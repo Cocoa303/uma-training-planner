@@ -1,7 +1,12 @@
 import { useState, useMemo } from "react";
 import type { Character } from "../../types/character";
 import type { Race, ClassLevel } from "../../types/race";
-import type { AptitudeFilter, SlotSelections } from "../../domain/scheduler";
+import type {
+  AptitudeFilter,
+  SlotSelections,
+  SlotOwnerships,
+  SlotOwnership,
+} from "../../domain/scheduler";
 import {
   effectiveAptitudes,
   computeRaceWinrate,
@@ -16,6 +21,7 @@ interface Props {
   character: Character | null;
   filter: AptitudeFilter;
   selections: SlotSelections;
+  ownerships: SlotOwnerships;
   onSelectRace: (turnIndex: number, raceId: string) => void;
   onClearSlot: (turnIndex: number) => void;
 }
@@ -24,22 +30,12 @@ export function RaceCalendar({
   character,
   filter,
   selections,
+  ownerships,
   onSelectRace,
   onClearSlot,
 }: Props) {
   const [activeClass, setActiveClass] = useState<ClassLevel>("클래식급");
 
-  // 캐릭터의 목표 레이스 이름들 (자동 잠금용)
-  const goalRaceNames = useMemo(() => {
-    if (!character) return new Set<string>();
-    return new Set(
-      character.trainingGoals
-        .map((g) => g.raceName)
-        .filter((n): n is string => n !== null)
-    );
-  }, [character]);
-
-  // 실효 적성 계산 (필터 반영)
   const effective = useMemo(() => {
     if (!character) return null;
     return effectiveAptitudes(character.aptitudes, filter);
@@ -68,12 +64,11 @@ export function RaceCalendar({
             <SlotCell
               key={slot.turnIndex}
               slot={slot}
-              character={character}
               effective={effective}
               filter={filter}
               selections={selections}
+              ownership={ownerships[slot.turnIndex]}
               selectedRaceId={selectedRaceId}
-              goalRaceNames={goalRaceNames}
               onSelectRace={onSelectRace}
               onClearSlot={onClearSlot}
             />
@@ -84,50 +79,45 @@ export function RaceCalendar({
   );
 }
 
-// ─── 슬롯 셀 ─────────────────────────────
-
 interface SlotCellProps {
   slot: ReturnType<typeof getSlotsForClass>[number];
-  character: Character | null;
   effective: ReturnType<typeof effectiveAptitudes> | null;
   filter: AptitudeFilter;
   selections: SlotSelections;
+  ownership: SlotOwnership | undefined;
   selectedRaceId: string | undefined;
-  goalRaceNames: Set<string>;
   onSelectRace: (turnIndex: number, raceId: string) => void;
   onClearSlot: (turnIndex: number) => void;
 }
 
 function SlotCell({
   slot,
-  character,
   effective,
   filter,
   selections,
+  ownership,
   selectedRaceId,
-  goalRaceNames,
   onSelectRace,
   onClearSlot,
 }: SlotCellProps) {
   const availableRaces = filterRacesByFilter(slot.races, filter);
   const selectedRace = slot.races.find((r) => r.id === selectedRaceId);
 
-  // 목표 레이스가 이 슬롯에 있으면 자동 잠금
-  const goalRaceInSlot = slot.races.find((r) => goalRaceNames.has(r.name));
-  const isGoalLocked = goalRaceInSlot !== undefined;
-  const displayRace = selectedRace ?? goalRaceInSlot;
+  const isGoal = ownership?.kind === "goal";
+  const badge = getSlotBadge(ownership);
+  const cellClassName = getSlotClassName(ownership, !!selectedRace);
 
   return (
-    <div className={`slot-cell ${displayRace ? "slot-cell--filled" : ""}`}>
+    <div className={cellClassName}>
       <div className="slot-cell__header">
         {slot.month}월 {slot.half === 1 ? "전반" : "후반"}
       </div>
 
-      {displayRace ? (
+      {selectedRace ? (
         <SelectedRaceView
-          race={displayRace}
-          isLocked={isGoalLocked}
-          character={character}
+          race={selectedRace}
+          badge={badge}
+          isGoal={isGoal}
           effective={effective}
           selections={selections}
           turnIndex={slot.turnIndex}
@@ -136,7 +126,6 @@ function SlotCell({
       ) : availableRaces.length > 0 ? (
         <AvailableRacesList
           races={availableRaces}
-          character={character}
           effective={effective}
           selections={selections}
           turnIndex={slot.turnIndex}
@@ -144,7 +133,7 @@ function SlotCell({
         />
       ) : slot.races.length > 0 ? (
         <div className="slot-cell__hidden">
-          필터에 맞는 레이스 없음 ({slot.races.length}개 숨김)
+          필터 밖 ({slot.races.length}개 숨김)
         </div>
       ) : (
         <div className="slot-cell__empty">-</div>
@@ -153,36 +142,68 @@ function SlotCell({
   );
 }
 
-// ─── 선택된 레이스 표시 ─────────────────
+function getSlotBadge(
+  ownership: SlotOwnership | undefined
+): { label: string; className: string } | null {
+  if (!ownership) return null;
+  if (ownership.kind === "goal") return { label: "목표", className: "badge--goal" };
+  if (ownership.kind === "hidden") return { label: "인자", className: "badge--hidden" };
+  if (ownership.kind === "g1") return { label: "G1", className: "badge--g1auto" };
+  return null;
+}
+
+function getSlotClassName(
+  ownership: SlotOwnership | undefined,
+  hasRace: boolean
+): string {
+  const classes = ["slot-cell"];
+  if (hasRace) classes.push("slot-cell--filled");
+  if (ownership?.kind === "goal") classes.push("slot-cell--goal");
+  else if (ownership?.kind === "hidden") classes.push("slot-cell--hidden-factor");
+  else if (ownership?.kind === "g1") classes.push("slot-cell--g1-auto");
+  return classes.join(" ");
+}
 
 function SelectedRaceView({
   race,
-  isLocked,
+  badge,
+  isGoal,
   effective,
   selections,
   turnIndex,
   onClear,
 }: {
   race: Race;
-  isLocked: boolean;
-  character: Character | null;
+  badge: { label: string; className: string } | null;
+  isGoal: boolean;
   effective: ReturnType<typeof effectiveAptitudes> | null;
   selections: SlotSelections;
   turnIndex: number;
   onClear: () => void;
 }) {
-  const winrate = effective
-    ? computeRaceWinrate(
-        race,
-        effective,
-        countConsecutive({ ...selections, [turnIndex]: race.id }, turnIndex)
-      )
-    : null;
+  // 목표 레이스는 승률 계산/표시 안 함
+  const winrate = isGoal
+    ? null
+    : effective
+      ? computeRaceWinrate(
+          race,
+          effective,
+          countConsecutive({ ...selections, [turnIndex]: race.id }, turnIndex)
+        )
+      : null;
 
   return (
     <div className="selected-race">
-      {isLocked && <div className="selected-race__lock-badge">목표</div>}
-      <div className={`grade-badge grade-badge--${race.grade.toLowerCase().replace("-", "")}`}>
+      {badge && (
+        <div className={`selected-race__lock-badge ${badge.className}`}>
+          {badge.label}
+        </div>
+      )}
+      <div
+        className={`grade-badge grade-badge--${race.grade
+          .toLowerCase()
+          .replace("-", "")}`}
+      >
         {race.grade}
       </div>
       <div className="selected-race__name">{race.name}</div>
@@ -194,7 +215,7 @@ function SelectedRaceView({
           {winrate}%
         </div>
       )}
-      {!isLocked && (
+      {!isGoal && (
         <button className="selected-race__clear" onClick={onClear}>
           ×
         </button>
@@ -202,8 +223,6 @@ function SelectedRaceView({
     </div>
   );
 }
-
-// ─── 사용 가능한 레이스 리스트 ─────────────
 
 function AvailableRacesList({
   races,
@@ -213,7 +232,6 @@ function AvailableRacesList({
   onSelect,
 }: {
   races: Race[];
-  character: Character | null;
   effective: ReturnType<typeof effectiveAptitudes> | null;
   selections: SlotSelections;
   turnIndex: number;
@@ -236,7 +254,11 @@ function AvailableRacesList({
             onClick={() => onSelect(race.id)}
             title={`${race.venue} · ${race.surface} · ${race.distance}m`}
           >
-            <span className={`grade-badge grade-badge--${race.grade.toLowerCase().replace("-", "")}`}>
+            <span
+              className={`grade-badge grade-badge--${race.grade
+                .toLowerCase()
+                .replace("-", "")}`}
+            >
               {race.grade}
             </span>
             <span className="race-option__name">{race.name}</span>
@@ -252,20 +274,24 @@ function AvailableRacesList({
   );
 }
 
-// ─── 유틸 ─────────────────────────────
-
 function filterRacesByFilter(races: Race[], filter: AptitudeFilter): Race[] {
   return races.filter((race) => {
-    // 잔디/더트 축
     if (race.surface === "잔디" && !filter.turf) return false;
     if (race.surface === "더트" && !filter.dirt) return false;
 
-    // 거리 축
     switch (race.distanceCategory) {
-      case "단거리": if (!filter.sprint) return false; break;
-      case "마일":   if (!filter.mile) return false; break;
-      case "중거리": if (!filter.medium) return false; break;
-      case "장거리": if (!filter.long) return false; break;
+      case "단거리":
+        if (!filter.sprint) return false;
+        break;
+      case "마일":
+        if (!filter.mile) return false;
+        break;
+      case "중거리":
+        if (!filter.medium) return false;
+        break;
+      case "장거리":
+        if (!filter.long) return false;
+        break;
     }
 
     return true;

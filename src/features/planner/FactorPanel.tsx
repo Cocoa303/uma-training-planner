@@ -2,20 +2,30 @@ import { useMemo } from "react";
 import type { Character } from "../../types/character";
 import type { SlotSelections, AptitudeFilter } from "../../domain/scheduler";
 import { computeFactorStatuses } from "../../domain/factors";
-import type { FactorStatus } from "../../types/factor";
+import type { FactorDef, FactorStatus } from "../../types/factor";
 import "./FactorPanel.css";
 
 interface Props {
   character: Character | null;
   selections: SlotSelections;
   filter: AptitudeFilter;
+  onFactorClick: (factor: FactorDef) => void;
+  isFactorAssigned: (factorId: string) => boolean;
 }
 
-export function FactorPanel({ character, selections, filter }: Props) {
+export function FactorPanel({
+  character,
+  selections,
+  filter,
+  onFactorClick,
+  isFactorAssigned,
+}: Props) {
   const statuses = useMemo(
     () => computeFactorStatuses(selections, character, filter),
     [selections, character, filter]
   );
+
+  const canAssign = character !== null;
 
   return (
     <div className="factor-panel">
@@ -23,17 +33,26 @@ export function FactorPanel({ character, selections, filter }: Props) {
         title="별명 인자"
         statuses={statuses.nickname}
         emptyText="데이터 없음"
+        onFactorClick={onFactorClick}
+        isFactorAssigned={isFactorAssigned}
+        canAssign={canAssign}
       />
       <FactorSection
         title="히든 인자"
         statuses={statuses.hidden}
         emptyText="데이터 없음"
+        onFactorClick={onFactorClick}
+        isFactorAssigned={isFactorAssigned}
+        canAssign={canAssign}
       />
       <FactorSection
         title="G1 인자"
         statuses={statuses.g1}
         emptyText="레이스 없음"
         showOnlyRelevant
+        onFactorClick={onFactorClick}
+        isFactorAssigned={isFactorAssigned}
+        canAssign={canAssign}
       />
     </div>
   );
@@ -44,13 +63,18 @@ function FactorSection({
   statuses,
   emptyText,
   showOnlyRelevant,
+  onFactorClick,
+  isFactorAssigned,
+  canAssign,
 }: {
   title: string;
   statuses: FactorStatus[];
   emptyText: string;
   showOnlyRelevant?: boolean;
+  onFactorClick: (factor: FactorDef) => void;
+  isFactorAssigned: (factorId: string) => boolean;
+  canAssign: boolean;
 }) {
-  // G1 인자는 목록이 많으니 획득한 것만 표시
   const displayed = showOnlyRelevant
     ? statuses.filter((s) => s.satisfied)
     : statuses;
@@ -75,7 +99,13 @@ function FactorSection({
       ) : (
         <ul className="factor-list">
           {displayed.map((s) => (
-            <FactorItem key={s.factor.id} status={s} />
+            <FactorItem
+              key={s.factor.id}
+              status={s}
+              assigned={isFactorAssigned(s.factor.id)}
+              onClick={() => onFactorClick(s.factor)}
+              canAssign={canAssign}
+            />
           ))}
         </ul>
       )}
@@ -83,15 +113,45 @@ function FactorSection({
   );
 }
 
-function FactorItem({ status }: { status: FactorStatus }) {
+function FactorItem({
+  status,
+  assigned,
+  onClick,
+  canAssign,
+}: {
+  status: FactorStatus;
+  assigned: boolean;
+  onClick: () => void;
+  canAssign: boolean;
+}) {
   const { factor, satisfied, detail, progress } = status;
+
+  // G1 인자는 클릭 시 자동 배치가 딱히 의미 없어서 비활성화
+  const isClickable = canAssign && factor.category !== "g1";
 
   return (
     <li
-      className={`factor-item ${satisfied ? "factor-item--satisfied" : ""}`}
-      title={factor.description}
+      className={[
+        "factor-item",
+        satisfied ? "factor-item--satisfied" : "",
+        assigned ? "factor-item--assigned" : "",
+        isClickable ? "factor-item--clickable" : "",
+      ]
+        .filter(Boolean)
+        .join(" ")}
+      title={
+        isClickable
+          ? assigned
+            ? "클릭해서 자동 배치 취소"
+            : `클릭해서 자동 배치: ${factor.description}`
+          : factor.description
+      }
+      onClick={isClickable ? onClick : undefined}
     >
-      <span className="factor-item__name">{factor.name}</span>
+      <span className="factor-item__name">
+        {assigned && <span className="factor-item__pin">📌</span>}
+        {factor.name}
+      </span>
       <span className="factor-item__status">
         {satisfied ? "✓" : detail ?? "미충족"}
       </span>

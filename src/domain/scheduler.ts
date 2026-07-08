@@ -1,9 +1,9 @@
-import type { AptitudeGrade } from "../types/character";
-import type { ClassLevel } from "../types/race";
+import type { AptitudeGrade, Aptitudes } from "../types/character";
+import type { ClassLevel, Race } from "../types/race";
+import { baseWinrate, finalWinrate } from "./winrate";
 
 /**
  * 필터: 유저가 "인자로 A까지 올릴 예정"이라고 표시한 축들.
- * 잔디/더트, 4개 거리, 4개 각질을 모두 boolean으로 관리.
  */
 export interface AptitudeFilter {
   turf: boolean;
@@ -32,51 +32,71 @@ export const EMPTY_FILTER: AptitudeFilter = {
 };
 
 /**
- * 슬롯 하나에 어떤 레이스가 선택됐는지.
- * key: turn index (0~71)
- * value: 선택된 레이스 ID (없으면 undefined)
- *
- * NOTE: 한 턴에 하나의 레이스만 뛸 수 있음 (게임 룰).
+ * 슬롯 소유권: 이 슬롯의 레이스가 어디로부터 배치되었는지.
+ * - "goal": 캐릭터의 목표 레이스 (자동 잠금, 최우선)
+ * - "hidden:<factorId>": 히든/별명 인자 자동 배치
+ * - "g1": G1 자동 배치 버튼으로 배치됨
+ * - "manual": 유저가 직접 선택
  */
-export type SlotSelections = Record<number, string | undefined>;
+export type SlotOwnership =
+  | { kind: "goal" }
+  | { kind: "hidden"; factorId: string }
+  | { kind: "g1" }
+  | { kind: "manual" };
 
-/**
- * 전체 스케줄 상태.
- */
+export type SlotSelections = Record<number, string | undefined>;
+export type SlotOwnerships = Record<number, SlotOwnership | undefined>;
+
 export interface PlannerState {
   characterId: string | null;
   filter: AptitudeFilter;
   selections: SlotSelections;
+  ownerships: SlotOwnerships;
 }
 
 export const INITIAL_STATE: PlannerState = {
   characterId: null,
   filter: EMPTY_FILTER,
   selections: {},
+  ownerships: {},
 };
 
-// ─── 필터 파생 계산 ─────────────────────────────
+// ─── 우선순위 ──────────────────────────────
+
+const OWNERSHIP_PRIORITY: Record<SlotOwnership["kind"], number> = {
+  goal: 3,
+  hidden: 2,
+  g1: 1,
+  manual: 0,
+};
 
 /**
- * 캐릭터의 원본 적성에서 B 이상인 축들을 자동으로 필터에 활성화.
- * (게임에서 이미 승률 100% 확보되는 축들)
+ * 새 소유권이 기존 소유권보다 높은 우선순위인가?
+ * (같은 우선순위는 덮어쓰기 불가)
  */
-export function autoActivateFilter(
-  originalGrades: {
-    turf: AptitudeGrade;
-    dirt: AptitudeGrade;
-    sprint: AptitudeGrade;
-    mile: AptitudeGrade;
-    medium: AptitudeGrade;
-    long: AptitudeGrade;
-    runner: AptitudeGrade;
-    leader: AptitudeGrade;
-    betweener: AptitudeGrade;
-    chaser: AptitudeGrade;
-  }
-): AptitudeFilter {
-  const isBOrBetter = (g: AptitudeGrade) =>
-    g === "S" || g === "A" || g === "B";
+export function canOverwrite(
+  newOwner: SlotOwnership,
+  existing: SlotOwnership | undefined
+): boolean {
+  if (!existing) return true;
+  return OWNERSHIP_PRIORITY[newOwner.kind] > OWNERSHIP_PRIORITY[existing.kind];
+}
+
+// ─── 필터 자동 활성화 ─────────────────────────
+
+export function autoActivateFilter(originalGrades: {
+  turf: AptitudeGrade;
+  dirt: AptitudeGrade;
+  sprint: AptitudeGrade;
+  mile: AptitudeGrade;
+  medium: AptitudeGrade;
+  long: AptitudeGrade;
+  runner: AptitudeGrade;
+  leader: AptitudeGrade;
+  betweener: AptitudeGrade;
+  chaser: AptitudeGrade;
+}): AptitudeFilter {
+  const isBOrBetter = (g: AptitudeGrade) => g === "S" || g === "A" || g === "B";
 
   return {
     turf: isBOrBetter(originalGrades.turf),
@@ -92,7 +112,7 @@ export function autoActivateFilter(
   };
 }
 
-// ─── 상태 조작 함수들 (순수 함수) ─────────────
+// ─── 상태 조작 (순수 함수) ────────────────────
 
 export function toggleFilterKey(
   state: PlannerState,
@@ -118,6 +138,10 @@ export function selectRaceInSlot(
       ...state.selections,
       [turnIndex]: raceId,
     },
+    ownerships: {
+      ...state.ownerships,
+      [turnIndex]: { kind: "manual" },
+    },
   };
 }
 
@@ -125,17 +149,45 @@ export function clearSlot(
   state: PlannerState,
   turnIndex: number
 ): PlannerState {
-  const next = { ...state.selections };
-  delete next[turnIndex];
+  const nextSelections = { ...state.selections };
+  delete nextSelections[turnIndex];
+  const nextOwnerships = { ...state.ownerships };
+  delete nextOwnerships[turnIndex];
   return {
     ...state,
-    selections: next,
+    selections: nextSelections,
+    ownerships: nextOwnerships,
+  };
+}
+
+/**
+ * 특정 조건에 맞는 소유권의 슬롯 전부 제거.
+ * (예: 특정 히든 인자 자동 배치 취소 시 사용)
+ */
+export function clearSlotsByOwnership(
+  state: PlannerState,
+  predicate: (ownership: SlotOwnership) => boolean
+): PlannerState {
+  const nextSelections = { ...state.selections };
+  const nextOwnerships = { ...state.ownerships };
+
+  for (const [key, ownership] of Object.entries(state.ownerships)) {
+    if (ownership && predicate(ownership)) {
+      const idx = Number(key);
+      delete nextSelections[idx];
+      delete nextOwnerships[idx];
+    }
+  }
+
+  return {
+    ...state,
+    selections: nextSelections,
+    ownerships: nextOwnerships,
   };
 }
 
 /**
  * 특정 턴이 연속 몇 번째 출전인지 계산.
- * 자신 포함, 그 앞 턴들을 거슬러 올라가 얼마나 연속으로 뛰었는지 카운트.
  */
 export function countConsecutive(
   selections: SlotSelections,
@@ -151,7 +203,7 @@ export function countConsecutive(
   return count;
 }
 
-// ─── 학년 변환 ──────────────────────────────
+// ─── 학년 인덱스 ─────────────────────────────
 
 const CLASS_ORDER: ClassLevel[] = ["주니어급", "클래식급", "시니어급"];
 
@@ -159,29 +211,26 @@ export function classToIndex(cls: ClassLevel): number {
   return CLASS_ORDER.indexOf(cls);
 }
 
-import type { Aptitudes } from "../types/character";
-import { baseWinrate, finalWinrate } from "./winrate";
-import type { Race } from "../types/race";
+// ─── 실효 적성 계산 ─────────────────────────
 
 /**
  * 필터 상태를 반영한 캐릭터의 "실효 적성" 계산.
- * 필터 켠 축은 A로, 안 켠 축은 원본 등급.
  */
 export function effectiveAptitudes(
   original: Aptitudes,
   filter: AptitudeFilter
 ): {
-  turf: import("../types/character").AptitudeGrade;
-  dirt: import("../types/character").AptitudeGrade;
-  sprint: import("../types/character").AptitudeGrade;
-  mile: import("../types/character").AptitudeGrade;
-  medium: import("../types/character").AptitudeGrade;
-  long: import("../types/character").AptitudeGrade;
+  turf: AptitudeGrade;
+  dirt: AptitudeGrade;
+  sprint: AptitudeGrade;
+  mile: AptitudeGrade;
+  medium: AptitudeGrade;
+  long: AptitudeGrade;
 } {
-  const raise = (
-    orig: import("../types/character").AptitudeGrade,
-    on: boolean
-  ) => (on && !isBOrBetter(orig) ? "A" : on ? bumpToA(orig) : orig);
+  const raise = (orig: AptitudeGrade, on: boolean): AptitudeGrade => {
+    if (!on) return orig;
+    return orig === "S" ? "S" : "A";
+  };
 
   return {
     turf: raise(original.surface.turf, filter.turf),
@@ -193,29 +242,18 @@ export function effectiveAptitudes(
   };
 }
 
-function isBOrBetter(g: import("../types/character").AptitudeGrade): boolean {
-  return g === "S" || g === "A" || g === "B";
-}
-
-// A 이상이 아니면 A로 올림 (B는 유지 안 하고 A로 올림)
-function bumpToA(
-  g: import("../types/character").AptitudeGrade
-): import("../types/character").AptitudeGrade {
-  return g === "S" ? "S" : "A";
-}
-
 /**
- * 특정 레이스에 대한 캐릭터의 승률 계산.
- * (연전 감점 포함)
+ * 특정 레이스에 대한 캐릭터의 승률 계산 (연전 감점 포함).
  */
 export function computeRaceWinrate(
   race: Race,
   effective: ReturnType<typeof effectiveAptitudes>,
   consecutiveCount: number
 ): number {
-  const surfaceGrade = race.surface === "잔디" ? effective.turf : effective.dirt;
+  const surfaceGrade =
+    race.surface === "잔디" ? effective.turf : effective.dirt;
 
-  let distanceGrade;
+  let distanceGrade: AptitudeGrade;
   switch (race.distanceCategory) {
     case "단거리":
       distanceGrade = effective.sprint;

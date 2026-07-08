@@ -52,10 +52,27 @@
   border-bottom: 1px solid var(--color-border);
   font-size: 12px;
   cursor: help;
+  transition: background 0.15s;
 }
 
 .factor-item:last-child {
   border-bottom: none;
+}
+
+.factor-item--clickable {
+  cursor: pointer;
+}
+
+.factor-item--clickable:hover {
+  background: #f0f9ff;
+}
+
+.factor-item--assigned {
+  background: #fef3c7;
+}
+
+.factor-item--assigned:hover {
+  background: #fde68a;
 }
 
 .factor-item__name {
@@ -64,6 +81,14 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   padding-right: 8px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.factor-item__pin {
+  font-size: 10px;
+  flex-shrink: 0;
 }
 
 .factor-item__status {
