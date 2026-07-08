@@ -32,11 +32,7 @@ export const EMPTY_FILTER: AptitudeFilter = {
 };
 
 /**
- * 슬롯 소유권: 이 슬롯의 레이스가 어디로부터 배치되었는지.
- * - "goal": 캐릭터의 목표 레이스 (자동 잠금, 최우선)
- * - "hidden:<factorId>": 히든/별명 인자 자동 배치
- * - "g1": G1 자동 배치 버튼으로 배치됨
- * - "manual": 유저가 직접 선택
+ * 슬롯 소유권.
  */
 export type SlotOwnership =
   | { kind: "goal" }
@@ -70,10 +66,6 @@ const OWNERSHIP_PRIORITY: Record<SlotOwnership["kind"], number> = {
   manual: 0,
 };
 
-/**
- * 새 소유권이 기존 소유권보다 높은 우선순위인가?
- * (같은 우선순위는 덮어쓰기 불가)
- */
 export function canOverwrite(
   newOwner: SlotOwnership,
   existing: SlotOwnership | undefined
@@ -84,6 +76,11 @@ export function canOverwrite(
 
 // ─── 필터 자동 활성화 ─────────────────────────
 
+/**
+ * 캐릭터 원본 적성에서 A 이상인 축만 자동으로 필터 ON.
+ * B 는 유저가 원할 때 수동으로 켜야 함 (필터를 켜면 A로 계산되므로,
+ * B 를 자동으로 켜면 실제로 B 인데 A 승률이 표시되는 문제가 생김).
+ */
 export function autoActivateFilter(originalGrades: {
   turf: AptitudeGrade;
   dirt: AptitudeGrade;
@@ -96,19 +93,19 @@ export function autoActivateFilter(originalGrades: {
   betweener: AptitudeGrade;
   chaser: AptitudeGrade;
 }): AptitudeFilter {
-  const isBOrBetter = (g: AptitudeGrade) => g === "S" || g === "A" || g === "B";
+  const isAOrBetter = (g: AptitudeGrade) => g === "S" || g === "A";
 
   return {
-    turf: isBOrBetter(originalGrades.turf),
-    dirt: isBOrBetter(originalGrades.dirt),
-    sprint: isBOrBetter(originalGrades.sprint),
-    mile: isBOrBetter(originalGrades.mile),
-    medium: isBOrBetter(originalGrades.medium),
-    long: isBOrBetter(originalGrades.long),
-    runner: isBOrBetter(originalGrades.runner),
-    leader: isBOrBetter(originalGrades.leader),
-    betweener: isBOrBetter(originalGrades.betweener),
-    chaser: isBOrBetter(originalGrades.chaser),
+    turf: isAOrBetter(originalGrades.turf),
+    dirt: isAOrBetter(originalGrades.dirt),
+    sprint: isAOrBetter(originalGrades.sprint),
+    mile: isAOrBetter(originalGrades.mile),
+    medium: isAOrBetter(originalGrades.medium),
+    long: isAOrBetter(originalGrades.long),
+    runner: isAOrBetter(originalGrades.runner),
+    leader: isAOrBetter(originalGrades.leader),
+    betweener: isAOrBetter(originalGrades.betweener),
+    chaser: isAOrBetter(originalGrades.chaser),
   };
 }
 
@@ -160,10 +157,6 @@ export function clearSlot(
   };
 }
 
-/**
- * 특정 조건에 맞는 소유권의 슬롯 전부 제거.
- * (예: 특정 히든 인자 자동 배치 취소 시 사용)
- */
 export function clearSlotsByOwnership(
   state: PlannerState,
   predicate: (ownership: SlotOwnership) => boolean
@@ -186,9 +179,6 @@ export function clearSlotsByOwnership(
   };
 }
 
-/**
- * 특정 턴이 연속 몇 번째 출전인지 계산.
- */
 export function countConsecutive(
   selections: SlotSelections,
   turnIndex: number
@@ -215,6 +205,7 @@ export function classToIndex(cls: ClassLevel): number {
 
 /**
  * 필터 상태를 반영한 캐릭터의 "실효 적성" 계산.
+ * 필터 켠 축은 A로 (S는 유지), 안 켠 축은 원본 등급.
  */
 export function effectiveAptitudes(
   original: Aptitudes,
