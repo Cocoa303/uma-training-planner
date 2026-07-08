@@ -1,0 +1,208 @@
+{
+  "_source": "https://note.com/kinako__uma/n/n7cddfef7be63",
+  "_note": "일본어 자료 기반. 스킬 기반 인자와 게임플레이 기반 인자는 제외. 레이스명은 인벤(한국섭) 기준.",
+
+  "nickname": [
+    {
+      "id": "triple-crown",
+      "category": "nickname",
+      "name": "트리플 크라운",
+      "description": "수말 삼관 우승 (사츠키상 + 일본 더비 + 국화상)",
+      "condition": {
+        "kind": "race-wins",
+        "raceNames": ["사츠키상", "도쿄 우준 (일본 더비)", "국화상"]
+      }
+    },
+    {
+      "id": "triple-tiara",
+      "category": "nickname",
+      "name": "트리플 티아라",
+      "description": "암말 삼관 우승 (벚꽃상 + 오크스 + 추화상)",
+      "condition": {
+        "kind": "race-wins",
+        "raceNames": ["벚꽃상", "오크스", "추화상"]
+      }
+    }
+  ],
+
+  "hidden": [
+    {
+      "id": "all-class-champion",
+      "category": "hidden",
+      "name": "전 계급 제패",
+      "description": "단거리/마일/중거리/장거리 G1 각 1회 이상 우승 (거리 적성 A 아니어도 됨)",
+      "condition": {
+        "kind": "custom",
+        "description": "각 거리 카테고리별 G1 우승"
+      }
+    },
+    {
+      "id": "perfect-crown",
+      "category": "nickname",
+      "name": "퍼펙트 크라운",
+      "description": "수말 삼관 + 트라이얼 레이스 3개(각 그룹에서 1개씩) 우승",
+      "condition": {
+        "kind": "custom",
+        "description": "삼관 3개 + [야요이상 or 스프링S or 새잎S] + [청엽상 or 프린시펄S] + [고베 신문배 or 세인트 라이트 기념]"
+      }
+    },
+    {
+      "id": "perfect-tiara",
+      "category": "nickname",
+      "name": "퍼펙트 티아라",
+      "description": "암말 삼관 + 트라이얼 레이스 3개 우승",
+      "condition": {
+        "kind": "custom",
+        "description": "삼관 3개 + [필리스 레뷰 or 튤립상 or 아네모네S] + [플로라S or 스위트피S] + [로즈S or 개미취S]"
+      }
+    },
+    {
+      "id": "newspaper",
+      "category": "hidden",
+      "name": "신문사",
+      "description": "신문배 레이스 우승",
+      "condition": {
+        "kind": "race-wins-any",
+        "raceNames": ["교토 신문배", "고베 신문배", "츄니치 신문배", "도쿄 신문배"]
+      }
+    },
+    {
+      "id": "new-year-plan",
+      "category": "hidden",
+      "name": "일년의 계는",
+      "description": "금배 중 하나 이상 우승 (나카야마 금배 or 교토 금배)",
+      "condition": {
+        "kind": "race-wins-any",
+        "raceNames": ["나카야마 금배", "교토 금배"]
+      }
+    },
+    {
+      "id": "sss",
+      "category": "hidden",
+      "name": "SSS (서머 스프린트 시리즈)",
+      "description": "여름 단거리 레이스 3회 우승 (같은 이름 재출전 카운트)",
+      "condition": {
+        "kind": "race-wins-count",
+        "raceNames": [
+          "하코다테 스프린트 스테이크스",
+          "이비스 서머 대시",
+          "CBC상",
+          "키타큐슈 기념",
+          "킨랜드컵",
+          "센토 스테이크스"
+        ],
+        "requiredCount": 3
+      }
+    },
+    {
+      "id": "sms",
+      "category": "hidden",
+      "name": "SMS (서머 마일 시리즈)",
+      "description": "여름 마일 레이스 3회 우승",
+      "condition": {
+        "kind": "race-wins-count",
+        "raceNames": [
+          "요나고 스테이크스",
+          "츄쿄 기념",
+          "세키야 기념",
+          "케이세이배 오텀 핸디캡"
+        ],
+        "requiredCount": 3
+      }
+    },
+    {
+      "id": "s2000",
+      "category": "hidden",
+      "name": "S2000 (서머 2000 시리즈)",
+      "description": "여름 2000m 레이스 3회 우승",
+      "condition": {
+        "kind": "race-wins-count",
+        "raceNames": [
+          "칠석상",
+          "하코다테 기념",
+          "코쿠라 기념",
+          "삿포로 기념",
+          "니이가타 기념"
+        ],
+        "requiredCount": 3
+      }
+    },
+    {
+      "id": "wish-upon-a-star",
+      "category": "hidden",
+      "name": "별에게 소원을",
+      "description": "별자리 레이스 3회 이상 우승",
+      "condition": {
+        "kind": "race-wins-count",
+        "raceNames": [
+          "프로시온 스테이크스",
+          "시리우스 스테이크스",
+          "카시오페이아 스테이크스",
+          "안드로메다 스테이크스",
+          "카펠라 스테이크스",
+          "리겔 스테이크스",
+          "베텔게우스 스테이크스",
+          "갤럭시 스테이크스",
+          "폴룩스 스테이크스",
+          "알데바란 스테이크스",
+          "폴라리스 스테이크스",
+          "안타레스 스테이크스"
+        ],
+        "requiredCount": 3
+      }
+    },
+    {
+      "id": "jewelry",
+      "category": "hidden",
+      "name": "쥬얼리",
+      "description": "보석 레이스 3개 이상 우승 (동명 레이스 중복 불가)",
+      "condition": {
+        "kind": "race-wins-count-unique",
+        "raceNames": [
+          "오팔 스테이크스",
+          "터키석 스테이크스",
+          "라피스 라줄리 스테이크스",
+          "탄자나이트 스테이크스",
+          "다이아몬드 스테이크스"
+        ],
+        "requiredCount": 3
+      }
+    },
+    {
+      "id": "dual-sword",
+      "category": "hidden",
+      "name": "이도류",
+      "description": "잔디/더트 적성 모두 A 이상",
+      "condition": {
+        "kind": "aptitude",
+        "check": "surface-both-a"
+      }
+    },
+    {
+      "id": "free-style",
+      "category": "hidden",
+      "name": "자유자재",
+      "description": "모든 각질 적성 A 이상",
+      "condition": {
+        "kind": "aptitude",
+        "check": "style-all-a"
+      }
+    },
+    {
+      "id": "smile",
+      "category": "hidden",
+      "name": "SMILE",
+      "description": "모든 거리 적성 A 이상",
+      "condition": {
+        "kind": "aptitude",
+        "check": "distance-all-a"
+      }
+    }
+  ],
+
+  "_todo": [
+    "スキル 기반 인자: 태양계, 노브레이크, 산소녀, 반짝반짝, 휘잉휘잉, 대폐활량, 기획통, 책략가, 큰 뜻, 전천후, 상속자, 무능력자 (스킬 크롤 후 구현)",
+    "게임 플레이 기반 인자: 잭팟, 건투, 리프레시, 신뢰의 증거, 밸런스, 반골정신, 목표 시리즈, 여행자, 동쪽/서쪽의 영웅 (실시간 추적 불가 - 이 앱 범위 밖)",
+    "레이스명 매칭 확인 필요: 인벤 크롤 데이터와 대조"
+  ]
+}
