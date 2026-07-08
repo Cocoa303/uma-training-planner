@@ -24,7 +24,7 @@ body {
 }
 
 .app {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 24px;
 }
@@ -33,7 +33,7 @@ body {
   margin-bottom: 24px;
 }
 
-.app-header h1 {
+.app-title h1 {
   margin: 0 0 4px;
   font-size: 24px;
 }
@@ -43,43 +43,29 @@ body {
   color: var(--color-text-muted);
   font-size: 14px;
 }
-.app-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  gap: 24px;
-  flex-wrap: wrap;
-}
 
-.app-title {
+/* ─── Grade Badges (공용) ─────────────────── */
+
+.grade-badge {
+  display: inline-block;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #1f2937;
+  line-height: 1.3;
   flex-shrink: 0;
 }
 
-.app-nav {
-  display: flex;
-  gap: 4px;
-  border-bottom: 1px solid var(--color-border);
-  padding-bottom: 0;
-}
+.grade-badge--g1 { background: #fca5a5; }
+.grade-badge--g2 { background: #fdba74; }
+.grade-badge--g3 { background: #fde68a; }
+.grade-badge--op { background: #d1d5db; }
+.grade-badge--preop { background: #e5e7eb; }
 
-.nav-tab {
-  padding: 8px 16px;
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 500;
+/* ─── Muted 텍스트 (공용) ──────────────────── */
+
+.muted {
   color: var(--color-text-muted);
-  border-bottom: 2px solid transparent;
-  margin-bottom: -1px;
-  transition: color 0.15s, border-color 0.15s;
-}
-
-.nav-tab:hover {
-  color: var(--color-text);
-}
-
-.nav-tab--active {
-  color: var(--color-accent);
-  border-bottom-color: var(--color-accent);
+  font-size: 12px;
 }
