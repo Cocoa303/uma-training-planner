@@ -103,24 +103,34 @@ function parseRaceInfo(text: string): {
 }
 
 /**
- * "41클래식급 4월 전반" 형태 파싱.
- * 앞의 "41"은 정렬키(월+반), 그 뒤가 실제 라벨.
- * 학년은 "클래식급/시니어급" 슬래시 조합 가능.
+ * "41클래식급 4월 전반", "102클래식급 10월 후반", "0 10월 전반" 등 파싱.
+ * - 앞의 숫자는 sort key (가변 길이) — 무시
+ * - 학년 정보는 없을 수도 있음 (해외 레이스)
  */
 function parseTiming(text: string): {
   turn: Turn;
   eligibleClasses: ClassLevel[];
 } | null {
-  // 앞의 숫자 2자리 = 정렬키 (예: "41" = 4월 전반)
-  // 뒤에 "클래식급/시니어급 4월 전반" 같은 텍스트
-  const match = text.match(/^(\d{2})(.+?)\s+(\d+)월\s+(전반|후반)/);
-  if (!match) return null;
+  // "N월 전반|후반"을 먼저 찾음
+  const monthMatch = text.match(/(\d+)월\s+(전반|후반)/);
+  if (!monthMatch) return null;
 
-  const classesRaw = match[2].trim();
-  const month = parseInt(match[3], 10);
-  const half = match[4] === "전반" ? 1 : 2;
+  const month = parseInt(monthMatch[1], 10);
+  const half: 1 | 2 = monthMatch[2] === "전반" ? 1 : 2;
 
-  const eligibleClasses = classesRaw.split("/").map((s) => s.trim()) as ClassLevel[];
+  // "월" 앞부분에서 sort key(숫자)를 제거하고 학년 정보만 추출
+  const monthIdx = text.indexOf(monthMatch[0]);
+  const beforeMonth = text.slice(0, monthIdx).trim();
+  const classesRaw = beforeMonth.replace(/^\d+/, "").trim();
+
+  const eligibleClasses: ClassLevel[] = classesRaw
+    ? classesRaw
+        .split("/")
+        .map((s) => s.trim())
+        .filter((s): s is ClassLevel =>
+          s === "주니어급" || s === "클래식급" || s === "시니어급"
+        )
+    : [];
 
   return {
     turn: { month, half },

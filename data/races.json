@@ -1,5 +1,23 @@
 [
   {
+    "id": "개선문상",
+    "name": "개선문상",
+    "grade": "G1",
+    "venue": "롱샹",
+    "surface": "잔디",
+    "distance": 2400,
+    "distanceCategory": "중거리",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 10,
+      "half": 1
+    },
+    "eligibleClasses": [],
+    "fansGained": 44000,
+    "isOverseas": true
+  },
+  {
     "id": "페브러리-스테이크스",
     "name": "페브러리 스테이크스",
     "grade": "G1",
@@ -277,7 +295,7 @@
       "half": 2
     },
     "eligibleClasses": [
-      "2클래식급"
+      "클래식급"
     ],
     "fansGained": 10000,
     "isOverseas": false
@@ -297,7 +315,7 @@
       "half": 2
     },
     "eligibleClasses": [
-      "2클래식급"
+      "클래식급"
     ],
     "fansGained": 12000,
     "isOverseas": false
@@ -317,7 +335,7 @@
       "half": 2
     },
     "eligibleClasses": [
-      "2클래식급",
+      "클래식급",
       "시니어급"
     ],
     "fansGained": 15000,
@@ -338,7 +356,7 @@
       "half": 1
     },
     "eligibleClasses": [
-      "1클래식급",
+      "클래식급",
       "시니어급"
     ],
     "fansGained": 10500,
@@ -359,7 +377,7 @@
       "half": 2
     },
     "eligibleClasses": [
-      "2클래식급",
+      "클래식급",
       "시니어급"
     ],
     "fansGained": 11000,
@@ -380,7 +398,7 @@
       "half": 2
     },
     "eligibleClasses": [
-      "2클래식급",
+      "클래식급",
       "시니어급"
     ],
     "fansGained": 30000,
@@ -401,7 +419,7 @@
       "half": 1
     },
     "eligibleClasses": [
-      "1클래식급",
+      "클래식급",
       "시니어급"
     ],
     "fansGained": 10000,
@@ -422,7 +440,7 @@
       "half": 1
     },
     "eligibleClasses": [
-      "1주니어급"
+      "주니어급"
     ],
     "fansGained": 6500,
     "isOverseas": false
@@ -442,7 +460,7 @@
       "half": 1
     },
     "eligibleClasses": [
-      "1주니어급"
+      "주니어급"
     ],
     "fansGained": 7000,
     "isOverseas": false
@@ -462,7 +480,7 @@
       "half": 2
     },
     "eligibleClasses": [
-      "2클래식급",
+      "클래식급",
       "시니어급"
     ],
     "fansGained": 30000,
@@ -483,7 +501,7 @@
       "half": 2
     },
     "eligibleClasses": [
-      "2주니어급"
+      "주니어급"
     ],
     "fansGained": 7000,
     "isOverseas": false
@@ -503,7 +521,7 @@
       "half": 2
     },
     "eligibleClasses": [
-      "2클래식급",
+      "클래식급",
       "시니어급"
     ],
     "fansGained": 8000,
@@ -524,7 +542,7 @@
       "half": 1
     },
     "eligibleClasses": [
-      "1클래식급",
+      "클래식급",
       "시니어급"
     ],
     "fansGained": 8000,
@@ -545,7 +563,7 @@
       "half": 1
     },
     "eligibleClasses": [
-      "1클래식급",
+      "클래식급",
       "시니어급"
     ],
     "fansGained": 6000,
@@ -566,7 +584,7 @@
       "half": 1
     },
     "eligibleClasses": [
-      "1클래식급",
+      "클래식급",
       "시니어급"
     ],
     "fansGained": 4100,
@@ -647,7 +665,7 @@
       "half": 2
     },
     "eligibleClasses": [
-      "2주니어급"
+      "주니어급"
     ],
     "fansGained": 4200,
     "isOverseas": false
@@ -687,7 +705,7 @@
       "half": 1
     },
     "eligibleClasses": [
-      "1클래식급",
+      "클래식급",
       "시니어급"
     ],
     "fansGained": 6000,
@@ -1231,7 +1249,7 @@
       "half": 1
     },
     "eligibleClasses": [
-      "1클래식급",
+      "클래식급",
       "시니어급"
     ],
     "fansGained": 6700,
@@ -1252,7 +1270,7 @@
       "half": 1
     },
     "eligibleClasses": [
-      "1클래식급",
+      "클래식급",
       "시니어급"
     ],
     "fansGained": 6700,
@@ -1273,7 +1291,7 @@
       "half": 1
     },
     "eligibleClasses": [
-      "1클래식급",
+      "클래식급",
       "시니어급"
     ],
     "fansGained": 5500,
@@ -1294,7 +1312,7 @@
       "half": 2
     },
     "eligibleClasses": [
-      "2클래식급",
+      "클래식급",
       "시니어급"
     ],
     "fansGained": 5900,
@@ -1315,7 +1333,7 @@
       "half": 2
     },
     "eligibleClasses": [
-      "2클래식급",
+      "클래식급",
       "시니어급"
     ],
     "fansGained": 5900,
@@ -1336,7 +1354,7 @@
       "half": 1
     },
     "eligibleClasses": [
-      "1주니어급"
+      "주니어급"
     ],
     "fansGained": 3800,
     "isOverseas": false
@@ -1356,7 +1374,7 @@
       "half": 1
     },
     "eligibleClasses": [
-      "1클래식급",
+      "클래식급",
       "시니어급"
     ],
     "fansGained": 5700,
@@ -1377,7 +1395,7 @@
       "half": 1
     },
     "eligibleClasses": [
-      "1주니어급"
+      "주니어급"
     ],
     "fansGained": 3800,
     "isOverseas": false
@@ -1397,7 +1415,7 @@
       "half": 1
     },
     "eligibleClasses": [
-      "1클래식급",
+      "클래식급",
       "시니어급"
     ],
     "fansGained": 6200,
@@ -1418,7 +1436,7 @@
       "half": 2
     },
     "eligibleClasses": [
-      "2클래식급",
+      "클래식급",
       "시니어급"
     ],
     "fansGained": 6700,
@@ -1439,7 +1457,7 @@
       "half": 1
     },
     "eligibleClasses": [
-      "1클래식급",
+      "클래식급",
       "시니어급"
     ],
     "fansGained": 3100,
@@ -1460,7 +1478,7 @@
       "half": 1
     },
     "eligibleClasses": [
-      "1클래식급",
+      "클래식급",
       "시니어급"
     ],
     "fansGained": 3500,
@@ -2701,7 +2719,7 @@
       "half": 1
     },
     "eligibleClasses": [
-      "1주니어급"
+      "주니어급"
     ],
     "fansGained": 3300,
     "isOverseas": false
@@ -2721,7 +2739,7 @@
       "half": 2
     },
     "eligibleClasses": [
-      "2주니어급"
+      "주니어급"
     ],
     "fansGained": 2900,
     "isOverseas": false
@@ -2741,7 +2759,7 @@
       "half": 1
     },
     "eligibleClasses": [
-      "1주니어급"
+      "주니어급"
     ],
     "fansGained": 2900,
     "isOverseas": false
@@ -2761,7 +2779,7 @@
       "half": 1
     },
     "eligibleClasses": [
-      "1클래식급",
+      "클래식급",
       "시니어급"
     ],
     "fansGained": 3800,
@@ -2782,7 +2800,7 @@
       "half": 1
     },
     "eligibleClasses": [
-      "1클래식급",
+      "클래식급",
       "시니어급"
     ],
     "fansGained": 3800,
@@ -2803,7 +2821,7 @@
       "half": 1
     },
     "eligibleClasses": [
-      "1클래식급",
+      "클래식급",
       "시니어급"
     ],
     "fansGained": 4100,
@@ -2824,7 +2842,7 @@
       "half": 2
     },
     "eligibleClasses": [
-      "2주니어급"
+      "주니어급"
     ],
     "fansGained": 3300,
     "isOverseas": false
@@ -2844,7 +2862,7 @@
       "half": 2
     },
     "eligibleClasses": [
-      "2주니어급"
+      "주니어급"
     ],
     "fansGained": 3300,
     "isOverseas": false
@@ -2864,7 +2882,7 @@
       "half": 2
     },
     "eligibleClasses": [
-      "2클래식급",
+      "클래식급",
       "시니어급"
     ],
     "fansGained": 3900,
@@ -2885,7 +2903,7 @@
       "half": 1
     },
     "eligibleClasses": [
-      "1클래식급",
+      "클래식급",
       "시니어급"
     ],
     "fansGained": 4100,
@@ -2906,7 +2924,7 @@
       "half": 1
     },
     "eligibleClasses": [
-      "1클래식급",
+      "클래식급",
       "시니어급"
     ],
     "fansGained": 4100,
@@ -2927,7 +2945,7 @@
       "half": 1
     },
     "eligibleClasses": [
-      "1클래식급",
+      "클래식급",
       "시니어급"
     ],
     "fansGained": 3600,
@@ -2948,7 +2966,7 @@
       "half": 1
     },
     "eligibleClasses": [
-      "1클래식급",
+      "클래식급",
       "시니어급"
     ],
     "fansGained": 3600,
@@ -3051,7 +3069,7 @@
       "half": 1
     },
     "eligibleClasses": [
-      "1클래식급",
+      "클래식급",
       "시니어급"
     ],
     "fansGained": 2100,
@@ -4834,7 +4852,7 @@
       "half": 1
     },
     "eligibleClasses": [
-      "1클래식급",
+      "클래식급",
       "시니어급"
     ],
     "fansGained": 2500,
@@ -4855,7 +4873,7 @@
       "half": 1
     },
     "eligibleClasses": [
-      "1클래식급",
+      "클래식급",
       "시니어급"
     ],
     "fansGained": 2300,
@@ -4876,7 +4894,7 @@
       "half": 1
     },
     "eligibleClasses": [
-      "1주니어급"
+      "주니어급"
     ],
     "fansGained": 1600,
     "isOverseas": false
@@ -4896,7 +4914,7 @@
       "half": 1
     },
     "eligibleClasses": [
-      "1클래식급",
+      "클래식급",
       "시니어급"
     ],
     "fansGained": 2600,
@@ -4917,7 +4935,7 @@
       "half": 1
     },
     "eligibleClasses": [
-      "1클래식급",
+      "클래식급",
       "시니어급"
     ],
     "fansGained": 2500,
@@ -4938,7 +4956,7 @@
       "half": 2
     },
     "eligibleClasses": [
-      "2주니어급"
+      "주니어급"
     ],
     "fansGained": 1700,
     "isOverseas": false
@@ -4958,7 +4976,7 @@
       "half": 2
     },
     "eligibleClasses": [
-      "2클래식급",
+      "클래식급",
       "시니어급"
     ],
     "fansGained": 2200,
@@ -4979,7 +4997,7 @@
       "half": 2
     },
     "eligibleClasses": [
-      "2클래식급",
+      "클래식급",
       "시니어급"
     ],
     "fansGained": 2300,
@@ -5000,7 +5018,7 @@
       "half": 2
     },
     "eligibleClasses": [
-      "2주니어급"
+      "주니어급"
     ],
     "fansGained": 1700,
     "isOverseas": false
@@ -5020,7 +5038,7 @@
       "half": 2
     },
     "eligibleClasses": [
-      "2클래식급",
+      "클래식급",
       "시니어급"
     ],
     "fansGained": 2600,
@@ -5041,7 +5059,7 @@
       "half": 2
     },
     "eligibleClasses": [
-      "2클래식급",
+      "클래식급",
       "시니어급"
     ],
     "fansGained": 2500,
@@ -5062,7 +5080,7 @@
       "half": 1
     },
     "eligibleClasses": [
-      "1클래식급",
+      "클래식급",
       "시니어급"
     ],
     "fansGained": 2500,
@@ -5083,7 +5101,7 @@
       "half": 1
     },
     "eligibleClasses": [
-      "1주니어급"
+      "주니어급"
     ],
     "fansGained": 1600,
     "isOverseas": false
@@ -5103,7 +5121,7 @@
       "half": 2
     },
     "eligibleClasses": [
-      "2클래식급",
+      "클래식급",
       "시니어급"
     ],
     "fansGained": 2600,
@@ -5124,7 +5142,7 @@
       "half": 2
     },
     "eligibleClasses": [
-      "2클래식급",
+      "클래식급",
       "시니어급"
     ],
     "fansGained": 2200,
@@ -5145,7 +5163,7 @@
       "half": 2
     },
     "eligibleClasses": [
-      "2클래식급",
+      "클래식급",
       "시니어급"
     ],
     "fansGained": 2300,
@@ -5166,7 +5184,7 @@
       "half": 2
     },
     "eligibleClasses": [
-      "2클래식급",
+      "클래식급",
       "시니어급"
     ],
     "fansGained": 2500,
@@ -5187,7 +5205,7 @@
       "half": 2
     },
     "eligibleClasses": [
-      "2클래식급",
+      "클래식급",
       "시니어급"
     ],
     "fansGained": 2200,
@@ -5208,7 +5226,7 @@
       "half": 1
     },
     "eligibleClasses": [
-      "1클래식급",
+      "클래식급",
       "시니어급"
     ],
     "fansGained": 2500,
@@ -5229,7 +5247,7 @@
       "half": 1
     },
     "eligibleClasses": [
-      "1클래식급",
+      "클래식급",
       "시니어급"
     ],
     "fansGained": 2300,
@@ -5250,7 +5268,7 @@
       "half": 1
     },
     "eligibleClasses": [
-      "1클래식급",
+      "클래식급",
       "시니어급"
     ],
     "fansGained": 2500,
@@ -5271,7 +5289,7 @@
       "half": 1
     },
     "eligibleClasses": [
-      "1클래식급",
+      "클래식급",
       "시니어급"
     ],
     "fansGained": 2300,
@@ -5292,7 +5310,7 @@
       "half": 1
     },
     "eligibleClasses": [
-      "1클래식급",
+      "클래식급",
       "시니어급"
     ],
     "fansGained": 2600,
@@ -5313,7 +5331,7 @@
       "half": 2
     },
     "eligibleClasses": [
-      "2주니어급"
+      "주니어급"
     ],
     "fansGained": 1600,
     "isOverseas": false
@@ -5333,7 +5351,7 @@
       "half": 2
     },
     "eligibleClasses": [
-      "2클래식급",
+      "클래식급",
       "시니어급"
     ],
     "fansGained": 2200,
@@ -5354,7 +5372,7 @@
       "half": 2
     },
     "eligibleClasses": [
-      "2클래식급",
+      "클래식급",
       "시니어급"
     ],
     "fansGained": 2200,
@@ -5499,7 +5517,7 @@
       "half": 1
     },
     "eligibleClasses": [
-      "1클래식급",
+      "클래식급",
       "시니어급"
     ],
     "fansGained": 2200,
@@ -5560,7 +5578,7 @@
       "half": 1
     },
     "eligibleClasses": [
-      "1주니어급"
+      "주니어급"
     ],
     "fansGained": 1000,
     "isOverseas": false
@@ -5580,7 +5598,7 @@
       "half": 1
     },
     "eligibleClasses": [
-      "1주니어급"
+      "주니어급"
     ],
     "fansGained": 1000,
     "isOverseas": false
@@ -5600,7 +5618,7 @@
       "half": 1
     },
     "eligibleClasses": [
-      "1주니어급"
+      "주니어급"
     ],
     "fansGained": 1000,
     "isOverseas": false
@@ -5620,7 +5638,7 @@
       "half": 2
     },
     "eligibleClasses": [
-      "2주니어급"
+      "주니어급"
     ],
     "fansGained": 1000,
     "isOverseas": false
@@ -5640,7 +5658,7 @@
       "half": 1
     },
     "eligibleClasses": [
-      "1주니어급"
+      "주니어급"
     ],
     "fansGained": 1000,
     "isOverseas": false
@@ -5660,7 +5678,7 @@
       "half": 1
     },
     "eligibleClasses": [
-      "1주니어급"
+      "주니어급"
     ],
     "fansGained": 1000,
     "isOverseas": false
@@ -5680,7 +5698,7 @@
       "half": 1
     },
     "eligibleClasses": [
-      "1주니어급"
+      "주니어급"
     ],
     "fansGained": 1000,
     "isOverseas": false
@@ -5700,7 +5718,7 @@
       "half": 1
     },
     "eligibleClasses": [
-      "1주니어급"
+      "주니어급"
     ],
     "fansGained": 1000,
     "isOverseas": false
@@ -5720,7 +5738,7 @@
       "half": 2
     },
     "eligibleClasses": [
-      "2주니어급"
+      "주니어급"
     ],
     "fansGained": 1000,
     "isOverseas": false
@@ -5740,7 +5758,7 @@
       "half": 2
     },
     "eligibleClasses": [
-      "2주니어급"
+      "주니어급"
     ],
     "fansGained": 1000,
     "isOverseas": false
@@ -5760,7 +5778,7 @@
       "half": 2
     },
     "eligibleClasses": [
-      "2주니어급"
+      "주니어급"
     ],
     "fansGained": 1000,
     "isOverseas": false
@@ -5780,7 +5798,7 @@
       "half": 2
     },
     "eligibleClasses": [
-      "2주니어급"
+      "주니어급"
     ],
     "fansGained": 1000,
     "isOverseas": false
@@ -5800,7 +5818,7 @@
       "half": 2
     },
     "eligibleClasses": [
-      "2주니어급"
+      "주니어급"
     ],
     "fansGained": 1000,
     "isOverseas": false
@@ -5820,7 +5838,7 @@
       "half": 2
     },
     "eligibleClasses": [
-      "2주니어급"
+      "주니어급"
     ],
     "fansGained": 1000,
     "isOverseas": false
@@ -5840,7 +5858,7 @@
       "half": 2
     },
     "eligibleClasses": [
-      "2주니어급"
+      "주니어급"
     ],
     "fansGained": 1000,
     "isOverseas": false
@@ -5860,7 +5878,7 @@
       "half": 2
     },
     "eligibleClasses": [
-      "2주니어급"
+      "주니어급"
     ],
     "fansGained": 1000,
     "isOverseas": false
@@ -5880,7 +5898,7 @@
       "half": 1
     },
     "eligibleClasses": [
-      "1주니어급"
+      "주니어급"
     ],
     "fansGained": 1000,
     "isOverseas": false
@@ -5900,7 +5918,7 @@
       "half": 1
     },
     "eligibleClasses": [
-      "1주니어급"
+      "주니어급"
     ],
     "fansGained": 1000,
     "isOverseas": false
@@ -5920,7 +5938,7 @@
       "half": 1
     },
     "eligibleClasses": [
-      "1주니어급"
+      "주니어급"
     ],
     "fansGained": 1000,
     "isOverseas": false
@@ -5940,7 +5958,7 @@
       "half": 1
     },
     "eligibleClasses": [
-      "1주니어급"
+      "주니어급"
     ],
     "fansGained": 1000,
     "isOverseas": false
@@ -5960,7 +5978,7 @@
       "half": 1
     },
     "eligibleClasses": [
-      "1주니어급"
+      "주니어급"
     ],
     "fansGained": 1000,
     "isOverseas": false
@@ -5980,7 +5998,7 @@
       "half": 1
     },
     "eligibleClasses": [
-      "1주니어급"
+      "주니어급"
     ],
     "fansGained": 1000,
     "isOverseas": false
@@ -6000,7 +6018,7 @@
       "half": 1
     },
     "eligibleClasses": [
-      "1주니어급"
+      "주니어급"
     ],
     "fansGained": 1000,
     "isOverseas": false
@@ -6020,7 +6038,7 @@
       "half": 2
     },
     "eligibleClasses": [
-      "2주니어급"
+      "주니어급"
     ],
     "fansGained": 1000,
     "isOverseas": false

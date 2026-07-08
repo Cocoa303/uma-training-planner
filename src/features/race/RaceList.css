@@ -1,0 +1,177 @@
+.race-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ─── Filters ─── */
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 16px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.filter-label {
+  font-size: 12px;
+  color: var(--color-text-muted);
+  font-weight: 500;
+}
+
+.filter-chips {
+  display: flex;
+  gap: 4px;
+}
+
+.chip {
+  padding: 4px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  background: white;
+  color: var(--color-text);
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.chip:hover {
+  border-color: var(--color-accent);
+}
+
+.chip--active {
+  background: var(--color-accent);
+  color: white;
+  border-color: var(--color-accent);
+}
+
+.search-input {
+  padding: 4px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  font-size: 13px;
+  min-width: 200px;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--color-accent);
+}
+
+/* ─── Result count ─── */
+
+.result-count {
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+.result-count strong {
+  color: var(--color-text);
+}
+
+/* ─── Table ─── */
+
+.race-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  overflow: hidden;
+  font-size: 13px;
+}
+
+.race-table th,
+.race-table td {
+  padding: 8px 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.race-table th {
+  background: #f9fafb;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.race-table tbody tr:hover {
+  background: #f9fafb;
+}
+
+.race-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.muted {
+  color: var(--color-text-muted);
+  font-size: 12px;
+}
+
+/* ─── Grade badges ─── */
+
+.grade-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.grade-badge--g1 { background: var(--color-g1); }
+.grade-badge--g2 { background: var(--color-g2); }
+.grade-badge--g3 { background: var(--color-g3); }
+.grade-badge--op { background: var(--color-op); }
+.grade-badge--preop { background: var(--color-preop); }
+/* ─── Surface badges & chips ─── */
+
+.surface-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.surface-badge--turf {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.surface-badge--dirt {
+  background: #fef3c7;
+  color: #78350f;
+}
+
+/* 바탕 필터 칩은 활성화 안 됐어도 살짝 색을 줘서 구별 */
+.chip--surface-turf:not(.chip--active) {
+  border-color: #10b981;
+  color: #065f46;
+}
+
+.chip--surface-dirt:not(.chip--active) {
+  border-color: #d97706;
+  color: #78350f;
+}
+
+.chip--surface-turf.chip--active {
+  background: #10b981;
+  border-color: #10b981;
+}
+
+.chip--surface-dirt.chip--active {
+  background: #d97706;
+  border-color: #d97706;
+}
