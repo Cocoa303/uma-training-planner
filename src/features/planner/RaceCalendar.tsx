@@ -13,6 +13,7 @@ import {
   countConsecutive,
 } from "../../domain/scheduler";
 import { getSlotsForClass } from "../../domain/calendar";
+import { RacePickerModal } from "./Racepickermodal";
 import "./RaceCalendar.css";
 
 const CLASSES: ClassLevel[] = ["주니어급", "클래식급", "시니어급"];
@@ -35,6 +36,12 @@ export function RaceCalendar({
   onClearSlot,
 }: Props) {
   const [activeClass, setActiveClass] = useState<ClassLevel>("클래식급");
+  const [pickerSlot, setPickerSlot] = useState<{
+    turnIndex: number;
+    className: ClassLevel;
+    month: number;
+    half: 1 | 2;
+  } | null>(null);
 
   const effective = useMemo(() => {
     if (!character) return null;
@@ -69,12 +76,37 @@ export function RaceCalendar({
               selections={selections}
               ownership={ownerships[slot.turnIndex]}
               selectedRaceId={selectedRaceId}
-              onSelectRace={onSelectRace}
+              onOpenPicker={() =>
+                setPickerSlot({
+                  turnIndex: slot.turnIndex,
+                  className: activeClass,
+                  month: slot.month,
+                  half: slot.half,
+                })
+              }
               onClearSlot={onClearSlot}
             />
           );
         })}
       </div>
+
+      {pickerSlot && (
+        <RacePickerModal
+          turnIndex={pickerSlot.turnIndex}
+          className={pickerSlot.className}
+          month={pickerSlot.month}
+          half={pickerSlot.half}
+          character={character}
+          filter={filter}
+          selections={selections}
+          ownership={ownerships[pickerSlot.turnIndex]}
+          onSelect={(raceId) => {
+            onSelectRace(pickerSlot.turnIndex, raceId);
+            setPickerSlot(null);
+          }}
+          onClose={() => setPickerSlot(null)}
+        />
+      )}
     </div>
   );
 }
@@ -86,26 +118,32 @@ interface SlotCellProps {
   selections: SlotSelections;
   ownership: SlotOwnership | undefined;
   selectedRaceId: string | undefined;
-  onSelectRace: (turnIndex: number, raceId: string) => void;
+  onOpenPicker: () => void;
   onClearSlot: (turnIndex: number) => void;
 }
 
 function SlotCell({
   slot,
   effective,
-  filter,
   selections,
   ownership,
   selectedRaceId,
-  onSelectRace,
+  onOpenPicker,
   onClearSlot,
 }: SlotCellProps) {
-  const availableRaces = filterRacesByFilter(slot.races, filter);
   const selectedRace = slot.races.find((r) => r.id === selectedRaceId);
-
   const isGoal = ownership?.kind === "goal";
   const badge = getSlotBadge(ownership);
   const cellClassName = getSlotClassName(ownership, !!selectedRace);
+
+  const winrate =
+    selectedRace && !isGoal && effective
+      ? computeRaceWinrate(
+          selectedRace,
+          effective,
+          countConsecutive(selections, slot.turnIndex)
+        )
+      : null;
 
   return (
     <div className={cellClassName}>
@@ -114,31 +152,103 @@ function SlotCell({
       </div>
 
       {selectedRace ? (
-        <SelectedRaceView
+        <FilledSlot
           race={selectedRace}
           badge={badge}
           isGoal={isGoal}
-          effective={effective}
-          selections={selections}
-          turnIndex={slot.turnIndex}
+          winrate={winrate}
+          onClick={onOpenPicker}
           onClear={() => onClearSlot(slot.turnIndex)}
         />
-      ) : availableRaces.length > 0 ? (
-        <AvailableRacesList
-          races={availableRaces}
-          effective={effective}
-          selections={selections}
-          turnIndex={slot.turnIndex}
-          onSelect={(raceId) => onSelectRace(slot.turnIndex, raceId)}
-        />
-      ) : slot.races.length > 0 ? (
-        <div className="slot-cell__hidden">
-          필터 밖 ({slot.races.length}개 숨김)
-        </div>
       ) : (
-        <div className="slot-cell__empty">-</div>
+        <EmptySlot
+          hasRacesAvailable={slot.races.length > 0}
+          onClick={onOpenPicker}
+        />
       )}
     </div>
+  );
+}
+
+function FilledSlot({
+  race,
+  badge,
+  isGoal,
+  winrate,
+  onClick,
+  onClear,
+}: {
+  race: Race;
+  badge: { label: string; className: string } | null;
+  isGoal: boolean;
+  winrate: number | null;
+  onClick: () => void;
+  onClear: () => void;
+}) {
+  const handleClick = (e: React.MouseEvent) => {
+    if (isGoal) return;
+    onClick();
+    e.stopPropagation();
+  };
+
+  return (
+    <div
+      className={`filled-slot ${isGoal ? "filled-slot--locked" : ""}`}
+      onClick={handleClick}
+    >
+      {badge && (
+        <div className={`filled-slot__badge ${badge.className}`}>{badge.label}</div>
+      )}
+
+      <div className="filled-slot__image">
+        {race.image ? (
+          <img src={race.image} alt={race.name} />
+        ) : (
+          <div className={`filled-slot__placeholder grade-bg--${gradeClass(race.grade)}`}>
+            <span className="filled-slot__placeholder-grade">{race.grade}</span>
+          </div>
+        )}
+      </div>
+
+      <div className="filled-slot__info">
+        <span className="filled-slot__name">{race.name}</span>
+        {winrate !== null && (
+          <span className={`filled-slot__winrate ${winrateClass(winrate)}`}>
+            {winrate}%
+          </span>
+        )}
+      </div>
+
+      {!isGoal && (
+        <button
+          className="filled-slot__clear"
+          onClick={(e) => {
+            e.stopPropagation();
+            onClear();
+          }}
+          title="선택 해제"
+        >
+          ×
+        </button>
+      )}
+    </div>
+  );
+}
+
+function EmptySlot({
+  hasRacesAvailable,
+  onClick,
+}: {
+  hasRacesAvailable: boolean;
+  onClick: () => void;
+}) {
+  if (!hasRacesAvailable) {
+    return <div className="empty-slot empty-slot--none">-</div>;
+  }
+  return (
+    <button className="empty-slot" onClick={onClick} title="레이스 선택">
+      <span className="empty-slot__plus">+</span>
+    </button>
   );
 }
 
@@ -164,142 +274,12 @@ function getSlotClassName(
   return classes.join(" ");
 }
 
-function SelectedRaceView({
-  race,
-  badge,
-  isGoal,
-  effective,
-  selections,
-  turnIndex,
-  onClear,
-}: {
-  race: Race;
-  badge: { label: string; className: string } | null;
-  isGoal: boolean;
-  effective: ReturnType<typeof effectiveAptitudes> | null;
-  selections: SlotSelections;
-  turnIndex: number;
-  onClear: () => void;
-}) {
-  // 목표 레이스는 승률 계산/표시 안 함
-  const winrate = isGoal
-    ? null
-    : effective
-      ? computeRaceWinrate(
-          race,
-          effective,
-          countConsecutive({ ...selections, [turnIndex]: race.id }, turnIndex)
-        )
-      : null;
-
-  return (
-    <div className="selected-race">
-      {badge && (
-        <div className={`selected-race__lock-badge ${badge.className}`}>
-          {badge.label}
-        </div>
-      )}
-      <div
-        className={`grade-badge grade-badge--${race.grade
-          .toLowerCase()
-          .replace("-", "")}`}
-      >
-        {race.grade}
-      </div>
-      <div className="selected-race__name">{race.name}</div>
-      <div className="selected-race__info">
-        {race.venue} · {race.surface} · {race.distance}m
-      </div>
-      {winrate !== null && (
-        <div className={`selected-race__winrate ${winrateClass(winrate)}`}>
-          {winrate}%
-        </div>
-      )}
-      {!isGoal && (
-        <button className="selected-race__clear" onClick={onClear}>
-          ×
-        </button>
-      )}
-    </div>
-  );
-}
-
-function AvailableRacesList({
-  races,
-  effective,
-  selections,
-  turnIndex,
-  onSelect,
-}: {
-  races: Race[];
-  effective: ReturnType<typeof effectiveAptitudes> | null;
-  selections: SlotSelections;
-  turnIndex: number;
-  onSelect: (raceId: string) => void;
-}) {
-  return (
-    <div className="available-races">
-      {races.map((race) => {
-        const winrate = effective
-          ? computeRaceWinrate(
-              race,
-              effective,
-              countConsecutive({ ...selections, [turnIndex]: race.id }, turnIndex)
-            )
-          : null;
-        return (
-          <button
-            key={race.id}
-            className="race-option"
-            onClick={() => onSelect(race.id)}
-            title={`${race.venue} · ${race.surface} · ${race.distance}m`}
-          >
-            <span
-              className={`grade-badge grade-badge--${race.grade
-                .toLowerCase()
-                .replace("-", "")}`}
-            >
-              {race.grade}
-            </span>
-            <span className="race-option__name">{race.name}</span>
-            {winrate !== null && (
-              <span className={`race-option__winrate ${winrateClass(winrate)}`}>
-                {winrate}%
-              </span>
-            )}
-          </button>
-        );
-      })}
-    </div>
-  );
-}
-
-function filterRacesByFilter(races: Race[], filter: AptitudeFilter): Race[] {
-  return races.filter((race) => {
-    if (race.surface === "잔디" && !filter.turf) return false;
-    if (race.surface === "더트" && !filter.dirt) return false;
-
-    switch (race.distanceCategory) {
-      case "단거리":
-        if (!filter.sprint) return false;
-        break;
-      case "마일":
-        if (!filter.mile) return false;
-        break;
-      case "중거리":
-        if (!filter.medium) return false;
-        break;
-      case "장거리":
-        if (!filter.long) return false;
-        break;
-    }
-
-    return true;
-  });
-}
-
 function winrateClass(winrate: number): string {
   if (winrate >= 100) return "winrate--good";
   if (winrate >= 80) return "winrate--ok";
   return "winrate--bad";
+}
+
+function gradeClass(grade: string): string {
+  return grade.toLowerCase().replace("-", "");
 }
