@@ -2,12 +2,14 @@
   "name": "uma-training-planner",
   "private": true,
   "version": "0.0.0",
-  "type": "module","scripts": {
+  "type": "module",
+  "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "scrape:races": "tsx scraper/crawl-races.ts"
+    "scrape:races": "tsx scraper/crawl-races.ts",
+    "scrape:characters": "tsx scraper/crawl-characters.ts"
   },
   "dependencies": {
     "react": "^19.2.7",
