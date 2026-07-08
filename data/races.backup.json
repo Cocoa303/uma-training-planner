@@ -1,0 +1,6086 @@
+[
+  {
+    "id": "개선문상",
+    "name": "개선문상",
+    "grade": "G1",
+    "venue": "롱샹",
+    "surface": "잔디",
+    "distance": 2400,
+    "distanceCategory": "중거리",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 10,
+      "half": 1
+    },
+    "eligibleClasses": [],
+    "fansGained": 44000,
+    "isOverseas": true
+  },
+  {
+    "id": "페브러리-스테이크스",
+    "name": "페브러리 스테이크스",
+    "grade": "G1",
+    "venue": "도쿄",
+    "surface": "더트",
+    "distance": 1600,
+    "distanceCategory": "마일",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 2,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 10000,
+    "isOverseas": false
+  },
+  {
+    "id": "타카마츠노미야-기념",
+    "name": "타카마츠노미야 기념",
+    "grade": "G1",
+    "venue": "츄쿄",
+    "surface": "잔디",
+    "distance": 1200,
+    "distanceCategory": "단거리",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 3,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 13000,
+    "isOverseas": false
+  },
+  {
+    "id": "오사카배",
+    "name": "오사카배",
+    "grade": "G1",
+    "venue": "한신",
+    "surface": "잔디",
+    "distance": 2000,
+    "distanceCategory": "중거리",
+    "rotation": "우",
+    "side": "내측",
+    "turn": {
+      "month": 3,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 13500,
+    "isOverseas": false
+  },
+  {
+    "id": "벚꽃상",
+    "name": "벚꽃상",
+    "grade": "G1",
+    "venue": "한신",
+    "surface": "잔디",
+    "distance": 1600,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": "외측",
+    "turn": {
+      "month": 4,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급"
+    ],
+    "fansGained": 10500,
+    "isOverseas": false
+  },
+  {
+    "id": "사츠키상",
+    "name": "사츠키상",
+    "grade": "G1",
+    "venue": "나카야마",
+    "surface": "잔디",
+    "distance": 2000,
+    "distanceCategory": "중거리",
+    "rotation": "우",
+    "side": "내측",
+    "turn": {
+      "month": 4,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급"
+    ],
+    "fansGained": 11000,
+    "isOverseas": false
+  },
+  {
+    "id": "텐노상-봄",
+    "name": "텐노상 (봄)",
+    "grade": "G1",
+    "venue": "교토",
+    "surface": "잔디",
+    "distance": 3200,
+    "distanceCategory": "장거리",
+    "rotation": "우",
+    "side": "외측",
+    "turn": {
+      "month": 4,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 15000,
+    "isOverseas": false
+  },
+  {
+    "id": "nhk-마일컵",
+    "name": "NHK 마일컵",
+    "grade": "G1",
+    "venue": "도쿄",
+    "surface": "잔디",
+    "distance": 1600,
+    "distanceCategory": "마일",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 5,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급"
+    ],
+    "fansGained": 10500,
+    "isOverseas": false
+  },
+  {
+    "id": "빅토리아-마일",
+    "name": "빅토리아 마일",
+    "grade": "G1",
+    "venue": "도쿄",
+    "surface": "잔디",
+    "distance": 1600,
+    "distanceCategory": "마일",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 5,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 10500,
+    "isOverseas": false
+  },
+  {
+    "id": "오크스",
+    "name": "오크스",
+    "grade": "G1",
+    "venue": "도쿄",
+    "surface": "잔디",
+    "distance": 2400,
+    "distanceCategory": "중거리",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 5,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "클래식급"
+    ],
+    "fansGained": 11000,
+    "isOverseas": false
+  },
+  {
+    "id": "도쿄-우준-일본-더비",
+    "name": "도쿄 우준 (일본 더비)",
+    "grade": "G1",
+    "venue": "도쿄",
+    "surface": "잔디",
+    "distance": 2400,
+    "distanceCategory": "중거리",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 5,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "클래식급"
+    ],
+    "fansGained": 20000,
+    "isOverseas": false
+  },
+  {
+    "id": "야스다-기념",
+    "name": "야스다 기념",
+    "grade": "G1",
+    "venue": "도쿄",
+    "surface": "잔디",
+    "distance": 1600,
+    "distanceCategory": "마일",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 6,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 13000,
+    "isOverseas": false
+  },
+  {
+    "id": "타카라즈카-기념",
+    "name": "타카라즈카 기념",
+    "grade": "G1",
+    "venue": "한신",
+    "surface": "잔디",
+    "distance": 2200,
+    "distanceCategory": "중거리",
+    "rotation": "우",
+    "side": "내측",
+    "turn": {
+      "month": 6,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 15000,
+    "isOverseas": false
+  },
+  {
+    "id": "스프린터스-스테이크스",
+    "name": "스프린터스 스테이크스",
+    "grade": "G1",
+    "venue": "나카야마",
+    "surface": "잔디",
+    "distance": 1200,
+    "distanceCategory": "단거리",
+    "rotation": "우",
+    "side": "외측",
+    "turn": {
+      "month": 9,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 13000,
+    "isOverseas": false
+  },
+  {
+    "id": "추화상",
+    "name": "추화상",
+    "grade": "G1",
+    "venue": "교토",
+    "surface": "잔디",
+    "distance": 2000,
+    "distanceCategory": "중거리",
+    "rotation": "우",
+    "side": "내측",
+    "turn": {
+      "month": 10,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "클래식급"
+    ],
+    "fansGained": 10000,
+    "isOverseas": false
+  },
+  {
+    "id": "국화상",
+    "name": "국화상",
+    "grade": "G1",
+    "venue": "교토",
+    "surface": "잔디",
+    "distance": 3000,
+    "distanceCategory": "장거리",
+    "rotation": "우",
+    "side": "외측",
+    "turn": {
+      "month": 10,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "클래식급"
+    ],
+    "fansGained": 12000,
+    "isOverseas": false
+  },
+  {
+    "id": "텐노상-가을",
+    "name": "텐노상 (가을)",
+    "grade": "G1",
+    "venue": "도쿄",
+    "surface": "잔디",
+    "distance": 2000,
+    "distanceCategory": "중거리",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 10,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 15000,
+    "isOverseas": false
+  },
+  {
+    "id": "엘리자베스-여왕배",
+    "name": "엘리자베스 여왕배",
+    "grade": "G1",
+    "venue": "교토",
+    "surface": "잔디",
+    "distance": 2200,
+    "distanceCategory": "중거리",
+    "rotation": "우",
+    "side": "외측",
+    "turn": {
+      "month": 11,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 10500,
+    "isOverseas": false
+  },
+  {
+    "id": "마일-챔피언십",
+    "name": "마일 챔피언십",
+    "grade": "G1",
+    "venue": "교토",
+    "surface": "잔디",
+    "distance": 1600,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": "외측",
+    "turn": {
+      "month": 11,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 11000,
+    "isOverseas": false
+  },
+  {
+    "id": "재팬컵",
+    "name": "재팬컵",
+    "grade": "G1",
+    "venue": "도쿄",
+    "surface": "잔디",
+    "distance": 2400,
+    "distanceCategory": "중거리",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 11,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 30000,
+    "isOverseas": false
+  },
+  {
+    "id": "챔피언스컵",
+    "name": "챔피언스컵",
+    "grade": "G1",
+    "venue": "츄쿄",
+    "surface": "더트",
+    "distance": 1800,
+    "distanceCategory": "마일",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 12,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 10000,
+    "isOverseas": false
+  },
+  {
+    "id": "한신-쥬버나일-필리스",
+    "name": "한신 쥬버나일 필리스",
+    "grade": "G1",
+    "venue": "한신",
+    "surface": "잔디",
+    "distance": 1600,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": "외측",
+    "turn": {
+      "month": 12,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "주니어급"
+    ],
+    "fansGained": 6500,
+    "isOverseas": false
+  },
+  {
+    "id": "아사히배-퓨처러티-스테이크스",
+    "name": "아사히배 퓨처러티 스테이크스",
+    "grade": "G1",
+    "venue": "한신",
+    "surface": "잔디",
+    "distance": 1600,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": "외측",
+    "turn": {
+      "month": 12,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "주니어급"
+    ],
+    "fansGained": 7000,
+    "isOverseas": false
+  },
+  {
+    "id": "아리마-기념",
+    "name": "아리마 기념",
+    "grade": "G1",
+    "venue": "나카야마",
+    "surface": "잔디",
+    "distance": 2500,
+    "distanceCategory": "장거리",
+    "rotation": "우",
+    "side": "내측",
+    "turn": {
+      "month": 12,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 30000,
+    "isOverseas": false
+  },
+  {
+    "id": "호프풀-스테이크스",
+    "name": "호프풀 스테이크스",
+    "grade": "G1",
+    "venue": "나카야마",
+    "surface": "잔디",
+    "distance": 2000,
+    "distanceCategory": "중거리",
+    "rotation": "우",
+    "side": "내측",
+    "turn": {
+      "month": 12,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "주니어급"
+    ],
+    "fansGained": 7000,
+    "isOverseas": false
+  },
+  {
+    "id": "도쿄-대상전",
+    "name": "도쿄 대상전",
+    "grade": "G1",
+    "venue": "오이",
+    "surface": "더트",
+    "distance": 2000,
+    "distanceCategory": "중거리",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 12,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 8000,
+    "isOverseas": false
+  },
+  {
+    "id": "jbc-클래식",
+    "name": "JBC 클래식",
+    "grade": "G1",
+    "venue": "오이",
+    "surface": "더트",
+    "distance": 2000,
+    "distanceCategory": "중거리",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 11,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 8000,
+    "isOverseas": false
+  },
+  {
+    "id": "jbc-스프린트",
+    "name": "JBC 스프린트",
+    "grade": "G1",
+    "venue": "오이",
+    "surface": "더트",
+    "distance": 1200,
+    "distanceCategory": "단거리",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 11,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 6000,
+    "isOverseas": false
+  },
+  {
+    "id": "jbc-레이디스-클래식",
+    "name": "JBC 레이디스 클래식",
+    "grade": "G1",
+    "venue": "오이",
+    "surface": "더트",
+    "distance": 1800,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 11,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 4100,
+    "isOverseas": false
+  },
+  {
+    "id": "재팬-더트-더비",
+    "name": "재팬 더트 더비",
+    "grade": "G1",
+    "venue": "오이",
+    "surface": "더트",
+    "distance": 2000,
+    "distanceCategory": "중거리",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 7,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급"
+    ],
+    "fansGained": 4500,
+    "isOverseas": false
+  },
+  {
+    "id": "제왕상",
+    "name": "제왕상",
+    "grade": "G1",
+    "venue": "오이",
+    "surface": "더트",
+    "distance": 2000,
+    "distanceCategory": "중거리",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 6,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 6000,
+    "isOverseas": false
+  },
+  {
+    "id": "가와사키-기념",
+    "name": "가와사키 기념",
+    "grade": "G1",
+    "venue": "가와사키",
+    "surface": "더트",
+    "distance": 2100,
+    "distanceCategory": "중거리",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 2,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 6000,
+    "isOverseas": false
+  },
+  {
+    "id": "전-일본-주니어-우준",
+    "name": "전 일본 주니어 우준",
+    "grade": "G1",
+    "venue": "가와사키",
+    "surface": "더트",
+    "distance": 1600,
+    "distanceCategory": "마일",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 12,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "주니어급"
+    ],
+    "fansGained": 4200,
+    "isOverseas": false
+  },
+  {
+    "id": "카시와-기념",
+    "name": "카시와 기념",
+    "grade": "G1",
+    "venue": "후나바시",
+    "surface": "더트",
+    "distance": 1600,
+    "distanceCategory": "마일",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 5,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 8000,
+    "isOverseas": false
+  },
+  {
+    "id": "마일-챔피언십-남부배",
+    "name": "마일 챔피언십 남부배",
+    "grade": "G1",
+    "venue": "모리오카",
+    "surface": "더트",
+    "distance": 1600,
+    "distanceCategory": "마일",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 10,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 6000,
+    "isOverseas": false
+  },
+  {
+    "id": "닛케이-신춘배",
+    "name": "닛케이 신춘배",
+    "grade": "G2",
+    "venue": "교토",
+    "surface": "잔디",
+    "distance": 2400,
+    "distanceCategory": "중거리",
+    "rotation": "우",
+    "side": "외측",
+    "turn": {
+      "month": 1,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 5700,
+    "isOverseas": false
+  },
+  {
+    "id": "토카이-스테이크스",
+    "name": "토카이 스테이크스",
+    "grade": "G2",
+    "venue": "츄쿄",
+    "surface": "더트",
+    "distance": 1800,
+    "distanceCategory": "마일",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 1,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 5500,
+    "isOverseas": false
+  },
+  {
+    "id": "아메리카-jcc",
+    "name": "아메리카 JCC",
+    "grade": "G2",
+    "venue": "나카야마",
+    "surface": "잔디",
+    "distance": 2200,
+    "distanceCategory": "중거리",
+    "rotation": "우",
+    "side": "외측",
+    "turn": {
+      "month": 1,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 6200,
+    "isOverseas": false
+  },
+  {
+    "id": "교토-기념",
+    "name": "교토 기념",
+    "grade": "G2",
+    "venue": "교토",
+    "surface": "잔디",
+    "distance": 2200,
+    "distanceCategory": "중거리",
+    "rotation": "우",
+    "side": "외측",
+    "turn": {
+      "month": 2,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 6200,
+    "isOverseas": false
+  },
+  {
+    "id": "나카야마-기념",
+    "name": "나카야마 기념",
+    "grade": "G2",
+    "venue": "나카야마",
+    "surface": "잔디",
+    "distance": 1800,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": "내측",
+    "turn": {
+      "month": 2,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 6700,
+    "isOverseas": false
+  },
+  {
+    "id": "튤립상",
+    "name": "튤립상",
+    "grade": "G2",
+    "venue": "한신",
+    "surface": "잔디",
+    "distance": 1600,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": "외측",
+    "turn": {
+      "month": 3,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급"
+    ],
+    "fansGained": 5200,
+    "isOverseas": false
+  },
+  {
+    "id": "야요이상",
+    "name": "야요이상",
+    "grade": "G2",
+    "venue": "나카야마",
+    "surface": "잔디",
+    "distance": 2000,
+    "distanceCategory": "중거리",
+    "rotation": "우",
+    "side": "내측",
+    "turn": {
+      "month": 3,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급"
+    ],
+    "fansGained": 5400,
+    "isOverseas": false
+  },
+  {
+    "id": "킨코상",
+    "name": "킨코상",
+    "grade": "G2",
+    "venue": "츄쿄",
+    "surface": "잔디",
+    "distance": 2000,
+    "distanceCategory": "중거리",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 3,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 6700,
+    "isOverseas": false
+  },
+  {
+    "id": "필리스-레뷰",
+    "name": "필리스 레뷰",
+    "grade": "G2",
+    "venue": "한신",
+    "surface": "잔디",
+    "distance": 1400,
+    "distanceCategory": "단거리",
+    "rotation": "우",
+    "side": "내측",
+    "turn": {
+      "month": 3,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급"
+    ],
+    "fansGained": 5200,
+    "isOverseas": false
+  },
+  {
+    "id": "한신-대상전",
+    "name": "한신 대상전",
+    "grade": "G2",
+    "venue": "한신",
+    "surface": "잔디",
+    "distance": 3000,
+    "distanceCategory": "장거리",
+    "rotation": "우",
+    "side": "내측",
+    "turn": {
+      "month": 3,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 6700,
+    "isOverseas": false
+  },
+  {
+    "id": "스프링-스테이크스",
+    "name": "스프링 스테이크스",
+    "grade": "G2",
+    "venue": "나카야마",
+    "surface": "잔디",
+    "distance": 1800,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": "내측",
+    "turn": {
+      "month": 3,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "클래식급"
+    ],
+    "fansGained": 5400,
+    "isOverseas": false
+  },
+  {
+    "id": "닛케이상",
+    "name": "닛케이상",
+    "grade": "G2",
+    "venue": "나카야마",
+    "surface": "잔디",
+    "distance": 2500,
+    "distanceCategory": "장거리",
+    "rotation": "우",
+    "side": "내측",
+    "turn": {
+      "month": 3,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 6700,
+    "isOverseas": false
+  },
+  {
+    "id": "한신-우마무스메-스테이크스",
+    "name": "한신 우마무스메 스테이크스",
+    "grade": "G2",
+    "venue": "한신",
+    "surface": "잔디",
+    "distance": 1600,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": "외측",
+    "turn": {
+      "month": 4,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 5500,
+    "isOverseas": false
+  },
+  {
+    "id": "뉴질랜드-트로피",
+    "name": "뉴질랜드 트로피",
+    "grade": "G2",
+    "venue": "나카야마",
+    "surface": "잔디",
+    "distance": 1600,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": "외측",
+    "turn": {
+      "month": 4,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급"
+    ],
+    "fansGained": 5400,
+    "isOverseas": false
+  },
+  {
+    "id": "마일러스컵",
+    "name": "마일러스컵",
+    "grade": "G2",
+    "venue": "교토",
+    "surface": "잔디",
+    "distance": 1600,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": "외측",
+    "turn": {
+      "month": 4,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 5900,
+    "isOverseas": false
+  },
+  {
+    "id": "플로라-스테이크스",
+    "name": "플로라 스테이크스",
+    "grade": "G2",
+    "venue": "도쿄",
+    "surface": "잔디",
+    "distance": 2000,
+    "distanceCategory": "중거리",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 4,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "클래식급"
+    ],
+    "fansGained": 5200,
+    "isOverseas": false
+  },
+  {
+    "id": "청엽상",
+    "name": "청엽상",
+    "grade": "G2",
+    "venue": "도쿄",
+    "surface": "잔디",
+    "distance": 2400,
+    "distanceCategory": "중거리",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 4,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "클래식급"
+    ],
+    "fansGained": 5400,
+    "isOverseas": false
+  },
+  {
+    "id": "교토-신문배",
+    "name": "교토 신문배",
+    "grade": "G2",
+    "venue": "교토",
+    "surface": "잔디",
+    "distance": 2200,
+    "distanceCategory": "중거리",
+    "rotation": "우",
+    "side": "외측",
+    "turn": {
+      "month": 5,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급"
+    ],
+    "fansGained": 5400,
+    "isOverseas": false
+  },
+  {
+    "id": "케이오배-스프링컵",
+    "name": "케이오배 스프링컵",
+    "grade": "G2",
+    "venue": "도쿄",
+    "surface": "잔디",
+    "distance": 1400,
+    "distanceCategory": "단거리",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 5,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 5900,
+    "isOverseas": false
+  },
+  {
+    "id": "메구로-기념",
+    "name": "메구로 기념",
+    "grade": "G2",
+    "venue": "도쿄",
+    "surface": "잔디",
+    "distance": 2500,
+    "distanceCategory": "장거리",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 5,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 5700,
+    "isOverseas": false
+  },
+  {
+    "id": "삿포로-기념",
+    "name": "삿포로 기념",
+    "grade": "G2",
+    "venue": "삿포로",
+    "surface": "잔디",
+    "distance": 2000,
+    "distanceCategory": "중거리",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 8,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 7000,
+    "isOverseas": false
+  },
+  {
+    "id": "센토-스테이크스",
+    "name": "센토 스테이크스",
+    "grade": "G2",
+    "venue": "한신",
+    "surface": "잔디",
+    "distance": 1200,
+    "distanceCategory": "단거리",
+    "rotation": "우",
+    "side": "내측",
+    "turn": {
+      "month": 9,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 5900,
+    "isOverseas": false
+  },
+  {
+    "id": "로즈-스테이크스",
+    "name": "로즈 스테이크스",
+    "grade": "G2",
+    "venue": "한신",
+    "surface": "잔디",
+    "distance": 1800,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": "외측",
+    "turn": {
+      "month": 9,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급"
+    ],
+    "fansGained": 5200,
+    "isOverseas": false
+  },
+  {
+    "id": "세인트-라이트-기념",
+    "name": "세인트 라이트 기념",
+    "grade": "G2",
+    "venue": "나카야마",
+    "surface": "잔디",
+    "distance": 2200,
+    "distanceCategory": "중거리",
+    "rotation": "우",
+    "side": "외측",
+    "turn": {
+      "month": 9,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "클래식급"
+    ],
+    "fansGained": 5400,
+    "isOverseas": false
+  },
+  {
+    "id": "고베-신문배",
+    "name": "고베 신문배",
+    "grade": "G2",
+    "venue": "한신",
+    "surface": "잔디",
+    "distance": 2400,
+    "distanceCategory": "중거리",
+    "rotation": "우",
+    "side": "외측",
+    "turn": {
+      "month": 9,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "클래식급"
+    ],
+    "fansGained": 5400,
+    "isOverseas": false
+  },
+  {
+    "id": "올-커머스",
+    "name": "올 커머스",
+    "grade": "G2",
+    "venue": "나카야마",
+    "surface": "잔디",
+    "distance": 2200,
+    "distanceCategory": "중거리",
+    "rotation": "우",
+    "side": "외측",
+    "turn": {
+      "month": 9,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 6700,
+    "isOverseas": false
+  },
+  {
+    "id": "마이니치-왕관",
+    "name": "마이니치 왕관",
+    "grade": "G2",
+    "venue": "도쿄",
+    "surface": "잔디",
+    "distance": 1800,
+    "distanceCategory": "마일",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 10,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 6700,
+    "isOverseas": false
+  },
+  {
+    "id": "교토-대상전",
+    "name": "교토 대상전",
+    "grade": "G2",
+    "venue": "교토",
+    "surface": "잔디",
+    "distance": 2400,
+    "distanceCategory": "중거리",
+    "rotation": "우",
+    "side": "외측",
+    "turn": {
+      "month": 10,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 6700,
+    "isOverseas": false
+  },
+  {
+    "id": "후츄-우마무스메-스테이크스",
+    "name": "후츄 우마무스메 스테이크스",
+    "grade": "G2",
+    "venue": "도쿄",
+    "surface": "잔디",
+    "distance": 1800,
+    "distanceCategory": "마일",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 10,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 5500,
+    "isOverseas": false
+  },
+  {
+    "id": "후지-스테이크스",
+    "name": "후지 스테이크스",
+    "grade": "G2",
+    "venue": "도쿄",
+    "surface": "잔디",
+    "distance": 1600,
+    "distanceCategory": "마일",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 10,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 5900,
+    "isOverseas": false
+  },
+  {
+    "id": "스완-스테이크스",
+    "name": "스완 스테이크스",
+    "grade": "G2",
+    "venue": "교토",
+    "surface": "잔디",
+    "distance": 1400,
+    "distanceCategory": "단거리",
+    "rotation": "우",
+    "side": "외측",
+    "turn": {
+      "month": 10,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 5900,
+    "isOverseas": false
+  },
+  {
+    "id": "케이오배-주니어-스테이크스",
+    "name": "케이오배 주니어 스테이크스",
+    "grade": "G2",
+    "venue": "도쿄",
+    "surface": "잔디",
+    "distance": 1400,
+    "distanceCategory": "단거리",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 11,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "주니어급"
+    ],
+    "fansGained": 3800,
+    "isOverseas": false
+  },
+  {
+    "id": "아르헨티나-공화국배",
+    "name": "아르헨티나 공화국배",
+    "grade": "G2",
+    "venue": "도쿄",
+    "surface": "잔디",
+    "distance": 2500,
+    "distanceCategory": "장거리",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 11,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 5700,
+    "isOverseas": false
+  },
+  {
+    "id": "데일리배-주니어-스테이크스",
+    "name": "데일리배 주니어 스테이크스",
+    "grade": "G2",
+    "venue": "교토",
+    "surface": "잔디",
+    "distance": 1600,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": "외측",
+    "turn": {
+      "month": 11,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "주니어급"
+    ],
+    "fansGained": 3800,
+    "isOverseas": false
+  },
+  {
+    "id": "스테이어스-스테이크스",
+    "name": "스테이어스 스테이크스",
+    "grade": "G2",
+    "venue": "나카야마",
+    "surface": "잔디",
+    "distance": 3600,
+    "distanceCategory": "장거리",
+    "rotation": "우",
+    "side": "내측",
+    "turn": {
+      "month": 12,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 6200,
+    "isOverseas": false
+  },
+  {
+    "id": "한신컵",
+    "name": "한신컵",
+    "grade": "G2",
+    "venue": "한신",
+    "surface": "잔디",
+    "distance": 1400,
+    "distanceCategory": "단거리",
+    "rotation": "우",
+    "side": "내측",
+    "turn": {
+      "month": 12,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 6700,
+    "isOverseas": false
+  },
+  {
+    "id": "레이디스-프렐류드",
+    "name": "레이디스 프렐류드",
+    "grade": "G2",
+    "venue": "오이",
+    "surface": "더트",
+    "distance": 1800,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 10,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 3100,
+    "isOverseas": false
+  },
+  {
+    "id": "도쿄배",
+    "name": "도쿄배",
+    "grade": "G2",
+    "venue": "오이",
+    "surface": "더트",
+    "distance": 1200,
+    "distanceCategory": "단거리",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 10,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 3500,
+    "isOverseas": false
+  },
+  {
+    "id": "엠프리스배",
+    "name": "엠프리스배",
+    "grade": "G2",
+    "venue": "가와사키",
+    "surface": "더트",
+    "distance": 2100,
+    "distanceCategory": "중거리",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 3,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 3500,
+    "isOverseas": false
+  },
+  {
+    "id": "간토-오크스",
+    "name": "간토 오크스",
+    "grade": "G2",
+    "venue": "가와사키",
+    "surface": "더트",
+    "distance": 2100,
+    "distanceCategory": "중거리",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 6,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급"
+    ],
+    "fansGained": 3500,
+    "isOverseas": false
+  },
+  {
+    "id": "다이올라이트-기념",
+    "name": "다이올라이트 기념",
+    "grade": "G2",
+    "venue": "후나바시",
+    "surface": "더트",
+    "distance": 2400,
+    "distanceCategory": "중거리",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 3,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 3200,
+    "isOverseas": false
+  },
+  {
+    "id": "산다화tv배",
+    "name": "산다화TV배",
+    "grade": "G2",
+    "venue": "후나바시",
+    "surface": "더트",
+    "distance": 1800,
+    "distanceCategory": "마일",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 9,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 3200,
+    "isOverseas": false
+  },
+  {
+    "id": "교토-금배",
+    "name": "교토 금배",
+    "grade": "G3",
+    "venue": "교토",
+    "surface": "잔디",
+    "distance": 1600,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": "외측",
+    "turn": {
+      "month": 1,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 4100,
+    "isOverseas": false
+  },
+  {
+    "id": "나카야마-금배",
+    "name": "나카야마 금배",
+    "grade": "G3",
+    "venue": "나카야마",
+    "surface": "잔디",
+    "distance": 2000,
+    "distanceCategory": "중거리",
+    "rotation": "우",
+    "side": "내측",
+    "turn": {
+      "month": 1,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 4100,
+    "isOverseas": false
+  },
+  {
+    "id": "신잔-기념",
+    "name": "신잔 기념",
+    "grade": "G3",
+    "venue": "교토",
+    "surface": "잔디",
+    "distance": 1600,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": "외측",
+    "turn": {
+      "month": 1,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급"
+    ],
+    "fansGained": 3800,
+    "isOverseas": false
+  },
+  {
+    "id": "페어리-스테이크스",
+    "name": "페어리 스테이크스",
+    "grade": "G3",
+    "venue": "나카야마",
+    "surface": "잔디",
+    "distance": 1600,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": "외측",
+    "turn": {
+      "month": 1,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급"
+    ],
+    "fansGained": 3500,
+    "isOverseas": false
+  },
+  {
+    "id": "아이치배",
+    "name": "아이치배",
+    "grade": "G3",
+    "venue": "츄쿄",
+    "surface": "잔디",
+    "distance": 2000,
+    "distanceCategory": "중거리",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 1,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 3600,
+    "isOverseas": false
+  },
+  {
+    "id": "케이세이배",
+    "name": "케이세이배",
+    "grade": "G3",
+    "venue": "나카야마",
+    "surface": "잔디",
+    "distance": 2000,
+    "distanceCategory": "중거리",
+    "rotation": "우",
+    "side": "내측",
+    "turn": {
+      "month": 1,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급"
+    ],
+    "fansGained": 3800,
+    "isOverseas": false
+  },
+  {
+    "id": "실크로드-스테이크스",
+    "name": "실크로드 스테이크스",
+    "grade": "G3",
+    "venue": "교토",
+    "surface": "잔디",
+    "distance": 1200,
+    "distanceCategory": "단거리",
+    "rotation": "우",
+    "side": "내측",
+    "turn": {
+      "month": 1,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 3900,
+    "isOverseas": false
+  },
+  {
+    "id": "네기시-스테이크스",
+    "name": "네기시 스테이크스",
+    "grade": "G3",
+    "venue": "도쿄",
+    "surface": "더트",
+    "distance": 1400,
+    "distanceCategory": "단거리",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 1,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 3800,
+    "isOverseas": false
+  },
+  {
+    "id": "키사라기상",
+    "name": "키사라기상",
+    "grade": "G3",
+    "venue": "교토",
+    "surface": "잔디",
+    "distance": 1800,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": "외측",
+    "turn": {
+      "month": 2,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급"
+    ],
+    "fansGained": 3800,
+    "isOverseas": false
+  },
+  {
+    "id": "도쿄-신문배",
+    "name": "도쿄 신문배",
+    "grade": "G3",
+    "venue": "도쿄",
+    "surface": "잔디",
+    "distance": 1600,
+    "distanceCategory": "마일",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 2,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 3900,
+    "isOverseas": false
+  },
+  {
+    "id": "퀸컵",
+    "name": "퀸컵",
+    "grade": "G3",
+    "venue": "도쿄",
+    "surface": "잔디",
+    "distance": 1600,
+    "distanceCategory": "마일",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 2,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급"
+    ],
+    "fansGained": 3500,
+    "isOverseas": false
+  },
+  {
+    "id": "쿄도통신배",
+    "name": "쿄도통신배",
+    "grade": "G3",
+    "venue": "도쿄",
+    "surface": "잔디",
+    "distance": 1800,
+    "distanceCategory": "마일",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 2,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급"
+    ],
+    "fansGained": 3800,
+    "isOverseas": false
+  },
+  {
+    "id": "교토-우마무스메-스테이크스",
+    "name": "교토 우마무스메 스테이크스",
+    "grade": "G3",
+    "venue": "교토",
+    "surface": "잔디",
+    "distance": 1400,
+    "distanceCategory": "단거리",
+    "rotation": "우",
+    "side": "외측",
+    "turn": {
+      "month": 2,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 3600,
+    "isOverseas": false
+  },
+  {
+    "id": "다이아몬드-스테이크스",
+    "name": "다이아몬드 스테이크스",
+    "grade": "G3",
+    "venue": "도쿄",
+    "surface": "잔디",
+    "distance": 3400,
+    "distanceCategory": "장거리",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 2,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 4100,
+    "isOverseas": false
+  },
+  {
+    "id": "코쿠라-대상전",
+    "name": "코쿠라 대상전",
+    "grade": "G3",
+    "venue": "코쿠라",
+    "surface": "잔디",
+    "distance": 1800,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 2,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 4100,
+    "isOverseas": false
+  },
+  {
+    "id": "알링턴컵",
+    "name": "알링턴컵",
+    "grade": "G3",
+    "venue": "한신",
+    "surface": "잔디",
+    "distance": 1600,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": "외측",
+    "turn": {
+      "month": 4,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급"
+    ],
+    "fansGained": 3800,
+    "isOverseas": false
+  },
+  {
+    "id": "한큐배",
+    "name": "한큐배",
+    "grade": "G3",
+    "venue": "한신",
+    "surface": "잔디",
+    "distance": 1400,
+    "distanceCategory": "단거리",
+    "rotation": "우",
+    "side": "내측",
+    "turn": {
+      "month": 2,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 4100,
+    "isOverseas": false
+  },
+  {
+    "id": "오션-스테이크스",
+    "name": "오션 스테이크스",
+    "grade": "G3",
+    "venue": "나카야마",
+    "surface": "잔디",
+    "distance": 1200,
+    "distanceCategory": "단거리",
+    "rotation": "우",
+    "side": "외측",
+    "turn": {
+      "month": 3,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 4100,
+    "isOverseas": false
+  },
+  {
+    "id": "나카야마-우마무스메-스테이크스",
+    "name": "나카야마 우마무스메 스테이크스",
+    "grade": "G3",
+    "venue": "나카야마",
+    "surface": "잔디",
+    "distance": 1800,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": "내측",
+    "turn": {
+      "month": 3,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 3600,
+    "isOverseas": false
+  },
+  {
+    "id": "팔콘-스테이크스",
+    "name": "팔콘 스테이크스",
+    "grade": "G3",
+    "venue": "츄쿄",
+    "surface": "잔디",
+    "distance": 1400,
+    "distanceCategory": "단거리",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 3,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "클래식급"
+    ],
+    "fansGained": 3800,
+    "isOverseas": false
+  },
+  {
+    "id": "플라워컵",
+    "name": "플라워컵",
+    "grade": "G3",
+    "venue": "나카야마",
+    "surface": "잔디",
+    "distance": 1800,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": "내측",
+    "turn": {
+      "month": 3,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "클래식급"
+    ],
+    "fansGained": 3500,
+    "isOverseas": false
+  },
+  {
+    "id": "마이니치배",
+    "name": "마이니치배",
+    "grade": "G3",
+    "venue": "한신",
+    "surface": "잔디",
+    "distance": 1800,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": "외측",
+    "turn": {
+      "month": 3,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "클래식급"
+    ],
+    "fansGained": 3800,
+    "isOverseas": false
+  },
+  {
+    "id": "마치-스테이크스",
+    "name": "마치 스테이크스",
+    "grade": "G3",
+    "venue": "나카야마",
+    "surface": "더트",
+    "distance": 1800,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 3,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 3600,
+    "isOverseas": false
+  },
+  {
+    "id": "더비-경-챌린지-트로피",
+    "name": "더비 경 챌린지 트로피",
+    "grade": "G3",
+    "venue": "나카야마",
+    "surface": "잔디",
+    "distance": 1600,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": "외측",
+    "turn": {
+      "month": 4,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 3900,
+    "isOverseas": false
+  },
+  {
+    "id": "안타레스-스테이크스",
+    "name": "안타레스 스테이크스",
+    "grade": "G3",
+    "venue": "한신",
+    "surface": "더트",
+    "distance": 1800,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 4,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 3600,
+    "isOverseas": false
+  },
+  {
+    "id": "후쿠시마-우마무스메-스테이크스",
+    "name": "후쿠시마 우마무스메 스테이크스",
+    "grade": "G3",
+    "venue": "후쿠시마",
+    "surface": "잔디",
+    "distance": 1800,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 4,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 3800,
+    "isOverseas": false
+  },
+  {
+    "id": "니이가타-대상전",
+    "name": "니이가타 대상전",
+    "grade": "G3",
+    "venue": "니이가타",
+    "surface": "잔디",
+    "distance": 2000,
+    "distanceCategory": "중거리",
+    "rotation": "좌",
+    "side": "외측",
+    "turn": {
+      "month": 5,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 4100,
+    "isOverseas": false
+  },
+  {
+    "id": "헤이안-스테이크스",
+    "name": "헤이안 스테이크스",
+    "grade": "G3",
+    "venue": "교토",
+    "surface": "더트",
+    "distance": 1900,
+    "distanceCategory": "중거리",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 5,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 3600,
+    "isOverseas": false
+  },
+  {
+    "id": "접시꽃-스테이크스",
+    "name": "접시꽃 스테이크스",
+    "grade": "G3",
+    "venue": "교토",
+    "surface": "잔디",
+    "distance": 1200,
+    "distanceCategory": "단거리",
+    "rotation": "우",
+    "side": "내측",
+    "turn": {
+      "month": 5,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "클래식급"
+    ],
+    "fansGained": 3800,
+    "isOverseas": false
+  },
+  {
+    "id": "나루오-기념",
+    "name": "나루오 기념",
+    "grade": "G3",
+    "venue": "한신",
+    "surface": "잔디",
+    "distance": 2000,
+    "distanceCategory": "중거리",
+    "rotation": "우",
+    "side": "내측",
+    "turn": {
+      "month": 6,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 4100,
+    "isOverseas": false
+  },
+  {
+    "id": "머메이드-스테이크스",
+    "name": "머메이드 스테이크스",
+    "grade": "G3",
+    "venue": "한신",
+    "surface": "잔디",
+    "distance": 2000,
+    "distanceCategory": "중거리",
+    "rotation": "우",
+    "side": "내측",
+    "turn": {
+      "month": 6,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 3600,
+    "isOverseas": false
+  },
+  {
+    "id": "엡섬컵",
+    "name": "엡섬컵",
+    "grade": "G3",
+    "venue": "도쿄",
+    "surface": "잔디",
+    "distance": 1800,
+    "distanceCategory": "마일",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 6,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 4100,
+    "isOverseas": false
+  },
+  {
+    "id": "유니콘-스테이크스",
+    "name": "유니콘 스테이크스",
+    "grade": "G3",
+    "venue": "도쿄",
+    "surface": "더트",
+    "distance": 1600,
+    "distanceCategory": "마일",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 6,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "클래식급"
+    ],
+    "fansGained": 3500,
+    "isOverseas": false
+  },
+  {
+    "id": "하코다테-스프린트-스테이크스",
+    "name": "하코다테 스프린트 스테이크스",
+    "grade": "G3",
+    "venue": "하코다테",
+    "surface": "잔디",
+    "distance": 1200,
+    "distanceCategory": "단거리",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 6,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 3900,
+    "isOverseas": false
+  },
+  {
+    "id": "cbc상",
+    "name": "CBC상",
+    "grade": "G3",
+    "venue": "츄쿄",
+    "surface": "잔디",
+    "distance": 1200,
+    "distanceCategory": "단거리",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 7,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 3900,
+    "isOverseas": false
+  },
+  {
+    "id": "라디오-nikkei상",
+    "name": "라디오 NIKKEI상",
+    "grade": "G3",
+    "venue": "후쿠시마",
+    "surface": "잔디",
+    "distance": 1800,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 7,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급"
+    ],
+    "fansGained": 3800,
+    "isOverseas": false
+  },
+  {
+    "id": "프로시온-스테이크스",
+    "name": "프로시온 스테이크스",
+    "grade": "G3",
+    "venue": "츄쿄",
+    "surface": "더트",
+    "distance": 1400,
+    "distanceCategory": "단거리",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 7,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 3600,
+    "isOverseas": false
+  },
+  {
+    "id": "칠석상",
+    "name": "칠석상",
+    "grade": "G3",
+    "venue": "후쿠시마",
+    "surface": "잔디",
+    "distance": 2000,
+    "distanceCategory": "중거리",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 7,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 4100,
+    "isOverseas": false
+  },
+  {
+    "id": "하코다테-기념",
+    "name": "하코다테 기념",
+    "grade": "G3",
+    "venue": "하코다테",
+    "surface": "잔디",
+    "distance": 2000,
+    "distanceCategory": "중거리",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 7,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 4100,
+    "isOverseas": false
+  },
+  {
+    "id": "츄쿄-기념",
+    "name": "츄쿄 기념",
+    "grade": "G3",
+    "venue": "츄쿄",
+    "surface": "잔디",
+    "distance": 1600,
+    "distanceCategory": "마일",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 7,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 3900,
+    "isOverseas": false
+  },
+  {
+    "id": "하코다테-주니어-스테이크스",
+    "name": "하코다테 주니어 스테이크스",
+    "grade": "G3",
+    "venue": "하코다테",
+    "surface": "잔디",
+    "distance": 1200,
+    "distanceCategory": "단거리",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 7,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "주니어급"
+    ],
+    "fansGained": 3100,
+    "isOverseas": false
+  },
+  {
+    "id": "이비스-서머-대시",
+    "name": "이비스 서머 대시",
+    "grade": "G3",
+    "venue": "니이가타",
+    "surface": "잔디",
+    "distance": 1000,
+    "distanceCategory": "단거리",
+    "rotation": "직선",
+    "side": null,
+    "turn": {
+      "month": 7,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 3900,
+    "isOverseas": false
+  },
+  {
+    "id": "퀸-스테이크스",
+    "name": "퀸 스테이크스",
+    "grade": "G3",
+    "venue": "삿포로",
+    "surface": "잔디",
+    "distance": 1800,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 7,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 3600,
+    "isOverseas": false
+  },
+  {
+    "id": "코쿠라-기념",
+    "name": "코쿠라 기념",
+    "grade": "G3",
+    "venue": "코쿠라",
+    "surface": "잔디",
+    "distance": 2000,
+    "distanceCategory": "중거리",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 8,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 4100,
+    "isOverseas": false
+  },
+  {
+    "id": "레오파드-스테이크스",
+    "name": "레오파드 스테이크스",
+    "grade": "G3",
+    "venue": "니이가타",
+    "surface": "더트",
+    "distance": 1800,
+    "distanceCategory": "마일",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 8,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급"
+    ],
+    "fansGained": 4000,
+    "isOverseas": false
+  },
+  {
+    "id": "세키야-기념",
+    "name": "세키야 기념",
+    "grade": "G3",
+    "venue": "니이가타",
+    "surface": "잔디",
+    "distance": 1600,
+    "distanceCategory": "마일",
+    "rotation": "좌",
+    "side": "외측",
+    "turn": {
+      "month": 8,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 3900,
+    "isOverseas": false
+  },
+  {
+    "id": "엘름-스테이크스",
+    "name": "엘름 스테이크스",
+    "grade": "G3",
+    "venue": "삿포로",
+    "surface": "더트",
+    "distance": 1700,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 8,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 3600,
+    "isOverseas": false
+  },
+  {
+    "id": "키타큐슈-기념",
+    "name": "키타큐슈 기념",
+    "grade": "G3",
+    "venue": "코쿠라",
+    "surface": "잔디",
+    "distance": 1200,
+    "distanceCategory": "단거리",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 8,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 3900,
+    "isOverseas": false
+  },
+  {
+    "id": "니이가타-주니어-스테이크스",
+    "name": "니이가타 주니어 스테이크스",
+    "grade": "G3",
+    "venue": "니이가타",
+    "surface": "잔디",
+    "distance": 1600,
+    "distanceCategory": "마일",
+    "rotation": "좌",
+    "side": "외측",
+    "turn": {
+      "month": 8,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "주니어급"
+    ],
+    "fansGained": 3100,
+    "isOverseas": false
+  },
+  {
+    "id": "킨랜드컵",
+    "name": "킨랜드컵",
+    "grade": "G3",
+    "venue": "삿포로",
+    "surface": "잔디",
+    "distance": 1200,
+    "distanceCategory": "단거리",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 8,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 4100,
+    "isOverseas": false
+  },
+  {
+    "id": "삿포로-주니어-스테이크스",
+    "name": "삿포로 주니어 스테이크스",
+    "grade": "G3",
+    "venue": "삿포로",
+    "surface": "잔디",
+    "distance": 1800,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 9,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "주니어급"
+    ],
+    "fansGained": 3100,
+    "isOverseas": false
+  },
+  {
+    "id": "코쿠라-주니어-스테이크스",
+    "name": "코쿠라 주니어 스테이크스",
+    "grade": "G3",
+    "venue": "코쿠라",
+    "surface": "잔디",
+    "distance": 1200,
+    "distanceCategory": "단거리",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 9,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "주니어급"
+    ],
+    "fansGained": 3100,
+    "isOverseas": false
+  },
+  {
+    "id": "니이가타-기념",
+    "name": "니이가타 기념",
+    "grade": "G3",
+    "venue": "니이가타",
+    "surface": "잔디",
+    "distance": 2000,
+    "distanceCategory": "중거리",
+    "rotation": "좌",
+    "side": "외측",
+    "turn": {
+      "month": 9,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 4100,
+    "isOverseas": false
+  },
+  {
+    "id": "개미취-스테이크스",
+    "name": "개미취 스테이크스",
+    "grade": "G3",
+    "venue": "나카야마",
+    "surface": "잔디",
+    "distance": 2000,
+    "distanceCategory": "중거리",
+    "rotation": "우",
+    "side": "내측",
+    "turn": {
+      "month": 9,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급"
+    ],
+    "fansGained": 3500,
+    "isOverseas": false
+  },
+  {
+    "id": "케이세이배-오텀-핸디캡",
+    "name": "케이세이배 오텀 핸디캡",
+    "grade": "G3",
+    "venue": "나카야마",
+    "surface": "잔디",
+    "distance": 1600,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": "외측",
+    "turn": {
+      "month": 9,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 3900,
+    "isOverseas": false
+  },
+  {
+    "id": "시리우스-스테이크스",
+    "name": "시리우스 스테이크스",
+    "grade": "G3",
+    "venue": "한신",
+    "surface": "더트",
+    "distance": 2000,
+    "distanceCategory": "중거리",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 9,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 3600,
+    "isOverseas": false
+  },
+  {
+    "id": "사우디아라비아-로얄컵",
+    "name": "사우디아라비아 로얄컵",
+    "grade": "G3",
+    "venue": "도쿄",
+    "surface": "잔디",
+    "distance": 1600,
+    "distanceCategory": "마일",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 10,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "주니어급"
+    ],
+    "fansGained": 3300,
+    "isOverseas": false
+  },
+  {
+    "id": "아르테미스-스테이크스",
+    "name": "아르테미스 스테이크스",
+    "grade": "G3",
+    "venue": "도쿄",
+    "surface": "잔디",
+    "distance": 1600,
+    "distanceCategory": "마일",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 10,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "주니어급"
+    ],
+    "fansGained": 2900,
+    "isOverseas": false
+  },
+  {
+    "id": "판타지-스테이크스",
+    "name": "판타지 스테이크스",
+    "grade": "G3",
+    "venue": "교토",
+    "surface": "잔디",
+    "distance": 1400,
+    "distanceCategory": "단거리",
+    "rotation": "우",
+    "side": "외측",
+    "turn": {
+      "month": 11,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "주니어급"
+    ],
+    "fansGained": 2900,
+    "isOverseas": false
+  },
+  {
+    "id": "미야코-스테이크스",
+    "name": "미야코 스테이크스",
+    "grade": "G3",
+    "venue": "교토",
+    "surface": "더트",
+    "distance": 1800,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 11,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 3800,
+    "isOverseas": false
+  },
+  {
+    "id": "무사시노-스테이크스",
+    "name": "무사시노 스테이크스",
+    "grade": "G3",
+    "venue": "도쿄",
+    "surface": "더트",
+    "distance": 1600,
+    "distanceCategory": "마일",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 11,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 3800,
+    "isOverseas": false
+  },
+  {
+    "id": "후쿠시마-기념",
+    "name": "후쿠시마 기념",
+    "grade": "G3",
+    "venue": "후쿠시마",
+    "surface": "잔디",
+    "distance": 2000,
+    "distanceCategory": "중거리",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 11,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 4100,
+    "isOverseas": false
+  },
+  {
+    "id": "도쿄-스포츠배-주니어-스테이크스",
+    "name": "도쿄 스포츠배 주니어 스테이크스",
+    "grade": "G3",
+    "venue": "도쿄",
+    "surface": "잔디",
+    "distance": 1800,
+    "distanceCategory": "마일",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 11,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "주니어급"
+    ],
+    "fansGained": 3300,
+    "isOverseas": false
+  },
+  {
+    "id": "교토-주니어-스테이크스",
+    "name": "교토 주니어 스테이크스",
+    "grade": "G3",
+    "venue": "교토",
+    "surface": "잔디",
+    "distance": 2000,
+    "distanceCategory": "중거리",
+    "rotation": "우",
+    "side": "내측",
+    "turn": {
+      "month": 11,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "주니어급"
+    ],
+    "fansGained": 3300,
+    "isOverseas": false
+  },
+  {
+    "id": "케이한배",
+    "name": "케이한배",
+    "grade": "G3",
+    "venue": "교토",
+    "surface": "잔디",
+    "distance": 1200,
+    "distanceCategory": "단거리",
+    "rotation": "우",
+    "side": "내측",
+    "turn": {
+      "month": 11,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 3900,
+    "isOverseas": false
+  },
+  {
+    "id": "챌린지컵",
+    "name": "챌린지컵",
+    "grade": "G3",
+    "venue": "한신",
+    "surface": "잔디",
+    "distance": 2000,
+    "distanceCategory": "중거리",
+    "rotation": "우",
+    "side": "내측",
+    "turn": {
+      "month": 12,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 4100,
+    "isOverseas": false
+  },
+  {
+    "id": "츄니치-신문배",
+    "name": "츄니치 신문배",
+    "grade": "G3",
+    "venue": "츄쿄",
+    "surface": "잔디",
+    "distance": 2000,
+    "distanceCategory": "중거리",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 12,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 4100,
+    "isOverseas": false
+  },
+  {
+    "id": "카펠라-스테이크스",
+    "name": "카펠라 스테이크스",
+    "grade": "G3",
+    "venue": "나카야마",
+    "surface": "더트",
+    "distance": 1200,
+    "distanceCategory": "단거리",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 12,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 3600,
+    "isOverseas": false
+  },
+  {
+    "id": "터키석-스테이크스",
+    "name": "터키석 스테이크스",
+    "grade": "G3",
+    "venue": "나카야마",
+    "surface": "잔디",
+    "distance": 1600,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": "외측",
+    "turn": {
+      "month": 12,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 3600,
+    "isOverseas": false
+  },
+  {
+    "id": "tck-여왕배",
+    "name": "TCK 여왕배",
+    "grade": "G3",
+    "venue": "오이",
+    "surface": "더트",
+    "distance": 1800,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 1,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 2200,
+    "isOverseas": false
+  },
+  {
+    "id": "도쿄-스프린트",
+    "name": "도쿄 스프린트",
+    "grade": "G3",
+    "venue": "오이",
+    "surface": "더트",
+    "distance": 1200,
+    "distanceCategory": "단거리",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 4,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 2700,
+    "isOverseas": false
+  },
+  {
+    "id": "스파킹-레이디컵",
+    "name": "스파킹 레이디컵",
+    "grade": "G3",
+    "venue": "가와사키",
+    "surface": "더트",
+    "distance": 1600,
+    "distanceCategory": "마일",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 7,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 2500,
+    "isOverseas": false
+  },
+  {
+    "id": "마린컵",
+    "name": "마린컵",
+    "grade": "G3",
+    "venue": "후나바시",
+    "surface": "더트",
+    "distance": 1600,
+    "distanceCategory": "마일",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 4,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 2500,
+    "isOverseas": false
+  },
+  {
+    "id": "퀸상",
+    "name": "퀸상",
+    "grade": "G3",
+    "venue": "후나바시",
+    "surface": "더트",
+    "distance": 1800,
+    "distanceCategory": "마일",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 12,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 2100,
+    "isOverseas": false
+  },
+  {
+    "id": "머큐리컵",
+    "name": "머큐리컵",
+    "grade": "G3",
+    "venue": "모리오카",
+    "surface": "더트",
+    "distance": 2000,
+    "distanceCategory": "중거리",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 7,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 2300,
+    "isOverseas": false
+  },
+  {
+    "id": "클러스터컵",
+    "name": "클러스터컵",
+    "grade": "G3",
+    "venue": "모리오카",
+    "surface": "더트",
+    "distance": 1200,
+    "distanceCategory": "단거리",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 8,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 2300,
+    "isOverseas": false
+  },
+  {
+    "id": "만엽-스테이크스",
+    "name": "만엽 스테이크스",
+    "grade": "OP",
+    "venue": "교토",
+    "surface": "잔디",
+    "distance": 3000,
+    "distanceCategory": "장거리",
+    "rotation": "우",
+    "side": "외측",
+    "turn": {
+      "month": 1,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 2400,
+    "isOverseas": false
+  },
+  {
+    "id": "주니어컵",
+    "name": "주니어컵",
+    "grade": "OP",
+    "venue": "나카야마",
+    "surface": "잔디",
+    "distance": 1600,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": "외측",
+    "turn": {
+      "month": 1,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급"
+    ],
+    "fansGained": 2000,
+    "isOverseas": false
+  },
+  {
+    "id": "요도-단거리-스테이크스",
+    "name": "요도 단거리 스테이크스",
+    "grade": "OP",
+    "venue": "교토",
+    "surface": "잔디",
+    "distance": 1200,
+    "distanceCategory": "단거리",
+    "rotation": "우",
+    "side": "내측",
+    "turn": {
+      "month": 1,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 2500,
+    "isOverseas": false
+  },
+  {
+    "id": "폴룩스-스테이크스",
+    "name": "폴룩스 스테이크스",
+    "grade": "OP",
+    "venue": "나카야마",
+    "surface": "더트",
+    "distance": 1800,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 1,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 2200,
+    "isOverseas": false
+  },
+  {
+    "id": "재뉴어리-스테이크스",
+    "name": "재뉴어리 스테이크스",
+    "grade": "OP",
+    "venue": "나카야마",
+    "surface": "더트",
+    "distance": 1200,
+    "distanceCategory": "단거리",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 1,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 2200,
+    "isOverseas": false
+  },
+  {
+    "id": "뉴-이어-스테이크스",
+    "name": "뉴 이어 스테이크스",
+    "grade": "OP",
+    "venue": "나카야마",
+    "surface": "잔디",
+    "distance": 1600,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": "외측",
+    "turn": {
+      "month": 1,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 2500,
+    "isOverseas": false
+  },
+  {
+    "id": "홍매화-스테이크스",
+    "name": "홍매화 스테이크스",
+    "grade": "OP",
+    "venue": "교토",
+    "surface": "잔디",
+    "distance": 1400,
+    "distanceCategory": "단거리",
+    "rotation": "우",
+    "side": "외측",
+    "turn": {
+      "month": 1,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급"
+    ],
+    "fansGained": 2000,
+    "isOverseas": false
+  },
+  {
+    "id": "플레이아데스-스테이크스",
+    "name": "플레이아데스 스테이크스",
+    "grade": "OP",
+    "venue": "교토",
+    "surface": "더트",
+    "distance": 1400,
+    "distanceCategory": "단거리",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 1,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 2300,
+    "isOverseas": false
+  },
+  {
+    "id": "와카고마-스테이크스",
+    "name": "와카고마 스테이크스",
+    "grade": "OP",
+    "venue": "교토",
+    "surface": "잔디",
+    "distance": 2000,
+    "distanceCategory": "중거리",
+    "rotation": "우",
+    "side": "내측",
+    "turn": {
+      "month": 1,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "클래식급"
+    ],
+    "fansGained": 2000,
+    "isOverseas": false
+  },
+  {
+    "id": "카벙클-스테이크스",
+    "name": "카벙클 스테이크스",
+    "grade": "OP",
+    "venue": "나카야마",
+    "surface": "잔디",
+    "distance": 1200,
+    "distanceCategory": "단거리",
+    "rotation": "우",
+    "side": "외측",
+    "turn": {
+      "month": 1,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 2300,
+    "isOverseas": false
+  },
+  {
+    "id": "시라후지-스테이크스",
+    "name": "시라후지 스테이크스",
+    "grade": "OP",
+    "venue": "도쿄",
+    "surface": "잔디",
+    "distance": 2000,
+    "distanceCategory": "중거리",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 1,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 2600,
+    "isOverseas": false
+  },
+  {
+    "id": "크로커스-스테이크스",
+    "name": "크로커스 스테이크스",
+    "grade": "OP",
+    "venue": "도쿄",
+    "surface": "잔디",
+    "distance": 1400,
+    "distanceCategory": "단거리",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 1,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "클래식급"
+    ],
+    "fansGained": 2000,
+    "isOverseas": false
+  },
+  {
+    "id": "야마토-스테이크스",
+    "name": "야마토 스테이크스",
+    "grade": "OP",
+    "venue": "교토",
+    "surface": "더트",
+    "distance": 1200,
+    "distanceCategory": "단거리",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 2,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 2200,
+    "isOverseas": false
+  },
+  {
+    "id": "엘핀-스테이크스",
+    "name": "엘핀 스테이크스",
+    "grade": "OP",
+    "venue": "교토",
+    "surface": "잔디",
+    "distance": 1600,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": "외측",
+    "turn": {
+      "month": 2,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급"
+    ],
+    "fansGained": 2000,
+    "isOverseas": false
+  },
+  {
+    "id": "라쿠요-스테이크스",
+    "name": "라쿠요 스테이크스",
+    "grade": "OP",
+    "venue": "교토",
+    "surface": "잔디",
+    "distance": 1600,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": "외측",
+    "turn": {
+      "month": 2,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 2500,
+    "isOverseas": false
+  },
+  {
+    "id": "알데바란-스테이크스",
+    "name": "알데바란 스테이크스",
+    "grade": "OP",
+    "venue": "교토",
+    "surface": "더트",
+    "distance": 1900,
+    "distanceCategory": "중거리",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 2,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 2200,
+    "isOverseas": false
+  },
+  {
+    "id": "밸런타인-스테이크스",
+    "name": "밸런타인 스테이크스",
+    "grade": "OP",
+    "venue": "도쿄",
+    "surface": "더트",
+    "distance": 1400,
+    "distanceCategory": "단거리",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 2,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 2200,
+    "isOverseas": false
+  },
+  {
+    "id": "히아신스-스테이크스",
+    "name": "히아신스 스테이크스",
+    "grade": "OP",
+    "venue": "도쿄",
+    "surface": "더트",
+    "distance": 1600,
+    "distanceCategory": "마일",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 2,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "클래식급"
+    ],
+    "fansGained": 1900,
+    "isOverseas": false
+  },
+  {
+    "id": "소부-스테이크스",
+    "name": "소부 스테이크스",
+    "grade": "OP",
+    "venue": "나카야마",
+    "surface": "더트",
+    "distance": 1800,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 2,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 2200,
+    "isOverseas": false
+  },
+  {
+    "id": "제비꽃-스테이크스",
+    "name": "제비꽃 스테이크스",
+    "grade": "OP",
+    "venue": "한신",
+    "surface": "잔디",
+    "distance": 2200,
+    "distanceCategory": "중거리",
+    "rotation": "우",
+    "side": "내측",
+    "turn": {
+      "month": 2,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "클래식급"
+    ],
+    "fansGained": 2000,
+    "isOverseas": false
+  },
+  {
+    "id": "오사카성-스테이크스",
+    "name": "오사카성 스테이크스",
+    "grade": "OP",
+    "venue": "한신",
+    "surface": "잔디",
+    "distance": 1800,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": "외측",
+    "turn": {
+      "month": 3,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 2600,
+    "isOverseas": false
+  },
+  {
+    "id": "폴라리스-스테이크스",
+    "name": "폴라리스 스테이크스",
+    "grade": "OP",
+    "venue": "한신",
+    "surface": "더트",
+    "distance": 1400,
+    "distanceCategory": "단거리",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 3,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 2200,
+    "isOverseas": false
+  },
+  {
+    "id": "니가와-스테이크스",
+    "name": "니가와 스테이크스",
+    "grade": "OP",
+    "venue": "한신",
+    "surface": "더트",
+    "distance": 2000,
+    "distanceCategory": "중거리",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 3,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 2300,
+    "isOverseas": false
+  },
+  {
+    "id": "아네모네-스테이크스",
+    "name": "아네모네 스테이크스",
+    "grade": "OP",
+    "venue": "나카야마",
+    "surface": "잔디",
+    "distance": 1600,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": "외측",
+    "turn": {
+      "month": 3,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급"
+    ],
+    "fansGained": 2000,
+    "isOverseas": false
+  },
+  {
+    "id": "승룡-스테이크스",
+    "name": "승룡 스테이크스",
+    "grade": "OP",
+    "venue": "츄쿄",
+    "surface": "더트",
+    "distance": 1400,
+    "distanceCategory": "단거리",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 3,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급"
+    ],
+    "fansGained": 1800,
+    "isOverseas": false
+  },
+  {
+    "id": "동풍-스테이크스",
+    "name": "동풍 스테이크스",
+    "grade": "OP",
+    "venue": "나카야마",
+    "surface": "잔디",
+    "distance": 1600,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": "외측",
+    "turn": {
+      "month": 3,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 2500,
+    "isOverseas": false
+  },
+  {
+    "id": "새잎-스테이크스",
+    "name": "새잎 스테이크스",
+    "grade": "OP",
+    "venue": "한신",
+    "surface": "잔디",
+    "distance": 2000,
+    "distanceCategory": "중거리",
+    "rotation": "우",
+    "side": "내측",
+    "turn": {
+      "month": 3,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "클래식급"
+    ],
+    "fansGained": 2000,
+    "isOverseas": false
+  },
+  {
+    "id": "치바-스테이크스",
+    "name": "치바 스테이크스",
+    "grade": "OP",
+    "venue": "나카야마",
+    "surface": "더트",
+    "distance": 1200,
+    "distanceCategory": "단거리",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 3,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 2200,
+    "isOverseas": false
+  },
+  {
+    "id": "롯코-스테이크스",
+    "name": "롯코 스테이크스",
+    "grade": "OP",
+    "venue": "한신",
+    "surface": "잔디",
+    "distance": 1600,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": "외측",
+    "turn": {
+      "month": 3,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 2500,
+    "isOverseas": false
+  },
+  {
+    "id": "코랄-스테이크스",
+    "name": "코랄 스테이크스",
+    "grade": "OP",
+    "venue": "한신",
+    "surface": "더트",
+    "distance": 1400,
+    "distanceCategory": "단거리",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 4,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 2300,
+    "isOverseas": false
+  },
+  {
+    "id": "마가렛-스테이크스",
+    "name": "마가렛 스테이크스",
+    "grade": "OP",
+    "venue": "한신",
+    "surface": "잔디",
+    "distance": 1200,
+    "distanceCategory": "단거리",
+    "rotation": "우",
+    "side": "내측",
+    "turn": {
+      "month": 2,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "클래식급"
+    ],
+    "fansGained": 2000,
+    "isOverseas": false
+  },
+  {
+    "id": "복룡-스테이크스",
+    "name": "복룡 스테이크스",
+    "grade": "OP",
+    "venue": "나카야마",
+    "surface": "더트",
+    "distance": 1800,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 4,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급"
+    ],
+    "fansGained": 1800,
+    "isOverseas": false
+  },
+  {
+    "id": "물망초상",
+    "name": "물망초상",
+    "grade": "OP",
+    "venue": "한신",
+    "surface": "잔디",
+    "distance": 2000,
+    "distanceCategory": "중거리",
+    "rotation": "우",
+    "side": "내측",
+    "turn": {
+      "month": 4,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급"
+    ],
+    "fansGained": 2000,
+    "isOverseas": false
+  },
+  {
+    "id": "케이요-스테이크스",
+    "name": "케이요 스테이크스",
+    "grade": "OP",
+    "venue": "나카야마",
+    "surface": "더트",
+    "distance": 1200,
+    "distanceCategory": "단거리",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 4,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 2300,
+    "isOverseas": false
+  },
+  {
+    "id": "춘뢰-스테이크스",
+    "name": "춘뢰 스테이크스",
+    "grade": "OP",
+    "venue": "나카야마",
+    "surface": "잔디",
+    "distance": 1200,
+    "distanceCategory": "단거리",
+    "rotation": "우",
+    "side": "외측",
+    "turn": {
+      "month": 4,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 2500,
+    "isOverseas": false
+  },
+  {
+    "id": "후쿠시마-민보배",
+    "name": "후쿠시마 민보배",
+    "grade": "OP",
+    "venue": "후쿠시마",
+    "surface": "잔디",
+    "distance": 2000,
+    "distanceCategory": "중거리",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 4,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 2600,
+    "isOverseas": false
+  },
+  {
+    "id": "밀감-스테이크스",
+    "name": "밀감 스테이크스",
+    "grade": "OP",
+    "venue": "교토",
+    "surface": "잔디",
+    "distance": 1400,
+    "distanceCategory": "단거리",
+    "rotation": "우",
+    "side": "외측",
+    "turn": {
+      "month": 4,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "클래식급"
+    ],
+    "fansGained": 2000,
+    "isOverseas": false
+  },
+  {
+    "id": "오아시스-스테이크스",
+    "name": "오아시스 스테이크스",
+    "grade": "OP",
+    "venue": "도쿄",
+    "surface": "더트",
+    "distance": 1600,
+    "distanceCategory": "마일",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 4,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 2300,
+    "isOverseas": false
+  },
+  {
+    "id": "텐노산-스테이크스",
+    "name": "텐노산 스테이크스",
+    "grade": "OP",
+    "venue": "교토",
+    "surface": "더트",
+    "distance": 1200,
+    "distanceCategory": "단거리",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 4,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 2200,
+    "isOverseas": false
+  },
+  {
+    "id": "단오-스테이크스",
+    "name": "단오 스테이크스",
+    "grade": "OP",
+    "venue": "교토",
+    "surface": "더트",
+    "distance": 1400,
+    "distanceCategory": "단거리",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 4,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "클래식급"
+    ],
+    "fansGained": 1800,
+    "isOverseas": false
+  },
+  {
+    "id": "스위트피-스테이크스",
+    "name": "스위트피 스테이크스",
+    "grade": "OP",
+    "venue": "도쿄",
+    "surface": "잔디",
+    "distance": 1800,
+    "distanceCategory": "마일",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 4,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "클래식급"
+    ],
+    "fansGained": 2000,
+    "isOverseas": false
+  },
+  {
+    "id": "타니가와다케-스테이크스",
+    "name": "타니가와다케 스테이크스",
+    "grade": "OP",
+    "venue": "니이가타",
+    "surface": "잔디",
+    "distance": 1600,
+    "distanceCategory": "마일",
+    "rotation": "좌",
+    "side": "외측",
+    "turn": {
+      "month": 5,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 2500,
+    "isOverseas": false
+  },
+  {
+    "id": "프린시펄-스테이크스",
+    "name": "프린시펄 스테이크스",
+    "grade": "OP",
+    "venue": "도쿄",
+    "surface": "잔디",
+    "distance": 2000,
+    "distanceCategory": "중거리",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 5,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급"
+    ],
+    "fansGained": 2000,
+    "isOverseas": false
+  },
+  {
+    "id": "메트로폴리탄-스테이크스",
+    "name": "메트로폴리탄 스테이크스",
+    "grade": "OP",
+    "venue": "도쿄",
+    "surface": "잔디",
+    "distance": 2400,
+    "distanceCategory": "중거리",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 5,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 2600,
+    "isOverseas": false
+  },
+  {
+    "id": "쿠라마-스테이크스",
+    "name": "쿠라마 스테이크스",
+    "grade": "OP",
+    "venue": "교토",
+    "surface": "잔디",
+    "distance": 1200,
+    "distanceCategory": "단거리",
+    "rotation": "우",
+    "side": "내측",
+    "turn": {
+      "month": 5,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 2300,
+    "isOverseas": false
+  },
+  {
+    "id": "브릴리언트-스테이크스",
+    "name": "브릴리언트 스테이크스",
+    "grade": "OP",
+    "venue": "도쿄",
+    "surface": "더트",
+    "distance": 2100,
+    "distanceCategory": "중거리",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 5,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 2300,
+    "isOverseas": false
+  },
+  {
+    "id": "미야코-오지-스테이크스",
+    "name": "미야코 오지 스테이크스",
+    "grade": "OP",
+    "venue": "교토",
+    "surface": "잔디",
+    "distance": 1800,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": "외측",
+    "turn": {
+      "month": 5,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 2600,
+    "isOverseas": false
+  },
+  {
+    "id": "릿토-스테이크스",
+    "name": "릿토 스테이크스",
+    "grade": "OP",
+    "venue": "교토",
+    "surface": "더트",
+    "distance": 1400,
+    "distanceCategory": "단거리",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 5,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 2300,
+    "isOverseas": false
+  },
+  {
+    "id": "청룡-스테이크스",
+    "name": "청룡 스테이크스",
+    "grade": "OP",
+    "venue": "도쿄",
+    "surface": "더트",
+    "distance": 1600,
+    "distanceCategory": "마일",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 5,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급"
+    ],
+    "fansGained": 1800,
+    "isOverseas": false
+  },
+  {
+    "id": "메이-스테이크스",
+    "name": "메이 스테이크스",
+    "grade": "OP",
+    "venue": "도쿄",
+    "surface": "잔디",
+    "distance": 1800,
+    "distanceCategory": "마일",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 5,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 2400,
+    "isOverseas": false
+  },
+  {
+    "id": "봉추-스테이크스",
+    "name": "봉추 스테이크스",
+    "grade": "OP",
+    "venue": "교토",
+    "surface": "더트",
+    "distance": 1800,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 5,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "클래식급"
+    ],
+    "fansGained": 1900,
+    "isOverseas": false
+  },
+  {
+    "id": "위타천-스테이크스",
+    "name": "위타천 스테이크스",
+    "grade": "OP",
+    "venue": "니이가타",
+    "surface": "잔디",
+    "distance": 1000,
+    "distanceCategory": "단거리",
+    "rotation": "직선",
+    "side": null,
+    "turn": {
+      "month": 5,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 2300,
+    "isOverseas": false
+  },
+  {
+    "id": "백백합-스테이크스",
+    "name": "백백합 스테이크스",
+    "grade": "OP",
+    "venue": "교토",
+    "surface": "잔디",
+    "distance": 1800,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": "외측",
+    "turn": {
+      "month": 5,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "클래식급"
+    ],
+    "fansGained": 2000,
+    "isOverseas": false
+  },
+  {
+    "id": "느티나무-스테이크스",
+    "name": "느티나무 스테이크스",
+    "grade": "OP",
+    "venue": "도쿄",
+    "surface": "더트",
+    "distance": 1400,
+    "distanceCategory": "단거리",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 5,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 2200,
+    "isOverseas": false
+  },
+  {
+    "id": "아즈치성-스테이크스",
+    "name": "아즈치성 스테이크스",
+    "grade": "OP",
+    "venue": "교토",
+    "surface": "잔디",
+    "distance": 1400,
+    "distanceCategory": "단거리",
+    "rotation": "우",
+    "side": "외측",
+    "turn": {
+      "month": 5,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 2500,
+    "isOverseas": false
+  },
+  {
+    "id": "아할-테케-스테이크스",
+    "name": "아할 테케 스테이크스",
+    "grade": "OP",
+    "venue": "도쿄",
+    "surface": "더트",
+    "distance": 1600,
+    "distanceCategory": "마일",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 6,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 2200,
+    "isOverseas": false
+  },
+  {
+    "id": "텐포산-스테이크스",
+    "name": "텐포산 스테이크스",
+    "grade": "OP",
+    "venue": "한신",
+    "surface": "더트",
+    "distance": 1400,
+    "distanceCategory": "단거리",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 6,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 2200,
+    "isOverseas": false
+  },
+  {
+    "id": "요나고-스테이크스",
+    "name": "요나고 스테이크스",
+    "grade": "OP",
+    "venue": "한신",
+    "surface": "잔디",
+    "distance": 1600,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": "외측",
+    "turn": {
+      "month": 6,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 2500,
+    "isOverseas": false
+  },
+  {
+    "id": "오누마-스테이크스",
+    "name": "오누마 스테이크스",
+    "grade": "OP",
+    "venue": "하코다테",
+    "surface": "더트",
+    "distance": 1700,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 6,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 2300,
+    "isOverseas": false
+  },
+  {
+    "id": "파라다이스-스테이크스",
+    "name": "파라다이스 스테이크스",
+    "grade": "OP",
+    "venue": "도쿄",
+    "surface": "잔디",
+    "distance": 1400,
+    "distanceCategory": "단거리",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 6,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 2500,
+    "isOverseas": false
+  },
+  {
+    "id": "토모에상",
+    "name": "토모에상",
+    "grade": "OP",
+    "venue": "하코다테",
+    "surface": "잔디",
+    "distance": 1800,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 7,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 2400,
+    "isOverseas": false
+  },
+  {
+    "id": "마린-스테이크스",
+    "name": "마린 스테이크스",
+    "grade": "OP",
+    "venue": "하코다테",
+    "surface": "더트",
+    "distance": 1700,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 7,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 2200,
+    "isOverseas": false
+  },
+  {
+    "id": "나고야-철도배",
+    "name": "나고야 철도배",
+    "grade": "OP",
+    "venue": "츄쿄",
+    "surface": "더트",
+    "distance": 1800,
+    "distanceCategory": "마일",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 7,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 2300,
+    "isOverseas": false
+  },
+  {
+    "id": "츄쿄-주니어-스테이크스",
+    "name": "츄쿄 주니어 스테이크스",
+    "grade": "OP",
+    "venue": "츄쿄",
+    "surface": "잔디",
+    "distance": 1600,
+    "distanceCategory": "마일",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 7,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "주니어급"
+    ],
+    "fansGained": 1600,
+    "isOverseas": false
+  },
+  {
+    "id": "후쿠시마tv-오픈",
+    "name": "후쿠시마TV 오픈",
+    "grade": "OP",
+    "venue": "후쿠시마",
+    "surface": "잔디",
+    "distance": 1200,
+    "distanceCategory": "단거리",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 7,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 2300,
+    "isOverseas": false
+  },
+  {
+    "id": "달리아상",
+    "name": "달리아상",
+    "grade": "OP",
+    "venue": "니이가타",
+    "surface": "잔디",
+    "distance": 1400,
+    "distanceCategory": "단거리",
+    "rotation": "좌",
+    "side": "내측",
+    "turn": {
+      "month": 8,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "주니어급"
+    ],
+    "fansGained": 1600,
+    "isOverseas": false
+  },
+  {
+    "id": "삿포로-닛케이-오픈",
+    "name": "삿포로 닛케이 오픈",
+    "grade": "OP",
+    "venue": "삿포로",
+    "surface": "잔디",
+    "distance": 2600,
+    "distanceCategory": "장거리",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 8,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 2600,
+    "isOverseas": false
+  },
+  {
+    "id": "uhb상",
+    "name": "UHB상",
+    "grade": "OP",
+    "venue": "삿포로",
+    "surface": "잔디",
+    "distance": 1200,
+    "distanceCategory": "단거리",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 8,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 2300,
+    "isOverseas": false
+  },
+  {
+    "id": "아소-스테이크스",
+    "name": "아소 스테이크스",
+    "grade": "OP",
+    "venue": "코쿠라",
+    "surface": "더트",
+    "distance": 1700,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 8,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 2200,
+    "isOverseas": false
+  },
+  {
+    "id": "피닉스상",
+    "name": "피닉스상",
+    "grade": "OP",
+    "venue": "코쿠라",
+    "surface": "잔디",
+    "distance": 1200,
+    "distanceCategory": "단거리",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 8,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "주니어급"
+    ],
+    "fansGained": 1600,
+    "isOverseas": false
+  },
+  {
+    "id": "코스모스상",
+    "name": "코스모스상",
+    "grade": "OP",
+    "venue": "삿포로",
+    "surface": "잔디",
+    "distance": 1800,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 8,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "주니어급"
+    ],
+    "fansGained": 1600,
+    "isOverseas": false
+  },
+  {
+    "id": "nst상",
+    "name": "NST상",
+    "grade": "OP",
+    "venue": "니이가타",
+    "surface": "더트",
+    "distance": 1200,
+    "distanceCategory": "단거리",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 8,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 2200,
+    "isOverseas": false
+  },
+  {
+    "id": "클로버상",
+    "name": "클로버상",
+    "grade": "OP",
+    "venue": "삿포로",
+    "surface": "잔디",
+    "distance": 1500,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 8,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "주니어급"
+    ],
+    "fansGained": 1600,
+    "isOverseas": false
+  },
+  {
+    "id": "bsn상",
+    "name": "BSN상",
+    "grade": "OP",
+    "venue": "니이가타",
+    "surface": "더트",
+    "distance": 1800,
+    "distanceCategory": "마일",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 8,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 2300,
+    "isOverseas": false
+  },
+  {
+    "id": "코쿠라-닛케이-오픈",
+    "name": "코쿠라 닛케이 오픈",
+    "grade": "OP",
+    "venue": "코쿠라",
+    "surface": "잔디",
+    "distance": 1800,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 8,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 2400,
+    "isOverseas": false
+  },
+  {
+    "id": "따오기-스테이크스",
+    "name": "따오기 스테이크스",
+    "grade": "OP",
+    "venue": "니이가타",
+    "surface": "잔디",
+    "distance": 1400,
+    "distanceCategory": "단거리",
+    "rotation": "좌",
+    "side": "내측",
+    "turn": {
+      "month": 8,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 2500,
+    "isOverseas": false
+  },
+  {
+    "id": "두루미-스테이크스",
+    "name": "두루미 스테이크스",
+    "grade": "OP",
+    "venue": "삿포로",
+    "surface": "잔디",
+    "distance": 2600,
+    "distanceCategory": "장거리",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 9,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 2400,
+    "isOverseas": false
+  },
+  {
+    "id": "은방울꽃상",
+    "name": "은방울꽃상",
+    "grade": "OP",
+    "venue": "삿포로",
+    "surface": "잔디",
+    "distance": 1200,
+    "distanceCategory": "단거리",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 9,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "주니어급"
+    ],
+    "fansGained": 1600,
+    "isOverseas": false
+  },
+  {
+    "id": "에니프-스테이크스",
+    "name": "에니프 스테이크스",
+    "grade": "OP",
+    "venue": "한신",
+    "surface": "더트",
+    "distance": 1400,
+    "distanceCategory": "단거리",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 9,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 2300,
+    "isOverseas": false
+  },
+  {
+    "id": "들국화-스테이크스",
+    "name": "들국화 스테이크스",
+    "grade": "OP",
+    "venue": "한신",
+    "surface": "잔디",
+    "distance": 1800,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": "외측",
+    "turn": {
+      "month": 9,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "주니어급"
+    ],
+    "fansGained": 1600,
+    "isOverseas": false
+  },
+  {
+    "id": "라디오-일본상",
+    "name": "라디오 일본상",
+    "grade": "OP",
+    "venue": "나카야마",
+    "surface": "더트",
+    "distance": 1800,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 9,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 2200,
+    "isOverseas": false
+  },
+  {
+    "id": "도라지-스테이크스",
+    "name": "도라지 스테이크스",
+    "grade": "OP",
+    "venue": "한신",
+    "surface": "잔디",
+    "distance": 1400,
+    "distanceCategory": "단거리",
+    "rotation": "우",
+    "side": "내측",
+    "turn": {
+      "month": 9,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "주니어급"
+    ],
+    "fansGained": 1600,
+    "isOverseas": false
+  },
+  {
+    "id": "부용꽃-스테이크스",
+    "name": "부용꽃 스테이크스",
+    "grade": "OP",
+    "venue": "나카야마",
+    "surface": "잔디",
+    "distance": 2000,
+    "distanceCategory": "중거리",
+    "rotation": "우",
+    "side": "내측",
+    "turn": {
+      "month": 9,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "주니어급"
+    ],
+    "fansGained": 1600,
+    "isOverseas": false
+  },
+  {
+    "id": "홍초-스테이크스",
+    "name": "홍초 스테이크스",
+    "grade": "OP",
+    "venue": "나카야마",
+    "surface": "잔디",
+    "distance": 1200,
+    "distanceCategory": "단거리",
+    "rotation": "우",
+    "side": "외측",
+    "turn": {
+      "month": 9,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "주니어급"
+    ],
+    "fansGained": 1600,
+    "isOverseas": false
+  },
+  {
+    "id": "포트아일랜드-스테이크스",
+    "name": "포트아일랜드 스테이크스",
+    "grade": "OP",
+    "venue": "한신",
+    "surface": "잔디",
+    "distance": 1600,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": "외측",
+    "turn": {
+      "month": 9,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 2500,
+    "isOverseas": false
+  },
+  {
+    "id": "오팔-스테이크스",
+    "name": "오팔 스테이크스",
+    "grade": "OP",
+    "venue": "교토",
+    "surface": "잔디",
+    "distance": 1200,
+    "distanceCategory": "단거리",
+    "rotation": "우",
+    "side": "내측",
+    "turn": {
+      "month": 10,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 2500,
+    "isOverseas": false
+  },
+  {
+    "id": "그린-채널컵",
+    "name": "그린 채널컵",
+    "grade": "OP",
+    "venue": "도쿄",
+    "surface": "더트",
+    "distance": 1400,
+    "distanceCategory": "단거리",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 10,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 2300,
+    "isOverseas": false
+  },
+  {
+    "id": "단풍-스테이크스",
+    "name": "단풍 스테이크스",
+    "grade": "OP",
+    "venue": "교토",
+    "surface": "잔디",
+    "distance": 1400,
+    "distanceCategory": "단거리",
+    "rotation": "우",
+    "side": "외측",
+    "turn": {
+      "month": 10,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "주니어급"
+    ],
+    "fansGained": 1600,
+    "isOverseas": false
+  },
+  {
+    "id": "옥토버-스테이크스",
+    "name": "옥토버 스테이크스",
+    "grade": "OP",
+    "venue": "도쿄",
+    "surface": "잔디",
+    "distance": 2000,
+    "distanceCategory": "중거리",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 10,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 2600,
+    "isOverseas": false
+  },
+  {
+    "id": "신에츠-스테이크스",
+    "name": "신에츠 스테이크스",
+    "grade": "OP",
+    "venue": "니이가타",
+    "surface": "잔디",
+    "distance": 1400,
+    "distanceCategory": "단거리",
+    "rotation": "좌",
+    "side": "내측",
+    "turn": {
+      "month": 10,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 2500,
+    "isOverseas": false
+  },
+  {
+    "id": "아이비-스테이크스",
+    "name": "아이비 스테이크스",
+    "grade": "OP",
+    "venue": "도쿄",
+    "surface": "잔디",
+    "distance": 1800,
+    "distanceCategory": "마일",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 10,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "주니어급"
+    ],
+    "fansGained": 1700,
+    "isOverseas": false
+  },
+  {
+    "id": "무로마치-스테이크스",
+    "name": "무로마치 스테이크스",
+    "grade": "OP",
+    "venue": "교토",
+    "surface": "더트",
+    "distance": 1200,
+    "distanceCategory": "단거리",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 10,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 2200,
+    "isOverseas": false
+  },
+  {
+    "id": "브라질컵",
+    "name": "브라질컵",
+    "grade": "OP",
+    "venue": "도쿄",
+    "surface": "더트",
+    "distance": 2100,
+    "distanceCategory": "중거리",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 10,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 2300,
+    "isOverseas": false
+  },
+  {
+    "id": "사철쑥-스테이크스",
+    "name": "사철쑥 스테이크스",
+    "grade": "OP",
+    "venue": "교토",
+    "surface": "잔디",
+    "distance": 1800,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": "외측",
+    "turn": {
+      "month": 10,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "주니어급"
+    ],
+    "fansGained": 1700,
+    "isOverseas": false
+  },
+  {
+    "id": "카시오페이아-스테이크스",
+    "name": "카시오페이아 스테이크스",
+    "grade": "OP",
+    "venue": "교토",
+    "surface": "잔디",
+    "distance": 1800,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": "외측",
+    "turn": {
+      "month": 10,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 2600,
+    "isOverseas": false
+  },
+  {
+    "id": "루미에르-오텀-대시",
+    "name": "루미에르 오텀 대시",
+    "grade": "OP",
+    "venue": "니이가타",
+    "surface": "잔디",
+    "distance": 1000,
+    "distanceCategory": "단거리",
+    "rotation": "직선",
+    "side": null,
+    "turn": {
+      "month": 10,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 2500,
+    "isOverseas": false
+  },
+  {
+    "id": "oro컵",
+    "name": "ORO컵",
+    "grade": "OP",
+    "venue": "도쿄",
+    "surface": "잔디",
+    "distance": 1400,
+    "distanceCategory": "단거리",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 11,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 2500,
+    "isOverseas": false
+  },
+  {
+    "id": "후쿠시마-주니어-스테이크스",
+    "name": "후쿠시마 주니어 스테이크스",
+    "grade": "OP",
+    "venue": "후쿠시마",
+    "surface": "잔디",
+    "distance": 1200,
+    "distanceCategory": "단거리",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 11,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "주니어급"
+    ],
+    "fansGained": 1600,
+    "isOverseas": false
+  },
+  {
+    "id": "안드로메다-스테이크스",
+    "name": "안드로메다 스테이크스",
+    "grade": "OP",
+    "venue": "교토",
+    "surface": "잔디",
+    "distance": 2000,
+    "distanceCategory": "중거리",
+    "rotation": "우",
+    "side": "내측",
+    "turn": {
+      "month": 11,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 2600,
+    "isOverseas": false
+  },
+  {
+    "id": "동짓달-스테이크스",
+    "name": "동짓달 스테이크스",
+    "grade": "OP",
+    "venue": "도쿄",
+    "surface": "더트",
+    "distance": 1400,
+    "distanceCategory": "단거리",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 11,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 2200,
+    "isOverseas": false
+  },
+  {
+    "id": "후쿠시마-민우컵",
+    "name": "후쿠시마 민우컵",
+    "grade": "OP",
+    "venue": "후쿠시마",
+    "surface": "더트",
+    "distance": 1700,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 11,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 2300,
+    "isOverseas": false
+  },
+  {
+    "id": "캐피탈-스테이크스",
+    "name": "캐피탈 스테이크스",
+    "grade": "OP",
+    "venue": "도쿄",
+    "surface": "잔디",
+    "distance": 1600,
+    "distanceCategory": "마일",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 11,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 2500,
+    "isOverseas": false
+  },
+  {
+    "id": "오텀-리프-스테이크스",
+    "name": "오텀 리프 스테이크스",
+    "grade": "OP",
+    "venue": "교토",
+    "surface": "더트",
+    "distance": 1200,
+    "distanceCategory": "단거리",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 11,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 2200,
+    "isOverseas": false
+  },
+  {
+    "id": "라피스-라줄리-스테이크스",
+    "name": "라피스 라줄리 스테이크스",
+    "grade": "OP",
+    "venue": "나카야마",
+    "surface": "잔디",
+    "distance": 1200,
+    "distanceCategory": "단거리",
+    "rotation": "우",
+    "side": "외측",
+    "turn": {
+      "month": 12,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 2500,
+    "isOverseas": false
+  },
+  {
+    "id": "섣달-스테이크스",
+    "name": "섣달 스테이크스",
+    "grade": "OP",
+    "venue": "나카야마",
+    "surface": "더트",
+    "distance": 1800,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 12,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 2300,
+    "isOverseas": false
+  },
+  {
+    "id": "리겔-스테이크스",
+    "name": "리겔 스테이크스",
+    "grade": "OP",
+    "venue": "한신",
+    "surface": "잔디",
+    "distance": 1600,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": "외측",
+    "turn": {
+      "month": 12,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 2500,
+    "isOverseas": false
+  },
+  {
+    "id": "탄자나이트-스테이크스",
+    "name": "탄자나이트 스테이크스",
+    "grade": "OP",
+    "venue": "한신",
+    "surface": "잔디",
+    "distance": 1200,
+    "distanceCategory": "단거리",
+    "rotation": "우",
+    "side": "내측",
+    "turn": {
+      "month": 12,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 2300,
+    "isOverseas": false
+  },
+  {
+    "id": "디셈버-스테이크스",
+    "name": "디셈버 스테이크스",
+    "grade": "OP",
+    "venue": "나카야마",
+    "surface": "잔디",
+    "distance": 1800,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": "내측",
+    "turn": {
+      "month": 12,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 2600,
+    "isOverseas": false
+  },
+  {
+    "id": "크리스마스-로즈-스테이크스",
+    "name": "크리스마스 로즈 스테이크스",
+    "grade": "OP",
+    "venue": "나카야마",
+    "surface": "잔디",
+    "distance": 1200,
+    "distanceCategory": "단거리",
+    "rotation": "우",
+    "side": "외측",
+    "turn": {
+      "month": 12,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "주니어급"
+    ],
+    "fansGained": 1600,
+    "isOverseas": false
+  },
+  {
+    "id": "갤럭시-스테이크스",
+    "name": "갤럭시 스테이크스",
+    "grade": "OP",
+    "venue": "한신",
+    "surface": "더트",
+    "distance": 1400,
+    "distanceCategory": "단거리",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 12,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 2200,
+    "isOverseas": false
+  },
+  {
+    "id": "베텔게우스-스테이크스",
+    "name": "베텔게우스 스테이크스",
+    "grade": "OP",
+    "venue": "한신",
+    "surface": "더트",
+    "distance": 1800,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 12,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 2200,
+    "isOverseas": false
+  },
+  {
+    "id": "키타큐슈-단거리-스테이크스",
+    "name": "키타큐슈 단거리 스테이크스",
+    "grade": "OP",
+    "venue": "코쿠라",
+    "surface": "잔디",
+    "distance": 1200,
+    "distanceCategory": "단거리",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 2,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 2300,
+    "isOverseas": false
+  },
+  {
+    "id": "아즈마코후지-스테이크스",
+    "name": "아즈마코후지 스테이크스",
+    "grade": "OP",
+    "venue": "후쿠시마",
+    "surface": "더트",
+    "distance": 1700,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 4,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 2200,
+    "isOverseas": false
+  },
+  {
+    "id": "슬레이프니르-스테이크스",
+    "name": "슬레이프니르 스테이크스",
+    "grade": "OP",
+    "venue": "도쿄",
+    "surface": "더트",
+    "distance": 2100,
+    "distanceCategory": "중거리",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 6,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 2200,
+    "isOverseas": false
+  },
+  {
+    "id": "산노미야-스테이크스",
+    "name": "산노미야 스테이크스",
+    "grade": "OP",
+    "venue": "한신",
+    "surface": "더트",
+    "distance": 1800,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 6,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 2200,
+    "isOverseas": false
+  },
+  {
+    "id": "간에츠-스테이크스",
+    "name": "간에츠 스테이크스",
+    "grade": "OP",
+    "venue": "니이가타",
+    "surface": "잔디",
+    "distance": 1800,
+    "distanceCategory": "마일",
+    "rotation": "좌",
+    "side": "외측",
+    "turn": {
+      "month": 8,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 2400,
+    "isOverseas": false
+  },
+  {
+    "id": "나가츠키-스테이크스",
+    "name": "나가츠키 스테이크스",
+    "grade": "OP",
+    "venue": "나카야마",
+    "surface": "더트",
+    "distance": 1200,
+    "distanceCategory": "단거리",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 9,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 2200,
+    "isOverseas": false
+  },
+  {
+    "id": "우즈마사-스테이크스",
+    "name": "우즈마사 스테이크스",
+    "grade": "OP",
+    "venue": "교토",
+    "surface": "더트",
+    "distance": 1800,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 10,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급",
+      "시니어급"
+    ],
+    "fansGained": 2200,
+    "isOverseas": false
+  },
+  {
+    "id": "우선국상",
+    "name": "우선국상",
+    "grade": "Pre-OP",
+    "venue": "나카야마",
+    "surface": "잔디",
+    "distance": 1600,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": "외측",
+    "turn": {
+      "month": 9,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "주니어급"
+    ],
+    "fansGained": 1000,
+    "isOverseas": false
+  },
+  {
+    "id": "사프란상",
+    "name": "사프란상",
+    "grade": "Pre-OP",
+    "venue": "나카야마",
+    "surface": "잔디",
+    "distance": 1600,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": "외측",
+    "turn": {
+      "month": 9,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "주니어급"
+    ],
+    "fansGained": 1000,
+    "isOverseas": false
+  },
+  {
+    "id": "용담상",
+    "name": "용담상",
+    "grade": "Pre-OP",
+    "venue": "교토",
+    "surface": "잔디",
+    "distance": 1400,
+    "distanceCategory": "단거리",
+    "rotation": "우",
+    "side": "외측",
+    "turn": {
+      "month": 10,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "주니어급"
+    ],
+    "fansGained": 1000,
+    "isOverseas": false
+  },
+  {
+    "id": "자국화상",
+    "name": "자국화상",
+    "grade": "Pre-OP",
+    "venue": "교토",
+    "surface": "잔디",
+    "distance": 2000,
+    "distanceCategory": "중거리",
+    "rotation": "우",
+    "side": "내측",
+    "turn": {
+      "month": 10,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "주니어급"
+    ],
+    "fansGained": 1000,
+    "isOverseas": false
+  },
+  {
+    "id": "플라타너스상",
+    "name": "플라타너스상",
+    "grade": "Pre-OP",
+    "venue": "도쿄",
+    "surface": "더트",
+    "distance": 1600,
+    "distanceCategory": "마일",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 10,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "주니어급"
+    ],
+    "fansGained": 1000,
+    "isOverseas": false
+  },
+  {
+    "id": "패랭이꽃상",
+    "name": "패랭이꽃상",
+    "grade": "Pre-OP",
+    "venue": "교토",
+    "surface": "더트",
+    "distance": 1400,
+    "distanceCategory": "단거리",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 10,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "주니어급"
+    ],
+    "fansGained": 1000,
+    "isOverseas": false
+  },
+  {
+    "id": "백일초-특별",
+    "name": "백일초 특별",
+    "grade": "Pre-OP",
+    "venue": "도쿄",
+    "surface": "잔디",
+    "distance": 2000,
+    "distanceCategory": "중거리",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 11,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "주니어급"
+    ],
+    "fansGained": 1000,
+    "isOverseas": false
+  },
+  {
+    "id": "금목서-특별",
+    "name": "금목서 특별",
+    "grade": "Pre-OP",
+    "venue": "후쿠시마",
+    "surface": "잔디",
+    "distance": 1800,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 11,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "주니어급"
+    ],
+    "fansGained": 1000,
+    "isOverseas": false
+  },
+  {
+    "id": "사랑초상",
+    "name": "사랑초상",
+    "grade": "Pre-OP",
+    "venue": "도쿄",
+    "surface": "더트",
+    "distance": 1400,
+    "distanceCategory": "단거리",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 11,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "주니어급"
+    ],
+    "fansGained": 1000,
+    "isOverseas": false
+  },
+  {
+    "id": "황국화상",
+    "name": "황국화상",
+    "grade": "Pre-OP",
+    "venue": "교토",
+    "surface": "잔디",
+    "distance": 2000,
+    "distanceCategory": "중거리",
+    "rotation": "우",
+    "side": "내측",
+    "turn": {
+      "month": 11,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "주니어급"
+    ],
+    "fansGained": 1000,
+    "isOverseas": false
+  },
+  {
+    "id": "감탕나무상",
+    "name": "감탕나무상",
+    "grade": "Pre-OP",
+    "venue": "교토",
+    "surface": "더트",
+    "distance": 1800,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 11,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "주니어급"
+    ],
+    "fansGained": 1000,
+    "isOverseas": false
+  },
+  {
+    "id": "적송상",
+    "name": "적송상",
+    "grade": "Pre-OP",
+    "venue": "도쿄",
+    "surface": "잔디",
+    "distance": 1600,
+    "distanceCategory": "마일",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 11,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "주니어급"
+    ],
+    "fansGained": 1000,
+    "isOverseas": false
+  },
+  {
+    "id": "추명국상",
+    "name": "추명국상",
+    "grade": "Pre-OP",
+    "venue": "교토",
+    "surface": "잔디",
+    "distance": 1400,
+    "distanceCategory": "단거리",
+    "rotation": "우",
+    "side": "외측",
+    "turn": {
+      "month": 11,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "주니어급"
+    ],
+    "fansGained": 1000,
+    "isOverseas": false
+  },
+  {
+    "id": "카틀레야상",
+    "name": "카틀레야상",
+    "grade": "Pre-OP",
+    "venue": "도쿄",
+    "surface": "더트",
+    "distance": 1600,
+    "distanceCategory": "마일",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 11,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "주니어급"
+    ],
+    "fansGained": 1000,
+    "isOverseas": false
+  },
+  {
+    "id": "베고니아상",
+    "name": "베고니아상",
+    "grade": "Pre-OP",
+    "venue": "도쿄",
+    "surface": "잔디",
+    "distance": 1600,
+    "distanceCategory": "마일",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 11,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "주니어급"
+    ],
+    "fansGained": 1000,
+    "isOverseas": false
+  },
+  {
+    "id": "백국화상",
+    "name": "백국화상",
+    "grade": "Pre-OP",
+    "venue": "교토",
+    "surface": "잔디",
+    "distance": 1600,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": "외측",
+    "turn": {
+      "month": 11,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "주니어급"
+    ],
+    "fansGained": 1000,
+    "isOverseas": false
+  },
+  {
+    "id": "모란채상",
+    "name": "모란채상",
+    "grade": "Pre-OP",
+    "venue": "나카야마",
+    "surface": "잔디",
+    "distance": 2000,
+    "distanceCategory": "중거리",
+    "rotation": "우",
+    "side": "내측",
+    "turn": {
+      "month": 11,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "주니어급"
+    ],
+    "fansGained": 1000,
+    "isOverseas": false
+  },
+  {
+    "id": "금송상",
+    "name": "금송상",
+    "grade": "Pre-OP",
+    "venue": "츄쿄",
+    "surface": "잔디",
+    "distance": 1600,
+    "distanceCategory": "마일",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 11,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "주니어급"
+    ],
+    "fansGained": 1000,
+    "isOverseas": false
+  },
+  {
+    "id": "백량금상",
+    "name": "백량금상",
+    "grade": "Pre-OP",
+    "venue": "한신",
+    "surface": "잔디",
+    "distance": 1400,
+    "distanceCategory": "단거리",
+    "rotation": "우",
+    "side": "내측",
+    "turn": {
+      "month": 12,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "주니어급"
+    ],
+    "fansGained": 1000,
+    "isOverseas": false
+  },
+  {
+    "id": "흑송상",
+    "name": "흑송상",
+    "grade": "Pre-OP",
+    "venue": "나카야마",
+    "surface": "잔디",
+    "distance": 1200,
+    "distanceCategory": "단거리",
+    "rotation": "우",
+    "side": "외측",
+    "turn": {
+      "month": 12,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "주니어급"
+    ],
+    "fansGained": 1000,
+    "isOverseas": false
+  },
+  {
+    "id": "에리카상",
+    "name": "에리카상",
+    "grade": "Pre-OP",
+    "venue": "한신",
+    "surface": "잔디",
+    "distance": 2000,
+    "distanceCategory": "중거리",
+    "rotation": "우",
+    "side": "내측",
+    "turn": {
+      "month": 12,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "주니어급"
+    ],
+    "fansGained": 1000,
+    "isOverseas": false
+  },
+  {
+    "id": "털머위상",
+    "name": "털머위상",
+    "grade": "Pre-OP",
+    "venue": "츄쿄",
+    "surface": "잔디",
+    "distance": 1400,
+    "distanceCategory": "단거리",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 12,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "주니어급"
+    ],
+    "fansGained": 1000,
+    "isOverseas": false
+  },
+  {
+    "id": "호랑가시나무상",
+    "name": "호랑가시나무상",
+    "grade": "Pre-OP",
+    "venue": "나카야마",
+    "surface": "잔디",
+    "distance": 1600,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": "외측",
+    "turn": {
+      "month": 12,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "주니어급"
+    ],
+    "fansGained": 1000,
+    "isOverseas": false
+  },
+  {
+    "id": "산다화상",
+    "name": "산다화상",
+    "grade": "Pre-OP",
+    "venue": "한신",
+    "surface": "잔디",
+    "distance": 1200,
+    "distanceCategory": "단거리",
+    "rotation": "우",
+    "side": "내측",
+    "turn": {
+      "month": 12,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "주니어급"
+    ],
+    "fansGained": 1000,
+    "isOverseas": false
+  },
+  {
+    "id": "겨울동백상",
+    "name": "겨울동백상",
+    "grade": "Pre-OP",
+    "venue": "츄쿄",
+    "surface": "더트",
+    "distance": 1400,
+    "distanceCategory": "단거리",
+    "rotation": "좌",
+    "side": null,
+    "turn": {
+      "month": 12,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "주니어급"
+    ],
+    "fansGained": 1000,
+    "isOverseas": false
+  },
+  {
+    "id": "죽절초상",
+    "name": "죽절초상",
+    "grade": "Pre-OP",
+    "venue": "한신",
+    "surface": "잔디",
+    "distance": 1600,
+    "distanceCategory": "마일",
+    "rotation": "우",
+    "side": "외측",
+    "turn": {
+      "month": 12,
+      "half": 2
+    },
+    "eligibleClasses": [
+      "주니어급"
+    ],
+    "fansGained": 1000,
+    "isOverseas": false
+  },
+  {
+    "id": "니엘상",
+    "name": "니엘상",
+    "grade": "G2",
+    "venue": "롱샹",
+    "surface": "잔디",
+    "distance": 2400,
+    "distanceCategory": "중거리",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 9,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "클래식급"
+    ],
+    "fansGained": 5000,
+    "isOverseas": true
+  },
+  {
+    "id": "푸아상",
+    "name": "푸아상",
+    "grade": "G2",
+    "venue": "롱샹",
+    "surface": "잔디",
+    "distance": 2400,
+    "distanceCategory": "중거리",
+    "rotation": "우",
+    "side": null,
+    "turn": {
+      "month": 9,
+      "half": 1
+    },
+    "eligibleClasses": [
+      "시니어급"
+    ],
+    "fansGained": 5000,
+    "isOverseas": true
+  }
+]
