@@ -1,0 +1,185 @@
+.race-calendar {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+/* 학년 탭 */
+.race-calendar__tabs {
+  display: flex;
+  gap: 2px;
+  background: #e5e7eb;
+  padding: 2px;
+  border-radius: 6px;
+}
+
+.class-tab {
+  flex: 1;
+  padding: 8px 16px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  border-radius: 4px;
+  transition: all 0.15s;
+}
+
+.class-tab:hover {
+  color: var(--color-text);
+}
+
+.class-tab--active {
+  background: white;
+  color: var(--color-accent);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+/* 그리드 */
+.race-calendar__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  flex: 1;
+}
+
+/* 슬롯 셀 */
+.slot-cell {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  padding: 6px;
+  min-height: 90px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.slot-cell--filled {
+  background: #f0fdf4;
+  border-color: #86efac;
+}
+
+.slot-cell__header {
+  font-size: 11px;
+  color: var(--color-text-muted);
+  padding-bottom: 3px;
+  border-bottom: 1px dashed var(--color-border);
+}
+
+.slot-cell__empty,
+.slot-cell__hidden {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #d1d5db;
+  font-size: 11px;
+  text-align: center;
+}
+
+.slot-cell__hidden {
+  color: var(--color-text-muted);
+}
+
+/* 선택된 레이스 */
+.selected-race {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  align-items: flex-start;
+}
+
+.selected-race__lock-badge {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  background: #3b82f6;
+  color: white;
+  font-size: 9px;
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-weight: 600;
+}
+
+.selected-race__name {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.selected-race__info {
+  font-size: 10px;
+  color: var(--color-text-muted);
+}
+
+.selected-race__winrate {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.selected-race__clear {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  width: 18px;
+  height: 18px;
+  border: none;
+  background: #ef4444;
+  color: white;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 12px;
+  line-height: 1;
+  display: none;
+}
+
+.slot-cell:hover .selected-race__clear {
+  display: block;
+}
+
+/* 사용 가능 레이스 리스트 */
+.available-races {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.race-option {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 5px;
+  border: 1px solid var(--color-border);
+  border-radius: 3px;
+  background: white;
+  cursor: pointer;
+  font-size: 11px;
+  text-align: left;
+}
+
+.race-option:hover {
+  border-color: var(--color-accent);
+  background: #f9fafb;
+}
+
+.race-option__name {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.race-option__winrate {
+  font-weight: 600;
+  font-size: 11px;
+}
+
+/* 승률 색상 */
+.winrate--good { color: #059669; }
+.winrate--ok { color: #d97706; }
+.winrate--bad { color: #dc2626; }

@@ -1,0 +1,47 @@
+.planner-page {
+  display: grid;
+  grid-template-columns: 240px 1fr 220px;
+  gap: 12px;
+  align-items: start;
+}
+
+@media (max-width: 1100px) {
+  .planner-page {
+    grid-template-columns: 1fr;
+  }
+}
+
+.planner-page__right-placeholder {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.placeholder-panel {
+  padding: 16px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+.placeholder-panel h4 {
+  margin: 0;
+  font-size: 13px;
+}
+
+.reset-btn {
+  padding: 8px 16px;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  background: white;
+  color: var(--color-text);
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.reset-btn:hover {
+  border-color: #ef4444;
+  color: #ef4444;
+}

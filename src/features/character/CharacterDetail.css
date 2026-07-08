@@ -1,0 +1,221 @@
+.character-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.back-button {
+  align-self: flex-start;
+  padding: 6px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  background: var(--color-surface);
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.back-button:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.detail-hero {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+}
+
+.detail-hero__image,
+.detail-hero__placeholder {
+  width: 180px;
+  height: 240px;
+  border-radius: 6px;
+  object-fit: cover;
+  background: #f3f4f6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-muted);
+  flex-shrink: 0;
+}
+
+.detail-hero__info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.detail-hero__rarity {
+  color: #f59e0b;
+  font-size: 16px;
+}
+
+.detail-hero__epithet {
+  color: var(--color-text-muted);
+  font-size: 13px;
+}
+
+.detail-hero__name {
+  margin: 0 0 6px;
+  font-size: 24px;
+}
+
+.detail-hero__cv {
+  color: var(--color-text-muted);
+  font-size: 13px;
+}
+
+.detail-hero__source {
+  margin-top: 12px;
+  font-size: 12px;
+  color: var(--color-accent);
+  text-decoration: none;
+}
+
+.detail-hero__source:hover {
+  text-decoration: underline;
+}
+
+.detail-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+@media (max-width: 720px) {
+  .detail-columns {
+    grid-template-columns: 1fr;
+  }
+}
+
+.detail-section {
+  padding: 16px 20px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+}
+
+.detail-section h3 {
+  margin: 0 0 12px;
+  font-size: 14px;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Stats table */
+.stats-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.stats-table th,
+.stats-table td {
+  padding: 6px 8px;
+  text-align: center;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.stats-table th {
+  font-size: 11px;
+  color: var(--color-text-muted);
+}
+
+.stats-table__label {
+  color: var(--color-text-muted);
+  font-weight: 500;
+}
+
+.stats-table__growth {
+  color: #059669;
+  font-weight: 600;
+}
+
+/* Aptitude grid */
+.aptitude-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.aptitude-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.aptitude-row__title {
+  min-width: 50px;
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+.aptitude-row__cells {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.aptitude-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.aptitude-cell__label {
+  font-size: 10px;
+  color: var(--color-text-muted);
+}
+
+.aptitude-cell__grade {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.apt-grade--s { background: #fecaca; color: #991b1b; }
+.apt-grade--a { background: #fed7aa; color: #9a3412; }
+.apt-grade--b { background: #fef08a; color: #854d0e; }
+.apt-grade--c { background: #d9f99d; color: #3f6212; }
+.apt-grade--d { background: #bae6fd; color: #075985; }
+.apt-grade--e { background: #ddd6fe; color: #5b21b6; }
+.apt-grade--f { background: #e5e7eb; color: #4b5563; }
+.apt-grade--g { background: #f3f4f6; color: #9ca3af; }
+
+/* Goals table */
+.goals-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.goals-table th,
+.goals-table td {
+  padding: 8px 10px;
+  text-align: left;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.goals-table th {
+  font-size: 11px;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  background: #f9fafb;
+}
+
+.race-info {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}

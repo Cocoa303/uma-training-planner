@@ -1,0 +1,17 @@
+.character-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.character-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 12px;
+}
+
+/* .chip:disabled 상태 (최소 등급 필터에서 거리 안 골랐을 때) */
+.chip:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
