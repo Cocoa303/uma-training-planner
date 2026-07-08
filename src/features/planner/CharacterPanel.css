@@ -95,11 +95,26 @@
   color: var(--color-text-muted);
 }
 
-.apt-cell__grade {
-  font-size: 14px;
+/* 캐릭터 패널의 적성 셀 - 배경 없이 글자색만 사용 */
+.character-panel .apt-cell__grade {
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
+  width: auto;
+  height: auto;
+  display: block;
   font-weight: 700;
-  line-height: 1.2;
 }
+
+/* 등급별로 글자색만 지정 (배경색 재정의) */
+.character-panel .apt-cell__grade.apt-grade--s { color: #dc2626; background: transparent; }
+.character-panel .apt-cell__grade.apt-grade--a { color: #ea580c; background: transparent; }
+.character-panel .apt-cell__grade.apt-grade--b { color: #ca8a04; background: transparent; }
+.character-panel .apt-cell__grade.apt-grade--c { color: #65a30d; background: transparent; }
+.character-panel .apt-cell__grade.apt-grade--d { color: #0284c7; background: transparent; }
+.character-panel .apt-cell__grade.apt-grade--e { color: #7c3aed; background: transparent; }
+.character-panel .apt-cell__grade.apt-grade--f { color: #6b7280; background: transparent; }
+.character-panel .apt-cell__grade.apt-grade--g { color: #9ca3af; background: transparent; }
 
 .apt-grade--s { color: #991b1b; }
 .apt-grade--a { color: #9a3412; }
