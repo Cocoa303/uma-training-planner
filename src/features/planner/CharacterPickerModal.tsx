@@ -1,6 +1,7 @@
 import { useMemo, useState, useEffect } from "react";
 import type { Character } from "../../types/character";
 import charactersData from "../../../data/characters.json";
+import { assetPath } from "../../utils/assetPath";
 import "./CharacterPickerModal.css";
 
 const characters = charactersData as Character[];
@@ -64,9 +65,9 @@ export function CharacterPickerModal({ open, onClose, onSelect }: Props) {
             >
               <div className="picker-card__image">
                 {c.images.race ? (
-                  <img src={c.images.race} alt={c.name} loading="lazy" />
+                  <img src={assetPath(c.images.race)} alt={c.name} loading="lazy" />
                 ) : c.images.icon ? (
-                  <img src={c.images.icon} alt={c.name} loading="lazy" />
+                  <img src={assetPath(c.images.icon)} alt={c.name} loading="lazy" />
                 ) : (
                   <div className="picker-card__placeholder">No Image</div>
                 )}

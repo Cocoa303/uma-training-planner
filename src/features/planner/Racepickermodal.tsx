@@ -12,6 +12,7 @@ import {
   countConsecutive,
 } from "../../domain/scheduler";
 import { getSlotsForClass } from "../../domain/calendar";
+import { assetPath } from "../../utils/assetPath";
 import "./Racepickermodal.css";
 
 interface Props {
@@ -112,7 +113,7 @@ export function RacePickerModal({
                 >
                   <div className="race-option-card__image">
                     {race.image ? (
-                      <img src={race.image} alt={race.name} />
+                      <img src={assetPath(race.image)} alt={race.name} />
                     ) : (
                       <div className={`race-option-card__placeholder grade-bg--${gradeClass(race.grade)}`}>
                         <span>{race.grade}</span>

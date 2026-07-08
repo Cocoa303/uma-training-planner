@@ -2,6 +2,7 @@ import { useState } from "react";
 import type { Character, AptitudeGrade } from "../../types/character";
 import type { AptitudeFilter } from "../../domain/scheduler";
 import { CharacterPickerModal } from "./CharacterPickerModal";
+import { assetPath } from "../../utils/assetPath";
 import "./CharacterPanel.css";
 
 interface Props {
@@ -27,9 +28,9 @@ export function CharacterPanel({
         title="캐릭터 선택"
       >
         {character?.images.race ? (
-          <img src={character.images.race} alt={character.name} />
+          <img src={assetPath(character.images.race)} alt={character.name} />
         ) : character?.images.icon ? (
-          <img src={character.images.icon} alt={character.name} />
+          <img src={assetPath(character.images.icon)} alt={character.name} />
         ) : (
           <div className="character-panel__placeholder">
             <span>클릭해서</span>

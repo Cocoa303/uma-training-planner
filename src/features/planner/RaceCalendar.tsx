@@ -14,6 +14,7 @@ import {
 } from "../../domain/scheduler";
 import { getSlotsForClass } from "../../domain/calendar";
 import { RacePickerModal } from "./Racepickermodal";
+import { assetPath } from "../../utils/assetPath";
 import "./RaceCalendar.css";
 
 const CLASSES: ClassLevel[] = ["주니어급", "클래식급", "시니어급"];
@@ -202,7 +203,7 @@ function FilledSlot({
 
       <div className="filled-slot__image">
         {race.image ? (
-          <img src={race.image} alt={race.name} />
+          <img src={assetPath(race.image)} alt={race.name} />
         ) : (
           <div className={`filled-slot__placeholder grade-bg--${gradeClass(race.grade)}`}>
             <span className="filled-slot__placeholder-grade">{race.grade}</span>
