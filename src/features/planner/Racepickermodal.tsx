@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from "react";
 import type { Character } from "../../types/character";
-import type { Race, ClassLevel, RaceGrade } from "../../types/race";
+import type { ClassLevel, RaceGrade } from "../../types/race";
 import type {
   AptitudeFilter,
   SlotSelections,
