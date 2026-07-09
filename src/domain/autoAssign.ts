@@ -57,15 +57,21 @@ const DUPLICATE_NAME_PENALTY = -5;
 
 /**
  * 특정 인자에 대한 점수 예외 처리.
- * - 퍼펙트 크라운: 트리플 크라운 조건을 포함하므로 2배
- * - 퍼펙트 티아라: 트리플 티아라 조건을 포함하므로 2배
- * - 전 계급 제패: G1 여러 개를 포함하므로 2배
+ * - 퍼펙트 크라운: 트리플 크라운 조건을 포함하므로 상향
+ * - 퍼펙트 티아라: 트리플 티아라 조건을 포함하므로 상향
+ * - 전 계급 제패: G1 여러 개를 포함하므로 상향
  */
 const HIDDEN_FACTOR_SCORE_MAP: Record<string, number> = {
-  "perfect-crown": 40,
-  "perfect-tiara": 40,
-  "all-class-champion": 40,
+  "perfect-crown": 60,
+  "perfect-tiara": 60,
+  "all-class-champion": 30,
 };
+
+/**
+ * 활성화 여부와 무관하게 최적화 시 무조건 우선 배치 시도할 인자 ID들.
+ * 이 인자들은 조합 탐색 대상이 아니라 강제 배치 대상이 된다.
+ */
+const PRIORITY_FACTOR_IDS = ["perfect-crown", "perfect-tiara"];
 
 function getFactorScore(factorId: string): number {
   return HIDDEN_FACTOR_SCORE_MAP[factorId] ?? HIDDEN_FACTOR_SCORE_DEFAULT;
@@ -1438,6 +1444,35 @@ export function runOptimization(
       mandatorySuccess.push(factor.name);
     } else {
       mandatoryFail.push(factor.name);
+    }
+  }
+
+  // ═══════════════════════════════════════════════════════════════
+  // 퍼펙트 크라운/티아라 강제 우선 배치
+  // 활성화 안 되어 있어도 최우선 시도. 성공하면 반영, 실패하면 무시.
+  // 활성 상태는 건드리지 않음 (일회성, 다음 최적화 시 다시 시도).
+  // 이 인자들이 조합 탐색 후보에 포함되지 않도록 activeFactorIds 에 임시 추가.
+  // ═══════════════════════════════════════════════════════════════
+  for (const priorityId of PRIORITY_FACTOR_IDS) {
+    if (activeFactorIds.has(priorityId)) continue;
+
+    const factor = factorMap.get(priorityId);
+    if (!factor) continue;
+
+    if (factor.characterIds && factor.characterIds.length > 0) {
+      if (!factor.characterIds.includes(character.id)) continue;
+    }
+
+    const { state: nextState, result } = autoAssignFactor(
+      factor,
+      mandatoryState,
+      character,
+      options
+    );
+    if (result.success) {
+      mandatoryState = nextState;
+      mandatorySuccess.push(`${factor.name} (우선 배치)`);
+      activeFactorIds.add(priorityId);
     }
   }
 

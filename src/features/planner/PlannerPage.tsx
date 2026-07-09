@@ -93,17 +93,23 @@ export function PlannerPage() {
       </div>
 
       {character && (
-        <div className="auto-btn-row">
-          <button
-            className={`g1-auto-btn ${g1AutoActive ? "g1-auto-btn--active" : ""}`}
-            onClick={g1AutoActive ? clearG1AutoAssign : runG1AutoAssign}
-          >
-            {g1AutoActive ? "G1 해제" : "G1 자동 배치"}
+        <>
+          <div className="auto-btn-row">
+            <button
+              className={`g1-auto-btn ${g1AutoActive ? "g1-auto-btn--active" : ""}`}
+              onClick={g1AutoActive ? clearG1AutoAssign : runG1AutoAssign}
+            >
+              {g1AutoActive ? "G1 해제" : "G1 자동 배치"}
+            </button>
+            <button className="optimize-btn" onClick={runOptimize}>
+              최적화 실행
+            </button>
+          </div>
+
+          <button className="reset-btn" onClick={resetAll}>
+            전체 초기화
           </button>
-          <button className="optimize-btn" onClick={runOptimize}>
-            최적화 실행
-          </button>
-        </div>
+        </>
       )}
 
       <FactorPanel
@@ -115,10 +121,6 @@ export function PlannerPage() {
         minWinrate={minWinrate}
         plannerState={state}
       />
-
-      <button className="reset-btn" onClick={resetAll}>
-        전체 초기화
-      </button>
     </aside>
   );
 
