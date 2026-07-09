@@ -352,3 +352,93 @@
   font-weight: 700;
   color: #1f2937;
 }
+
+/* ─── 모바일 대응 (< 768px) ─── */
+
+@media (max-width: 767px) {
+  /* 그리드: 4열 → 2열 */
+  .race-calendar__grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+  }
+
+  /* 슬롯 최소 높이 축소 */
+  .slot-cell {
+    min-height: 110px;
+    padding: 4px;
+  }
+
+  /* 이미지 aspect-ratio 명시하여 세로로 늘어나지 않게 */
+  .filled-slot__image {
+    aspect-ratio: 3 / 1;
+    flex: none;
+    max-height: 80px;
+  }
+
+  /* 빈 슬롯 최소 높이 통일 */
+  .empty-slot {
+    min-height: 60px;
+  }
+
+  .empty-slot__plus {
+    font-size: 24px;
+  }
+
+  /* 슬롯 헤더 폰트 축소 */
+  .slot-cell__header {
+    font-size: 10px;
+    padding-bottom: 1px;
+  }
+
+  /* 레이스 이름/승률 폰트 축소 */
+  .filled-slot__name {
+    font-size: 10px;
+  }
+
+  .filled-slot__winrate {
+    font-size: 11px;
+  }
+
+  /* 탭 폰트 축소 */
+  .class-tab {
+    padding: 6px 8px;
+    font-size: 12px;
+  }
+
+  /* 전체 뷰: 학년 헤더 컴팩트 */
+  .class-section__header {
+    padding: 6px 10px;
+  }
+
+  .class-section__title {
+    font-size: 14px;
+  }
+}
+
+/* ─── 초소형 모바일 (< 400px) ─── */
+
+@media (max-width: 399px) {
+  .race-calendar__grid {
+    gap: 4px;
+  }
+
+  .slot-cell {
+    min-height: 100px;
+    padding: 3px;
+  }
+
+  .filled-slot__image {
+    max-height: 70px;
+  }
+
+  .filled-slot__badge {
+    font-size: 8px;
+    padding: 1px 4px;
+  }
+
+  /* 탭이 4개면 좁을 수 있으니 폰트 더 축소 */
+  .class-tab {
+    padding: 6px 4px;
+    font-size: 11px;
+  }
+}

@@ -395,3 +395,73 @@
 .filter-grade-selector__option--active .filter-grade-selector__option-hint {
   color: #065f46;
 }
+
+/* ─── 모바일 대응 (< 768px) ─── */
+
+@media (max-width: 767px) {
+  .character-panel {
+    padding: 10px;
+    gap: 8px;
+  }
+
+  /* 이미지: 세로 3:4 → 가로 4:3 로 뒤집어서 화면 덜 차지 */
+  .character-panel__image-btn {
+    aspect-ratio: auto;
+    max-height: 140px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .character-panel__image-btn img {
+    max-height: 140px;
+    height: 140px;
+    width: auto;
+    object-fit: contain;
+  }
+
+  /* 캐릭터 이름 폰트 축소 */
+  .character-panel__full-name {
+    font-size: 13px;
+  }
+
+  .character-panel__epithet {
+    font-size: 10px;
+  }
+
+  /* 적성 셀 컴팩트 */
+  .apt-cell {
+    padding: 2px 1px;
+  }
+
+  .apt-cell__label {
+    font-size: 9px;
+  }
+
+  .apt-section__title {
+    font-size: 10px;
+    padding: 2px;
+  }
+
+  /* 필터 섹션 컴팩트 */
+  .character-panel__filter-section h4 {
+    font-size: 11px;
+    padding: 3px;
+    margin: 0 0 3px;
+  }
+
+  .character-panel__filter-hint {
+    font-size: 9px;
+    margin: 0 0 4px;
+  }
+
+  .filter-block {
+    gap: 3px;
+    margin-bottom: 4px;
+  }
+
+  .filter-grade-selector__button {
+    padding: 6px 8px;
+    font-size: 11px;
+  }
+}

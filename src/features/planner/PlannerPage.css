@@ -301,3 +301,43 @@
   opacity: 1;
   background: rgba(0, 0, 0, 0.1);
 }
+
+/* ─── 모바일 대응 (< 768px) ─── */
+
+@media (max-width: 767px) {
+  /* 최소 승률 입력을 컴팩트하게 */
+  .winrate-input-group {
+    padding: 8px 10px;
+  }
+
+  /* 자동 배치 버튼 그룹 - 모바일에서 폰트 축소 */
+  .auto-btn-row {
+    gap: 4px;
+  }
+
+  .auto-btn-row .g1-auto-btn,
+  .auto-btn-row .optimize-btn {
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+
+  .g1-auto-btn,
+  .optimize-btn {
+    font-size: 12px;
+  }
+
+  /* 인자 토글 버튼 - 모바일에서 숨김 (항상 열림) */
+  .factor-toggle {
+    display: none;
+  }
+
+  /* 알림창 - 모바일에서 상대 위치, 아래쪽 여백 */
+  .assign-alert {
+    position: relative;
+    bottom: auto;
+    right: auto;
+    margin: 8px 0;
+    max-width: 100%;
+    animation: none;
+  }
+}
