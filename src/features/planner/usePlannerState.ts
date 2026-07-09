@@ -3,21 +3,23 @@ import charactersData from "../../../data/characters.json";
 import racesData from "../../../data/races.json";
 import type { Character } from "../../types/character";
 import type { Race, ClassLevel } from "../../types/race";
+import type { FactorDef } from "../../types/factor";
 import {
   INITIAL_STATE,
   autoActivateFilter,
-  toggleFilterKey,
+  setFilterGrade,
   selectRaceInSlot,
   clearSlot,
   clearSlotsByOwnership,
   type PlannerState,
   type AptitudeFilter,
+  type AptitudeFilterGrade,
   type SlotSelections,
   type SlotOwnerships,
 } from "../../domain/scheduler";
 import { toTurnIndex } from "../../domain/turn";
-import type { FactorDef } from "../../types/factor";
-import { autoAssignFactor, autoAssignG1 } from "../../domain/autoAssign";
+import { autoAssignFactor, autoAssignG1, runOptimization } from "../../domain/autoAssign";
+import { computeFactorStatuses } from "../../domain/factors";
 import {
   loadPlannerState,
   savePlannerState,
@@ -90,6 +92,23 @@ function buildInitialGoalSlots(character: Character): {
   return { selections, ownerships };
 }
 
+function buildFactorMap(
+  character: Character,
+  selections: SlotSelections,
+  filter: AptitudeFilter
+): Map<string, FactorDef> {
+  const statuses = computeFactorStatuses(selections, character, filter);
+  const map = new Map<string, FactorDef>();
+
+  for (const group of [statuses.nickname, statuses.hidden, statuses.g1]) {
+    for (const s of group) {
+      map.set(s.factor.id, s.factor);
+    }
+  }
+
+  return map;
+}
+
 export function usePlannerState() {
   const [state, setState] = useState<PlannerState>(INITIAL_STATE);
   const [minWinrate, setMinWinrateState] = useState<number>(100);
@@ -146,9 +165,12 @@ export function usePlannerState() {
     setLastAssignResult(null);
   }, []);
 
-  const toggleFilter = useCallback((key: keyof AptitudeFilter) => {
-    setState((s) => toggleFilterKey(s, key));
-  }, []);
+  const setAptitudeFilter = useCallback(
+    (key: keyof AptitudeFilter, grade: AptitudeFilterGrade) => {
+      setState((s) => setFilterGrade(s, key, grade));
+    },
+    []
+  );
 
   const selectRace = useCallback((turnIndex: number, raceId: string) => {
     setState((s) => {
@@ -194,21 +216,15 @@ export function usePlannerState() {
     setLastAssignResult(null);
   }, []);
 
-  /**
-   * 인자 자동 배치 토글.
-   * setState 콜백을 순수하게 유지하기 위해, 계산은 밖에서 하고 상태만 setState.
-   */
   const toggleFactorAssignment = useCallback(
     (factor: FactorDef) => {
       if (!character) return;
 
-      // 현재 상태에서 이 인자가 배치되어 있는지 확인
       const hasAssigned = Object.values(state.ownerships).some(
         (o) => o && o.kind === "hidden" && o.factorId === factor.id
       );
 
       if (hasAssigned) {
-        // 취소
         setState((s) =>
           clearSlotsByOwnership(
             s,
@@ -223,7 +239,6 @@ export function usePlannerState() {
         return;
       }
 
-      // 배치
       const { state: newState, result } = autoAssignFactor(
         factor,
         state,
@@ -232,10 +247,17 @@ export function usePlannerState() {
       );
 
       if (!result.success) {
+        const lines: string[] = [
+          `[${factor.name}] 배치 실패`,
+          result.reason ?? "알 수 없는 이유",
+        ];
+        if (result.failureDetails && result.failureDetails.length > 0) {
+          lines.push(...result.failureDetails);
+        }
         setLastAssignResult({
           factorId: factor.id,
           success: false,
-          message: `[${factor.name}] 배치 실패: ${result.reason ?? "알 수 없는 이유"}`,
+          message: lines.join("\n"),
         });
         return;
       }
@@ -286,13 +308,51 @@ export function usePlannerState() {
     setLastAssignResult({ success: true, message: "G1 자동 배치 해제됨" });
   }, []);
 
+  const runOptimize = useCallback(() => {
+    if (!character) return;
+
+    const factorMap = buildFactorMap(character, state.selections, state.filter);
+
+    const { state: newState, result } = runOptimization(
+      state,
+      character,
+      factorMap,
+      { minWinrate }
+    );
+
+    setState(newState);
+
+    const parts: string[] = [];
+    parts.push(`인자 ${result.chosenFactorCount}개`);
+    parts.push(`총점 ${result.totalScore}`);
+    if (result.filledEmptyCount > 0) {
+      parts.push(`빈 슬롯 ${result.filledEmptyCount} 채움`);
+    }
+    if (result.restoredManualCount > 0) {
+      parts.push(`수동 ${result.restoredManualCount} 유지`);
+    }
+    if (result.droppedManualCount > 0) {
+      parts.push(`수동 ${result.droppedManualCount} 삭제`);
+    }
+    parts.push(`${result.method === "exhaustive" ? "완전탐색" : "그리디"}`);
+    parts.push(`${result.elapsedMs}ms`);
+
+    const lines: string[] = [`최적화 완료: ${parts.join(", ")}`];
+    if (result.reason) lines.push(result.reason);
+
+    setLastAssignResult({
+      success: true,
+      message: lines.join("\n"),
+    });
+  }, [character, state, minWinrate]);
+
   return {
     state,
     character,
     minWinrate,
     setMinWinrate,
     selectCharacter,
-    toggleFilter,
+    setAptitudeFilter,
     selectRace,
     clearRaceSlot,
     resetAll,
@@ -300,6 +360,7 @@ export function usePlannerState() {
     isFactorAssigned,
     runG1AutoAssign,
     clearG1AutoAssign,
+    runOptimize,
     lastAssignResult,
   };
 }

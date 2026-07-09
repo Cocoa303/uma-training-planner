@@ -276,3 +276,19 @@
 .winrate--good { color: #059669; }
 .winrate--ok { color: #d97706; }
 .winrate--bad { color: #dc2626; }
+
+/* filler 배지 (자동 채움 슬롯) */
+.badge--filler {
+  background: #6b7280;
+  color: white;
+}
+
+/* filler 슬롯 배경 (다른 자동 배치보다 흐리게) */
+.slot-cell--filler {
+  background: #f9fafb;
+  border-color: #e5e7eb;
+}
+
+.slot-cell--filler .filled-slot {
+  opacity: 0.85;
+}

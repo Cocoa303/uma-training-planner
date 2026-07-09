@@ -260,6 +260,7 @@ function getSlotBadge(
   if (ownership.kind === "goal") return { label: "목표", className: "badge--goal" };
   if (ownership.kind === "hidden") return { label: "인자", className: "badge--hidden" };
   if (ownership.kind === "g1") return { label: "G1", className: "badge--g1auto" };
+  if (ownership.kind === "filler") return { label: "채움", className: "badge--filler" };
   return null;
 }
 
@@ -272,6 +273,7 @@ function getSlotClassName(
   if (ownership?.kind === "goal") classes.push("slot-cell--goal");
   else if (ownership?.kind === "hidden") classes.push("slot-cell--hidden-factor");
   else if (ownership?.kind === "g1") classes.push("slot-cell--g1-auto");
+  else if (ownership?.kind === "filler") classes.push("slot-cell--filler");
   return classes.join(" ");
 }
 

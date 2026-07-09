@@ -1,14 +1,45 @@
-import type { PlannerState } from "./scheduler";
-import { INITIAL_STATE } from "./scheduler";
+import type { PlannerState, AptitudeFilter, AptitudeFilterGrade } from "./scheduler";
+import { INITIAL_STATE, EMPTY_FILTER } from "./scheduler";
 
 const STATE_KEY = "uma-training-planner:v1";
 const MIN_WINRATE_KEY = "uma-training-planner:min-winrate";
+
+/**
+ * 필터 값 하나를 마이그레이션.
+ * - boolean true  → "A"
+ * - boolean false → null
+ * - "A"/"B"/"C"   → 그대로
+ * - 그 외         → null
+ */
+function migrateFilterValue(v: unknown): AptitudeFilterGrade {
+  if (v === true) return "A";
+  if (v === false) return null;
+  if (v === "A" || v === "B" || v === "C") return v;
+  return null;
+}
+
+function migrateFilter(raw: unknown): AptitudeFilter {
+  if (typeof raw !== "object" || raw === null) return { ...EMPTY_FILTER };
+  const f = raw as Record<string, unknown>;
+  return {
+    turf: migrateFilterValue(f.turf),
+    dirt: migrateFilterValue(f.dirt),
+    sprint: migrateFilterValue(f.sprint),
+    mile: migrateFilterValue(f.mile),
+    medium: migrateFilterValue(f.medium),
+    long: migrateFilterValue(f.long),
+    runner: migrateFilterValue(f.runner),
+    leader: migrateFilterValue(f.leader),
+    betweener: migrateFilterValue(f.betweener),
+    chaser: migrateFilterValue(f.chaser),
+  };
+}
 
 export function loadPlannerState(): PlannerState {
   try {
     const raw = localStorage.getItem(STATE_KEY);
     if (!raw) return INITIAL_STATE;
-    const parsed = JSON.parse(raw) as PlannerState;
+    const parsed = JSON.parse(raw);
     if (
       typeof parsed !== "object" ||
       parsed === null ||
@@ -17,11 +48,16 @@ export function loadPlannerState(): PlannerState {
     ) {
       return INITIAL_STATE;
     }
-    // 이전 버전 호환: ownerships 없으면 빈 객체
+
+    // ownerships 없으면 빈 객체
     if (typeof parsed.ownerships !== "object" || parsed.ownerships === null) {
       parsed.ownerships = {};
     }
-    return parsed;
+
+    // 필터 마이그레이션 (boolean → 등급)
+    parsed.filter = migrateFilter(parsed.filter);
+
+    return parsed as PlannerState;
   } catch {
     return INITIAL_STATE;
   }

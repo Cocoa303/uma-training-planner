@@ -12,7 +12,7 @@ export function PlannerPage() {
     minWinrate,
     setMinWinrate,
     selectCharacter,
-    toggleFilter,
+    setAptitudeFilter,
     selectRace,
     clearRaceSlot,
     resetAll,
@@ -20,6 +20,7 @@ export function PlannerPage() {
     isFactorAssigned,
     runG1AutoAssign,
     clearG1AutoAssign,
+    runOptimize,
     lastAssignResult,
   } = usePlannerState();
 
@@ -27,7 +28,6 @@ export function PlannerPage() {
   const [visibleAlert, setVisibleAlert] = useState<string | null>(null);
   const [alertSuccess, setAlertSuccess] = useState(true);
 
-  // 임시 입력값 (블러 시 확정)
   const [winrateInput, setWinrateInput] = useState(String(minWinrate));
 
   useEffect(() => {
@@ -38,7 +38,9 @@ export function PlannerPage() {
     if (!lastAssignResult) return;
     setVisibleAlert(lastAssignResult.message);
     setAlertSuccess(lastAssignResult.success);
-    const timer = setTimeout(() => setVisibleAlert(null), 3000);
+    // 실패 시 상세 정보가 길 수 있으므로 12초 노출
+    const duration = lastAssignResult.success ? 3000 : 12000;
+    const timer = setTimeout(() => setVisibleAlert(null), duration);
     return () => clearTimeout(timer);
   }, [lastAssignResult]);
 
@@ -65,7 +67,7 @@ export function PlannerPage() {
         character={character}
         filter={state.filter}
         onSelectCharacter={selectCharacter}
-        onToggleFilter={toggleFilter}
+        onSetFilterGrade={setAptitudeFilter}
       />
 
       <RaceCalendar
@@ -115,12 +117,17 @@ export function PlannerPage() {
             </div>
 
             {character && (
-              <button
-                className={`g1-auto-btn ${g1AutoActive ? "g1-auto-btn--active" : ""}`}
-                onClick={g1AutoActive ? clearG1AutoAssign : runG1AutoAssign}
-              >
-                {g1AutoActive ? "G1 자동 배치 해제" : "G1 자동 배치"}
-              </button>
+              <div className="auto-btn-row">
+                <button
+                  className={`g1-auto-btn ${g1AutoActive ? "g1-auto-btn--active" : ""}`}
+                  onClick={g1AutoActive ? clearG1AutoAssign : runG1AutoAssign}
+                >
+                  {g1AutoActive ? "G1 해제" : "G1 자동 배치"}
+                </button>
+                <button className="optimize-btn" onClick={runOptimize}>
+                  최적화 실행
+                </button>
+              </div>
             )}
 
             <FactorPanel
@@ -143,7 +150,18 @@ export function PlannerPage() {
               alertSuccess ? "assign-alert--success" : "assign-alert--error"
             }`}
           >
-            {visibleAlert}
+            {visibleAlert.split("\n").map((line, idx) => (
+              <div key={idx} className="assign-alert__line">
+                {line}
+              </div>
+            ))}
+            <button
+              className="assign-alert__close"
+              onClick={() => setVisibleAlert(null)}
+              title="닫기"
+            >
+              ×
+            </button>
           </div>
         )}
       </aside>

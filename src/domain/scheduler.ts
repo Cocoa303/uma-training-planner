@@ -3,42 +3,52 @@ import type { ClassLevel, Race } from "../types/race";
 import { baseWinrate, finalWinrate } from "./winrate";
 
 /**
- * 필터: 유저가 "인자로 A까지 올릴 예정"이라고 표시한 축들.
+ * 필터 등급.
+ * - null: 필터 OFF (원본 적성 그대로 사용)
+ * - "A" | "B" | "C": 유저가 인자로 이 등급까지 올리겠다고 지정
  */
+export type AptitudeFilterGrade = "A" | "B" | "C" | null;
+
 export interface AptitudeFilter {
-  turf: boolean;
-  dirt: boolean;
-  sprint: boolean;
-  mile: boolean;
-  medium: boolean;
-  long: boolean;
-  runner: boolean;
-  leader: boolean;
-  betweener: boolean;
-  chaser: boolean;
+  turf: AptitudeFilterGrade;
+  dirt: AptitudeFilterGrade;
+  sprint: AptitudeFilterGrade;
+  mile: AptitudeFilterGrade;
+  medium: AptitudeFilterGrade;
+  long: AptitudeFilterGrade;
+  runner: AptitudeFilterGrade;
+  leader: AptitudeFilterGrade;
+  betweener: AptitudeFilterGrade;
+  chaser: AptitudeFilterGrade;
 }
 
 export const EMPTY_FILTER: AptitudeFilter = {
-  turf: false,
-  dirt: false,
-  sprint: false,
-  mile: false,
-  medium: false,
-  long: false,
-  runner: false,
-  leader: false,
-  betweener: false,
-  chaser: false,
+  turf: null,
+  dirt: null,
+  sprint: null,
+  mile: null,
+  medium: null,
+  long: null,
+  runner: null,
+  leader: null,
+  betweener: null,
+  chaser: null,
 };
 
 /**
  * 슬롯 소유권.
+ * - goal: 목표 레이스 (변경 불가)
+ * - hidden: 히든 인자 자동 배치
+ * - g1: G1 자동 배치
+ * - manual: 유저가 직접 선택
+ * - filler: 최적화의 "빈 슬롯 채우기" 로 자동 배치 (재실행 시 초기화됨)
  */
 export type SlotOwnership =
   | { kind: "goal" }
   | { kind: "hidden"; factorId: string }
   | { kind: "g1" }
-  | { kind: "manual" };
+  | { kind: "manual" }
+  | { kind: "filler" };
 
 export type SlotSelections = Record<number, string | undefined>;
 export type SlotOwnerships = Record<number, SlotOwnership | undefined>;
@@ -59,11 +69,21 @@ export const INITIAL_STATE: PlannerState = {
 
 // ─── 우선순위 ──────────────────────────────
 
+/**
+ * 우선순위 비교.
+ * 높은 우선순위가 낮은 우선순위를 덮어쓸 수 있음.
+ *
+ * filler(-1) < manual(0) < g1(1) < hidden(2) < goal(3)
+ *
+ * filler 는 가장 낮음 → 자동 배치 무엇이든 filler 를 덮어쓸 수 있음.
+ * manual 은 유저 의도가 있으므로 filler 보다 높음.
+ */
 const OWNERSHIP_PRIORITY: Record<SlotOwnership["kind"], number> = {
   goal: 3,
   hidden: 2,
   g1: 1,
   manual: 0,
+  filler: -1,
 };
 
 export function canOverwrite(
@@ -74,14 +94,30 @@ export function canOverwrite(
   return OWNERSHIP_PRIORITY[newOwner.kind] > OWNERSHIP_PRIORITY[existing.kind];
 }
 
-// ─── 필터 자동 활성화 ─────────────────────────
+// ─── 등급 비교 ─────────────────────────
 
-/**
- * 캐릭터 원본 적성에서 A 이상인 축만 자동으로 필터 ON.
- * B 는 유저가 원할 때 수동으로 켜야 함 (필터를 켜면 A로 계산되므로,
- * B 를 자동으로 켜면 실제로 B 인데 A 승률이 표시되는 문제가 생김).
- */
-export function autoActivateFilter(originalGrades: {
+const GRADE_RANK: Record<AptitudeGrade, number> = {
+  S: 7,
+  A: 6,
+  B: 5,
+  C: 4,
+  D: 3,
+  E: 2,
+  F: 1,
+  G: 0,
+};
+
+function isFilterHigherThanOriginal(
+  original: AptitudeGrade,
+  filter: AptitudeFilterGrade
+): boolean {
+  if (filter === null) return false;
+  return GRADE_RANK[filter] > GRADE_RANK[original];
+}
+
+// ─── 필터 자동 활성화 (사용 안 함) ─────────────────────────
+
+export function autoActivateFilter(_originalGrades: {
   turf: AptitudeGrade;
   dirt: AptitudeGrade;
   sprint: AptitudeGrade;
@@ -93,33 +129,35 @@ export function autoActivateFilter(originalGrades: {
   betweener: AptitudeGrade;
   chaser: AptitudeGrade;
 }): AptitudeFilter {
-  const isAOrBetter = (g: AptitudeGrade) => g === "S" || g === "A";
-
-  return {
-    turf: isAOrBetter(originalGrades.turf),
-    dirt: isAOrBetter(originalGrades.dirt),
-    sprint: isAOrBetter(originalGrades.sprint),
-    mile: isAOrBetter(originalGrades.mile),
-    medium: isAOrBetter(originalGrades.medium),
-    long: isAOrBetter(originalGrades.long),
-    runner: isAOrBetter(originalGrades.runner),
-    leader: isAOrBetter(originalGrades.leader),
-    betweener: isAOrBetter(originalGrades.betweener),
-    chaser: isAOrBetter(originalGrades.chaser),
-  };
+  return { ...EMPTY_FILTER };
 }
 
 // ─── 상태 조작 (순수 함수) ────────────────────
 
-export function toggleFilterKey(
+export function setFilterGrade(
   state: PlannerState,
-  key: keyof AptitudeFilter
+  key: keyof AptitudeFilter,
+  grade: AptitudeFilterGrade
 ): PlannerState {
   return {
     ...state,
     filter: {
       ...state.filter,
-      [key]: !state.filter[key],
+      [key]: grade,
+    },
+  };
+}
+
+export function toggleFilterKey(
+  state: PlannerState,
+  key: keyof AptitudeFilter
+): PlannerState {
+  const current = state.filter[key];
+  return {
+    ...state,
+    filter: {
+      ...state.filter,
+      [key]: current === null ? "A" : null,
     },
   };
 }
@@ -203,10 +241,6 @@ export function classToIndex(cls: ClassLevel): number {
 
 // ─── 실효 적성 계산 ─────────────────────────
 
-/**
- * 필터 상태를 반영한 캐릭터의 "실효 적성" 계산.
- * 필터 켠 축은 A로 (S는 유지), 안 켠 축은 원본 등급.
- */
 export function effectiveAptitudes(
   original: Aptitudes,
   filter: AptitudeFilter
@@ -218,9 +252,12 @@ export function effectiveAptitudes(
   medium: AptitudeGrade;
   long: AptitudeGrade;
 } {
-  const raise = (orig: AptitudeGrade, on: boolean): AptitudeGrade => {
-    if (!on) return orig;
-    return orig === "S" ? "S" : "A";
+  const raise = (
+    orig: AptitudeGrade,
+    filterGrade: AptitudeFilterGrade
+  ): AptitudeGrade => {
+    if (!isFilterHigherThanOriginal(orig, filterGrade)) return orig;
+    return filterGrade as AptitudeGrade;
   };
 
   return {
@@ -233,9 +270,6 @@ export function effectiveAptitudes(
   };
 }
 
-/**
- * 특정 레이스에 대한 캐릭터의 승률 계산 (연전 감점 포함).
- */
 export function computeRaceWinrate(
   race: Race,
   effective: ReturnType<typeof effectiveAptitudes>,
@@ -264,4 +298,22 @@ export function computeRaceWinrate(
 
   const base = baseWinrate(surfaceGrade, distanceGrade);
   return finalWinrate(base, consecutiveCount);
+}
+
+export function availableFilterGrades(
+  original: AptitudeGrade
+): AptitudeGrade[] {
+  if (original === "S" || original === "A") return [];
+
+  const options: AptitudeGrade[] = [];
+  const gradesUpToA: AptitudeGrade[] = ["G", "F", "E", "D", "C", "B", "A"];
+  const originalRank = GRADE_RANK[original];
+
+  for (const g of gradesUpToA) {
+    if (GRADE_RANK[g] >= originalRank) {
+      options.push(g);
+    }
+  }
+
+  return options;
 }

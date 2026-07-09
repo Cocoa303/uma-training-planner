@@ -1,8 +1,9 @@
 import type { Character } from "../types/character";
-import type { Race, ClassLevel } from "../types/race";
+import type { Race, RaceGrade, ClassLevel } from "../types/race";
 import type {
   PlannerState,
   SlotOwnership,
+  AptitudeFilter,
 } from "./scheduler";
 import type { FactorDef, FactorCondition } from "../types/factor";
 import {
@@ -23,9 +24,21 @@ export interface AssignResult {
   assigned: { turnIndex: number; raceId: string }[];
   skippedCount?: number;
   reason?: string;
+  failureDetails?: string[];
 }
 
-// ─── 옵션 ─────────────────────────────
+export interface OptimizeResult {
+  success: boolean;
+  assignedCount: number;
+  restoredManualCount: number;
+  droppedManualCount: number;
+  filledEmptyCount: number;
+  chosenFactorCount: number;
+  totalScore: number;
+  method: "exhaustive" | "greedy";
+  elapsedMs: number;
+  reason?: string;
+}
 
 export interface AutoAssignOptions {
   minWinrate: number;
@@ -34,6 +47,69 @@ export interface AutoAssignOptions {
 const DEFAULT_OPTIONS: AutoAssignOptions = {
   minWinrate: 100,
 };
+
+// ─── 점수 상수 ─────────────────────────
+
+const HIDDEN_FACTOR_SCORE = 20;
+const G1_SCORE = 10;
+const DUPLICATE_NAME_PENALTY = -5;
+
+const GRADE_SCORE_MAP: Record<RaceGrade, number> = {
+  G1: 10,
+  G2: 8,
+  G3: 6,
+  OP: 4,
+  "Pre-OP": 2,
+};
+
+const EXHAUSTIVE_TIMEOUT_MS = 5000;
+
+interface Candidate {
+  turnIndex: number;
+  race: Race;
+  winrate: number;
+}
+
+// ─── 헬퍼: 조합 생성 ─────────────────────────
+
+function forEachCombination(
+  items: Candidate[],
+  k: number,
+  cb: (combo: Candidate[]) => void,
+  maxIterations = 50000
+): void {
+  let iterations = 0;
+  const n = items.length;
+  const combo: Candidate[] = [];
+  const usedSlots = new Set<number>();
+
+  function recurse(start: number): boolean {
+    if (iterations >= maxIterations) return false;
+
+    if (combo.length === k) {
+      iterations++;
+      cb([...combo]);
+      return true;
+    }
+
+    if (n - start < k - combo.length) return true;
+
+    for (let i = start; i < n; i++) {
+      const cand = items[i];
+      if (usedSlots.has(cand.turnIndex)) continue;
+
+      combo.push(cand);
+      usedSlots.add(cand.turnIndex);
+      const ok = recurse(i + 1);
+      combo.pop();
+      usedSlots.delete(cand.turnIndex);
+      if (!ok) return false;
+    }
+    return true;
+  }
+
+  recurse(0);
+}
 
 // ─── 슬롯 후보 조회 ─────────────────────────
 
@@ -55,12 +131,8 @@ function collectCandidates(
   raceNames: string[],
   state: PlannerState,
   effective: ReturnType<typeof effectiveAptitudes>
-): {
-  turnIndex: number;
-  race: Race;
-  winrate: number;
-}[] {
-  const candidates: { turnIndex: number; race: Race; winrate: number }[] = [];
+): Candidate[] {
+  const candidates: Candidate[] = [];
 
   for (const name of raceNames) {
     const slots = findRaceSlots(name);
@@ -77,59 +149,184 @@ function collectCandidates(
   return candidates;
 }
 
-function canUseSlot(
-  turnIndex: number,
-  claimedThisIteration: Set<number>,
-  state: PlannerState,
-  newOwner: SlotOwnership
-): boolean {
-  if (claimedThisIteration.has(turnIndex)) return false;
-  return canOverwrite(newOwner, state.ownerships[turnIndex]);
-}
+// ─── 슬롯 승률 스냅샷 ─────────────────────────
 
-// ─── 승률 유지 검증 ─────────────────────────
+function snapshotWinrates(
+  selections: PlannerState["selections"],
+  ownerships: PlannerState["ownerships"],
+  effective: ReturnType<typeof effectiveAptitudes>
+): Map<number, number> {
+  const snap = new Map<number, number>();
 
-/**
- * 슬롯 하나를 새로 채웠을 때, 그 슬롯과 그 슬롯 이후의 연속된 슬롯들의
- * 승률이 모두 minWinrate 이상인지 검증한다.
- *
- * 연속 출전 감점은 뒤로 이어지는 슬롯들에도 영향을 주므로,
- * 새 슬롯을 채우면 그 뒤에 있는 (그리고 앞에 있는) 슬롯들의 승률이 바뀔 수 있다.
- *
- * 목표 슬롯(kind='goal')은 승률 검증에서 제외 — 어차피 필수 참여이기 때문.
- */
-function wouldMaintainMinWinrate(
-  newTurnIndex: number,
-  newRace: Race,
-  state: PlannerState,
-  effective: ReturnType<typeof effectiveAptitudes>,
-  minWinrate: number
-): boolean {
-  const trialSelections = { ...state.selections, [newTurnIndex]: newRace.id };
-
-  // 검증할 슬롯: 새 슬롯 + 새 슬롯 뒤로 이어지는 연속 슬롯들 + 새 슬롯 앞의 연속 슬롯들
-  // 연속 출전 감점이 앞뒤로 전파되므로 안전하게 전체 검사
-
-  for (const [key, raceId] of Object.entries(trialSelections)) {
+  for (const [key, raceId] of Object.entries(selections)) {
     if (!raceId) continue;
     const turnIndex = Number(key);
-
-    // 목표 슬롯은 승률 검증 스킵
-    const ownership = state.ownerships[turnIndex];
+    const ownership = ownerships[turnIndex];
     if (ownership?.kind === "goal") continue;
 
     const race = allRaces.find((r) => r.id === raceId);
     if (!race) continue;
 
-    const consec = countConsecutive(trialSelections, turnIndex);
+    const consec = countConsecutive(selections, turnIndex);
     const winrate = computeRaceWinrate(race, effective, consec);
+    snap.set(turnIndex, winrate);
+  }
 
-    if (winrate < minWinrate) {
-      return false;
+  return snap;
+}
+
+function wouldNotWorsenExistingSlots(
+  beforeSelections: PlannerState["selections"],
+  afterSelections: PlannerState["selections"],
+  ownerships: PlannerState["ownerships"],
+  effective: ReturnType<typeof effectiveAptitudes>,
+  minWinrate: number
+): boolean {
+  const beforeSnap = snapshotWinrates(beforeSelections, ownerships, effective);
+
+  for (const [key, raceId] of Object.entries(afterSelections)) {
+    if (!raceId) continue;
+    const turnIndex = Number(key);
+    const ownership = ownerships[turnIndex];
+    if (ownership?.kind === "goal") continue;
+
+    const race = allRaces.find((r) => r.id === raceId);
+    if (!race) continue;
+
+    const consec = countConsecutive(afterSelections, turnIndex);
+    const afterWinrate = computeRaceWinrate(race, effective, consec);
+
+    const beforeWinrate = beforeSnap.get(turnIndex);
+    const isNewSlot = beforeWinrate === undefined;
+    const wasAboveThreshold =
+      beforeWinrate !== undefined && beforeWinrate >= minWinrate;
+
+    if (isNewSlot) {
+      if (afterWinrate < minWinrate) return false;
+    } else if (wasAboveThreshold) {
+      if (afterWinrate < minWinrate) return false;
     }
   }
 
   return true;
+}
+
+// ─── 로그 헬퍼 ─────────────────────────
+
+const CLASS_ORDER_LOCAL: ClassLevel[] = ["주니어급", "클래식급", "시니어급"];
+
+function turnIndexToLabel(index: number): string {
+  const cls = CLASS_ORDER_LOCAL[Math.floor(index / 24)] ?? "?";
+  const remainder = index % 24;
+  const month = Math.floor(remainder / 2) + 1;
+  const half = remainder % 2 === 0 ? "전반" : "후반";
+  return `${cls.replace("급", "")} ${month}월 ${half}`;
+}
+
+function formatCandidateVerdict(
+  cand: Candidate,
+  state: PlannerState,
+  owner: SlotOwnership,
+  minWinrate: number
+): { ok: boolean; text: string } {
+  const slotLabel = turnIndexToLabel(cand.turnIndex);
+  const raceLabel = `${cand.race.name} (${slotLabel})`;
+
+  const existing = state.ownerships[cand.turnIndex];
+  if (existing && !canOverwrite(owner, existing)) {
+    const kindMap: Record<SlotOwnership["kind"], string> = {
+      goal: "목표",
+      hidden: "다른 인자",
+      g1: "G1",
+      manual: "수동 배치",
+      filler: "자동 채움",
+    };
+    return {
+      ok: false,
+      text: `${raceLabel}: 슬롯 점유됨 (${kindMap[existing.kind]})`,
+    };
+  }
+
+  const consec = countConsecutive(
+    { ...state.selections, [cand.turnIndex]: cand.race.id },
+    cand.turnIndex
+  );
+  const consecInfo = consec >= 3 ? ` (${consec}연전 감점)` : "";
+
+  if (cand.winrate < minWinrate) {
+    return {
+      ok: false,
+      text: `${raceLabel}: 승률 ${cand.winrate}%${consecInfo}`,
+    };
+  }
+
+  return {
+    ok: true,
+    text: `${raceLabel}: 승률 ${cand.winrate}%${consecInfo} ✓`,
+  };
+}
+
+function buildWinrateFailureDetails(
+  beforeSelections: PlannerState["selections"],
+  afterSelections: PlannerState["selections"],
+  ownerships: PlannerState["ownerships"],
+  effective: ReturnType<typeof effectiveAptitudes>,
+  minWinrate: number,
+  justAssigned: { turnIndex: number; raceId: string }[]
+): string[] {
+  const beforeSnap = snapshotWinrates(beforeSelections, ownerships, effective);
+  const details: string[] = [];
+
+  const newlyAdded = new Set(justAssigned.map((a) => a.turnIndex));
+
+  const newSlots: string[] = [];
+  for (const { turnIndex, raceId } of justAssigned) {
+    const race = allRaces.find((r) => r.id === raceId);
+    if (!race) continue;
+    const consec = countConsecutive(afterSelections, turnIndex);
+    const wr = computeRaceWinrate(race, effective, consec);
+    const consecInfo = consec >= 3 ? ` [${consec}연전]` : "";
+    const mark = wr < minWinrate ? " ✗" : "";
+    newSlots.push(
+      `  ${race.name} (${turnIndexToLabel(turnIndex)}): ${wr}%${consecInfo}${mark}`
+    );
+  }
+  if (newSlots.length > 0) {
+    details.push("배치 시도:");
+    details.push(...newSlots);
+  }
+
+  const worsened: string[] = [];
+  for (const [key, raceId] of Object.entries(afterSelections)) {
+    if (!raceId) continue;
+    const turnIndex = Number(key);
+    if (newlyAdded.has(turnIndex)) continue;
+
+    const ownership = ownerships[turnIndex];
+    if (ownership?.kind === "goal") continue;
+
+    const race = allRaces.find((r) => r.id === raceId);
+    if (!race) continue;
+
+    const consec = countConsecutive(afterSelections, turnIndex);
+    const afterWr = computeRaceWinrate(race, effective, consec);
+    const beforeWr = beforeSnap.get(turnIndex);
+
+    if (beforeWr === undefined) continue;
+    if (beforeWr >= minWinrate && afterWr < minWinrate) {
+      const consecInfo = consec >= 3 ? ` [${consec}연전 감점]` : "";
+      worsened.push(
+        `  ${race.name} (${turnIndexToLabel(turnIndex)}): ${beforeWr}% → ${afterWr}%${consecInfo}`
+      );
+    }
+  }
+
+  if (worsened.length > 0) {
+    details.push("영향받은 기존 슬롯:");
+    details.push(...worsened);
+  }
+
+  return details;
 }
 
 // ─── 인자 조건 배치 ─────────────────────────
@@ -149,7 +346,7 @@ function assignForCondition(
     case "race-wins-any":
       return assignAnyRace(condition.raceNames, newOwner, state, effective, options);
     case "race-wins-count":
-      return assignCountRaces(
+      return assignCountRacesOptimal(
         condition.raceNames,
         condition.requiredCount,
         newOwner,
@@ -159,7 +356,7 @@ function assignForCondition(
         false
       );
     case "race-wins-count-unique":
-      return assignCountRaces(
+      return assignCountRacesOptimal(
         condition.raceNames,
         condition.requiredCount,
         newOwner,
@@ -196,23 +393,50 @@ function assignAllRaces(
 
   const assigned: { turnIndex: number; raceId: string }[] = [];
   const claimed = new Set<number>();
+  const failureDetails: string[] = [];
 
   for (const name of raceNames) {
     if (already.has(name)) continue;
+
     const candidates = collectCandidates([name], state, effective);
-    const usable = candidates
-      .filter((c) => canUseSlot(c.turnIndex, claimed, state, owner))
-      .filter((c) => c.winrate >= options.minWinrate)
-      .sort((a, b) => b.winrate - a.winrate);
+    if (candidates.length === 0) {
+      failureDetails.push(`${name}: 개최 슬롯 없음`);
+      return {
+        success: false,
+        assigned,
+        reason: `"${name}" 개최 슬롯 없음`,
+        failureDetails,
+      };
+    }
+
+    const verdicts = candidates.map((c) => ({
+      cand: c,
+      verdict: formatCandidateVerdict(c, state, owner, options.minWinrate),
+    }));
+
+    const usable = verdicts
+      .filter((v) => v.verdict.ok)
+      .filter((v) => !claimed.has(v.cand.turnIndex))
+      .sort((a, b) => {
+        const scoreDiff =
+          (GRADE_SCORE_MAP[b.cand.race.grade] ?? 0) - (GRADE_SCORE_MAP[a.cand.race.grade] ?? 0);
+        if (scoreDiff !== 0) return scoreDiff;
+        return b.cand.winrate - a.cand.winrate;
+      });
 
     if (usable.length === 0) {
+      failureDetails.push(`"${name}" 후보 판정:`);
+      for (const v of verdicts) {
+        failureDetails.push(`  ${v.verdict.text}`);
+      }
       return {
         success: false,
         assigned,
         reason: `"${name}" 배치할 슬롯이 없거나 승률 부족 (최소 ${options.minWinrate}%)`,
+        failureDetails,
       };
     }
-    const chosen = usable[0];
+    const chosen = usable[0].cand;
     assigned.push({ turnIndex: chosen.turnIndex, raceId: chosen.race.id });
     claimed.add(chosen.turnIndex);
   }
@@ -236,28 +460,75 @@ function assignAnyRace(
   }
 
   const candidates = collectCandidates(raceNames, state, effective);
-  const claimed = new Set<number>();
-  const usable = candidates
-    .filter((c) => canUseSlot(c.turnIndex, claimed, state, owner))
-    .filter((c) => c.winrate >= options.minWinrate)
-    .sort((a, b) => b.winrate - a.winrate);
+  if (candidates.length === 0) {
+    return {
+      success: false,
+      assigned: [],
+      reason: `해당 레이스 개최 슬롯 없음`,
+      failureDetails: [`후보 없음 (${raceNames.slice(0, 3).join(", ")}${raceNames.length > 3 ? "..." : ""})`],
+    };
+  }
+
+  const verdicts = candidates.map((c) => ({
+    cand: c,
+    verdict: formatCandidateVerdict(c, state, owner, options.minWinrate),
+  }));
+
+  const usable = verdicts
+    .filter((v) => v.verdict.ok)
+    .sort((a, b) => {
+      const scoreDiff =
+        (GRADE_SCORE_MAP[b.cand.race.grade] ?? 0) - (GRADE_SCORE_MAP[a.cand.race.grade] ?? 0);
+      if (scoreDiff !== 0) return scoreDiff;
+      return b.cand.winrate - a.cand.winrate;
+    });
 
   if (usable.length === 0) {
+    const failureDetails: string[] = ["후보 판정:"];
+    for (const v of verdicts) {
+      failureDetails.push(`  ${v.verdict.text}`);
+    }
     return {
       success: false,
       assigned: [],
       reason: `배치 가능한 슬롯 없음 (최소 승률 ${options.minWinrate}%)`,
+      failureDetails,
     };
   }
 
-  const chosen = usable[0];
+  const chosen = usable[0].cand;
   return {
     success: true,
     assigned: [{ turnIndex: chosen.turnIndex, raceId: chosen.race.id }],
   };
 }
 
-function assignCountRaces(
+function combinationAvgWinrate(items: Candidate[]): number {
+  if (items.length === 0) return 0;
+  const sum = items.reduce((s, i) => s + i.winrate, 0);
+  return sum / items.length;
+}
+
+function combinationScoreForCountRaces(items: Candidate[]): number {
+  const nameCount = new Map<string, number>();
+  let baseScore = 0;
+
+  for (const item of items) {
+    baseScore += GRADE_SCORE_MAP[item.race.grade] ?? 0;
+    nameCount.set(item.race.name, (nameCount.get(item.race.name) ?? 0) + 1);
+  }
+
+  let penalty = 0;
+  for (const count of nameCount.values()) {
+    if (count > 1) {
+      penalty += DUPLICATE_NAME_PENALTY * ((count * (count - 1)) / 2);
+    }
+  }
+
+  return baseScore + penalty;
+}
+
+function assignCountRacesOptimal(
   raceNames: string[],
   requiredCount: number,
   owner: SlotOwnership,
@@ -282,37 +553,78 @@ function assignCountRaces(
     return { success: true, assigned: [] };
   }
 
-  const candidates = collectCandidates(raceNames, state, effective)
-    .filter((c) => c.winrate >= options.minWinrate)
-    .sort((a, b) => b.winrate - a.winrate);
+  const rawCandidates = collectCandidates(raceNames, state, effective);
+  const verdicts = rawCandidates.map((c) => ({
+    cand: c,
+    verdict: formatCandidateVerdict(c, state, owner, options.minWinrate),
+  }));
 
-  const chosen: { turnIndex: number; raceId: string }[] = [];
-  const claimed = new Set<number>();
-  const usedNames = new Set<string>(uniqueOnly ? alreadyNames : []);
+  const candidates = verdicts.filter((v) => v.verdict.ok).map((v) => v.cand);
 
-  for (const cand of candidates) {
-    if (chosen.length >= remaining) break;
-    if (claimed.has(cand.turnIndex)) continue;
-    if (!canOverwrite(owner, state.ownerships[cand.turnIndex])) continue;
-    if (uniqueOnly && usedNames.has(cand.race.name)) continue;
-
-    chosen.push({ turnIndex: cand.turnIndex, raceId: cand.race.id });
-    claimed.add(cand.turnIndex);
-    if (uniqueOnly) usedNames.add(cand.race.name);
-  }
-
-  if (chosen.length < remaining) {
+  if (candidates.length < remaining) {
+    const failureDetails: string[] = [
+      `${candidates.length}/${remaining}개만 배치 가능. 후보 판정:`,
+    ];
+    for (const v of verdicts) {
+      failureDetails.push(`  ${v.verdict.text}`);
+    }
     return {
       success: false,
       assigned: [],
-      reason: `${chosen.length}/${remaining}개만 배치 가능 (최소 승률 ${options.minWinrate}%)`,
+      reason: `${candidates.length}/${remaining}개만 배치 가능 (최소 승률 ${options.minWinrate}%)`,
+      failureDetails,
     };
   }
 
-  return { success: true, assigned: chosen };
+  let bestCombo: Candidate[] | null = null;
+  let bestScore = -Infinity;
+  let bestAvgWinrate = -Infinity;
+
+  forEachCombination(candidates, remaining, (combo) => {
+    if (uniqueOnly) {
+      const names = new Set<string>(alreadyNames);
+      let hasDup = false;
+      for (const c of combo) {
+        if (names.has(c.race.name)) {
+          hasDup = true;
+          break;
+        }
+        names.add(c.race.name);
+      }
+      if (hasDup) return;
+    }
+
+    const score = combinationScoreForCountRaces(combo);
+    const avgWr = combinationAvgWinrate(combo);
+
+    if (
+      score > bestScore ||
+      (score === bestScore && avgWr > bestAvgWinrate)
+    ) {
+      bestScore = score;
+      bestAvgWinrate = avgWr;
+      bestCombo = combo;
+    }
+  });
+
+  if (!bestCombo) {
+    return {
+      success: false,
+      assigned: [],
+      reason: `조합 탐색 실패 (최소 승률 ${options.minWinrate}%)`,
+    };
+  }
+
+  const combo = bestCombo as Candidate[];
+  const assigned = combo.map((c) => ({
+    turnIndex: c.turnIndex,
+    raceId: c.race.id,
+  }));
+
+  return { success: true, assigned };
 }
 
-// ─── 커스텀 인자 자동 배치 ─────────────────────
+// ─── 커스텀 인자 ─────────────────────────
 
 interface CustomSpec {
   requiredWins: string[];
@@ -365,7 +677,12 @@ function assignCustom(
     options
   );
   if (!requiredResult.success) {
-    return { success: false, assigned: [], reason: requiredResult.reason };
+    return {
+      success: false,
+      assigned: [],
+      reason: requiredResult.reason,
+      failureDetails: requiredResult.failureDetails,
+    };
   }
   allAssigned.push(...requiredResult.assigned);
   workingState = applyAssignments(workingState, requiredResult.assigned, owner);
@@ -378,6 +695,7 @@ function assignCustom(
         success: false,
         assigned: [],
         reason: `${i + 1}번째 트라이얼 그룹 배치 실패`,
+        failureDetails: [`${i + 1}번째 트라이얼:`, ...(groupResult.failureDetails ?? [])],
       };
     }
     allAssigned.push(...groupResult.assigned);
@@ -420,6 +738,7 @@ function assignAllClassChampion(
         success: false,
         assigned: [],
         reason: `${cat} G1 배치 실패`,
+        failureDetails: [`${cat} G1:`, ...(result.failureDetails ?? [])],
       };
     }
     allAssigned.push(...result.assigned);
@@ -445,7 +764,7 @@ function applyAssignments(
   return { ...state, selections: nextSelections, ownerships: nextOwnerships };
 }
 
-// ─── Public API ─────────────────────────────
+// ─── Public API: 단일 인자 배치 ─────────────
 
 export function autoAssignFactor(
   factor: FactorDef,
@@ -476,14 +795,39 @@ export function autoAssignFactor(
     kind: "hidden",
     factorId: factor.id,
   });
+
+  if (!wouldNotWorsenExistingSlots(
+    state.selections,
+    newState.selections,
+    newState.ownerships,
+    effective,
+    options.minWinrate
+  )) {
+    const details = buildWinrateFailureDetails(
+      state.selections,
+      newState.selections,
+      newState.ownerships,
+      effective,
+      options.minWinrate,
+      result.assigned
+    );
+
+    return {
+      state,
+      result: {
+        success: false,
+        assigned: [],
+        reason: `배치 시 기존 슬롯의 승률이 최소 ${options.minWinrate}% 아래로 떨어짐`,
+        failureDetails: details.length > 0 ? details : undefined,
+      },
+    };
+  }
+
   return { state: newState, result };
 }
 
-/**
- * G1 자동 배치.
- * 순차적으로 배치하면서, 각 배치 후에 기존 슬롯들의 승률이 minWinrate 이상 유지되는지 확인.
- * 유지 안 되면 그 G1 은 스킵.
- */
+// ─── Public API: G1 자동 배치 ─────────────
+
 export function autoAssignG1(
   state: PlannerState,
   character: Character,
@@ -493,7 +837,6 @@ export function autoAssignG1(
   const owner: SlotOwnership = { kind: "g1" };
   const g1Races = allRaces.filter((r) => r.grade === "G1" && !r.isOverseas);
 
-  // 후보 초기 수집 (일단 현 state 기준 승률로 정렬해서 우선순위 정함)
   const initialCandidates: { turnIndex: number; race: Race; initialWinrate: number }[] = [];
   for (const race of g1Races) {
     for (const cls of race.eligibleClasses) {
@@ -512,31 +855,26 @@ export function autoAssignG1(
     }
   }
 
-  // 초기 승률 높은 순으로 정렬 (동점이면 turnIndex 순)
   initialCandidates.sort((a, b) => {
     if (b.initialWinrate !== a.initialWinrate) return b.initialWinrate - a.initialWinrate;
     return a.turnIndex - b.turnIndex;
   });
 
-  // 순차적으로 배치하면서 매번 workingState 로 검증
   const chosen: { turnIndex: number; raceId: string }[] = [];
   let workingState = state;
   let skippedCount = 0;
 
   for (const cand of initialCandidates) {
-    // 이미 이번 iteration 에서 사용한 슬롯이면 스킵
-    if (workingState.selections[cand.turnIndex] && workingState.ownerships[cand.turnIndex]?.kind !== "g1") {
-      // 실제로는 초기 수집 시 canOverwrite 로 걸러졌지만, iteration 중 다른 G1 이 이 슬롯을 이미 채웠을 수 있음
-      if (chosen.some((c) => c.turnIndex === cand.turnIndex)) continue;
-    }
     if (chosen.some((c) => c.turnIndex === cand.turnIndex)) continue;
 
-    // 이 슬롯에 이 레이스를 넣었을 때 모든 슬롯의 승률이 minWinrate 이상 유지되는지 검증
+    const trialSelections = { ...workingState.selections, [cand.turnIndex]: cand.race.id };
+    const trialOwnerships = { ...workingState.ownerships, [cand.turnIndex]: owner };
+
     if (
-      !wouldMaintainMinWinrate(
-        cand.turnIndex,
-        cand.race,
-        workingState,
+      !wouldNotWorsenExistingSlots(
+        workingState.selections,
+        trialSelections,
+        trialOwnerships,
         effective,
         options.minWinrate
       )
@@ -546,7 +884,11 @@ export function autoAssignG1(
     }
 
     chosen.push({ turnIndex: cand.turnIndex, raceId: cand.race.id });
-    workingState = applyAssignments(workingState, [{ turnIndex: cand.turnIndex, raceId: cand.race.id }], owner);
+    workingState = applyAssignments(
+      workingState,
+      [{ turnIndex: cand.turnIndex, raceId: cand.race.id }],
+      owner
+    );
   }
 
   if (chosen.length === 0) {
@@ -567,7 +909,475 @@ export function autoAssignG1(
   };
 }
 
-// ─── 낮은 승률 슬롯 수집 (로그판용) ─────────
+// ─── 최적화용: 상태 점수 계산 ─────────────
+
+function calculateG1AndPenaltyScore(state: PlannerState): number {
+  let score = 0;
+  const nameCount = new Map<string, number>();
+
+  for (const [, raceId] of Object.entries(state.selections)) {
+    if (!raceId) continue;
+    const race = allRaces.find((r) => r.id === raceId);
+    if (!race) continue;
+
+    if (race.grade === "G1") score += G1_SCORE;
+
+    nameCount.set(race.name, (nameCount.get(race.name) ?? 0) + 1);
+  }
+
+  for (const count of nameCount.values()) {
+    if (count > 1) {
+      score += DUPLICATE_NAME_PENALTY * ((count * (count - 1)) / 2);
+    }
+  }
+
+  return score;
+}
+
+// ─── 빈 슬롯 채우기 (filler 소유권 사용) ─────────
+
+const MAX_TURN_INDEX = 72;
+
+function fillEmptySlots(
+  state: PlannerState,
+  effective: ReturnType<typeof effectiveAptitudes>,
+  _filter: AptitudeFilter,
+  options: AutoAssignOptions
+): { state: PlannerState; filledCount: number } {
+  let workingState = state;
+  let filledCount = 0;
+  // 이제 filler 소유권으로 저장 (재실행 시 초기화됨)
+  const owner: SlotOwnership = { kind: "filler" };
+
+  const raceByTurn = new Map<number, Race[]>();
+  for (const race of allRaces) {
+    if (race.isOverseas) continue;
+    for (const cls of race.eligibleClasses) {
+      const idx = toTurnIndex(cls, race.turn.month, race.turn.half);
+      if (idx < 0) continue;
+      const list = raceByTurn.get(idx) ?? [];
+      list.push(race);
+      raceByTurn.set(idx, list);
+    }
+  }
+
+  for (let turnIdx = 0; turnIdx < MAX_TURN_INDEX; turnIdx++) {
+    if (workingState.selections[turnIdx]) continue;
+
+    const races = raceByTurn.get(turnIdx);
+    if (!races || races.length === 0) continue;
+
+    const candidates: Candidate[] = [];
+    for (const race of races) {
+      // 필터 체크 제거: 승률 검증이 이미 필터 역할을 대신함
+      // (실효 등급 낮은 축의 레이스는 승률 미달로 자연스럽게 걸러짐)
+      const trialSelections = {
+        ...workingState.selections,
+        [turnIdx]: race.id,
+      };
+      const consec = countConsecutive(trialSelections, turnIdx);
+      const winrate = computeRaceWinrate(race, effective, consec);
+      if (winrate < options.minWinrate) continue;
+
+      candidates.push({ turnIndex: turnIdx, race, winrate });
+    }
+
+    if (candidates.length === 0) continue;
+
+    candidates.sort((a, b) => {
+      const dupA = countExistingName(a.race.name, workingState) > 0 ? DUPLICATE_NAME_PENALTY : 0;
+      const dupB = countExistingName(b.race.name, workingState) > 0 ? DUPLICATE_NAME_PENALTY : 0;
+      const scoreA = (GRADE_SCORE_MAP[a.race.grade] ?? 0) + dupA;
+      const scoreB = (GRADE_SCORE_MAP[b.race.grade] ?? 0) + dupB;
+      if (scoreB !== scoreA) return scoreB - scoreA;
+      return b.winrate - a.winrate;
+    });
+
+    for (const cand of candidates) {
+      const trialSelections = {
+        ...workingState.selections,
+        [turnIdx]: cand.race.id,
+      };
+      const trialOwnerships = {
+        ...workingState.ownerships,
+        [turnIdx]: owner,
+      };
+
+      if (
+        wouldNotWorsenExistingSlots(
+          workingState.selections,
+          trialSelections,
+          trialOwnerships,
+          effective,
+          options.minWinrate
+        )
+      ) {
+        workingState = applyAssignments(
+          workingState,
+          [{ turnIndex: turnIdx, raceId: cand.race.id }],
+          owner
+        );
+        filledCount++;
+        break;
+      }
+    }
+  }
+
+  return { state: workingState, filledCount };
+}
+
+function countExistingName(name: string, state: PlannerState): number {
+  let count = 0;
+  for (const [, raceId] of Object.entries(state.selections)) {
+    if (!raceId) continue;
+    const race = allRaces.find((r) => r.id === raceId);
+    if (race && race.name === name) count++;
+  }
+  return count;
+}
+
+// ─── 최적화 실행 ─────────────
+
+/**
+ * 최적화 실행.
+ *
+ * 초기화 규칙:
+ * - goal (목표) 슬롯은 유지
+ * - manual (수동) 슬롯은 백업 후 복원 시도
+ * - hidden, g1, filler 슬롯은 삭제 후 재계산
+ *
+ * 즉 이전 최적화 결과 (filler 포함) 는 완전 초기화되고 다시 계산됨.
+ */
+export function runOptimization(
+  state: PlannerState,
+  character: Character,
+  factorMap: Map<string, FactorDef>,
+  options: AutoAssignOptions = DEFAULT_OPTIONS
+): { state: PlannerState; result: OptimizeResult } {
+  const startTime = Date.now();
+  const effective = effectiveAptitudes(character.aptitudes, state.filter);
+
+  // 1. 상태 추출
+  const activeFactorIds = new Set<string>();
+  const manualBackup: { turnIndex: number; raceId: string }[] = [];
+
+  for (const [key, ownership] of Object.entries(state.ownerships)) {
+    if (!ownership) continue;
+    const turnIndex = Number(key);
+
+    if (ownership.kind === "hidden") {
+      activeFactorIds.add(ownership.factorId);
+    } else if (ownership.kind === "manual") {
+      const raceId = state.selections[turnIndex];
+      if (raceId) {
+        manualBackup.push({ turnIndex, raceId });
+      }
+    }
+    // filler, g1 은 저장 안 함 (초기화됨)
+  }
+
+  // 2. 목표만 남기고 초기화
+  let baseState: PlannerState = {
+    ...state,
+    selections: {},
+    ownerships: {},
+  };
+  for (const [key, ownership] of Object.entries(state.ownerships)) {
+    if (ownership?.kind === "goal") {
+      const turnIndex = Number(key);
+      const raceId = state.selections[turnIndex];
+      if (raceId) {
+        baseState.selections[turnIndex] = raceId;
+        baseState.ownerships[turnIndex] = { kind: "goal" };
+      }
+    }
+  }
+
+  // 3. 활성 인자 우선 배치
+  let mandatoryState = baseState;
+  const mandatorySuccess: string[] = [];
+  const mandatoryFail: string[] = [];
+
+  for (const factorId of activeFactorIds) {
+    const factor = factorMap.get(factorId);
+    if (!factor) continue;
+
+    const { state: nextState, result } = autoAssignFactor(
+      factor,
+      mandatoryState,
+      character,
+      options
+    );
+    if (result.success) {
+      mandatoryState = nextState;
+      mandatorySuccess.push(factor.name);
+    } else {
+      mandatoryFail.push(factor.name);
+    }
+  }
+
+  // 4. 나머지 인자 후보
+  const otherFactors: FactorDef[] = [];
+  for (const factor of factorMap.values()) {
+    if (activeFactorIds.has(factor.id)) continue;
+    if (factor.category !== "hidden") continue;
+    if (!factor.condition) continue;
+    if (factor.condition.kind === "aptitude") continue;
+
+    if (factor.characterIds && factor.characterIds.length > 0) {
+      if (!factor.characterIds.includes(character.id)) continue;
+    }
+
+    otherFactors.push(factor);
+  }
+
+  // 5. 최적 조합 탐색
+  const { chosenIds, method, timedOut } = findBestFactorCombination(
+    otherFactors,
+    mandatoryState,
+    character,
+    options,
+    startTime
+  );
+
+  // 6. 선택된 인자 배치
+  let workingState = mandatoryState;
+  let chosenFactorCount = mandatorySuccess.length;
+  for (const factorId of chosenIds) {
+    const factor = factorMap.get(factorId);
+    if (!factor) continue;
+    const { state: nextState, result } = autoAssignFactor(
+      factor,
+      workingState,
+      character,
+      options
+    );
+    if (result.success) {
+      workingState = nextState;
+      chosenFactorCount++;
+    }
+  }
+
+  // 7. G1 자동 배치
+  const { state: afterG1 } = autoAssignG1(workingState, character, options);
+  workingState = afterG1;
+
+  // 8. 수동 슬롯 복원 (승률 검증 통과할 때만)
+  let restoredManualCount = 0;
+  let droppedManualCount = 0;
+  for (const backup of manualBackup) {
+    if (workingState.selections[backup.turnIndex] !== undefined) {
+      // 이미 다른 것이 차지함 → 버림
+      droppedManualCount++;
+      continue;
+    }
+
+    // 승률 검증: 이 배치로 인해 기존 슬롯 승률이 안 깨지는지
+    const trialSelections = {
+      ...workingState.selections,
+      [backup.turnIndex]: backup.raceId,
+    };
+    const trialOwnerships = {
+      ...workingState.ownerships,
+      [backup.turnIndex]: { kind: "manual" } as SlotOwnership,
+    };
+
+    if (
+      wouldNotWorsenExistingSlots(
+        workingState.selections,
+        trialSelections,
+        trialOwnerships,
+        effective,
+        options.minWinrate
+      )
+    ) {
+      workingState = {
+        ...workingState,
+        selections: trialSelections,
+        ownerships: trialOwnerships,
+      };
+      restoredManualCount++;
+    } else {
+      droppedManualCount++;
+    }
+  }
+
+  // 9. 빈 슬롯 채우기 (filler 소유권으로)
+  const fillResult = fillEmptySlots(workingState, effective, state.filter, options);
+  workingState = fillResult.state;
+  const filledEmptyCount = fillResult.filledCount;
+
+  // 총점 계산
+  const g1AndPenalty = calculateG1AndPenaltyScore(workingState);
+  const factorScore = chosenFactorCount * HIDDEN_FACTOR_SCORE;
+  const totalScore = g1AndPenalty + factorScore;
+
+  const elapsedMs = Date.now() - startTime;
+
+  const reasons: string[] = [];
+  if (mandatoryFail.length > 0) {
+    reasons.push(`활성 인자 배치 실패: ${mandatoryFail.join(", ")}`);
+  }
+  if (timedOut) {
+    reasons.push("완전 탐색 시간 초과 → 그리디 사용");
+  }
+
+  return {
+    state: workingState,
+    result: {
+      success: true,
+      assignedCount: 0,
+      restoredManualCount,
+      droppedManualCount,
+      filledEmptyCount,
+      chosenFactorCount,
+      totalScore,
+      method,
+      elapsedMs,
+      reason: reasons.length > 0 ? reasons.join(" / ") : undefined,
+    },
+  };
+}
+
+function findBestFactorCombination(
+  candidates: FactorDef[],
+  baseState: PlannerState,
+  character: Character,
+  options: AutoAssignOptions,
+  startTime: number
+): { chosenIds: string[]; method: "exhaustive" | "greedy"; timedOut: boolean } {
+  const n = candidates.length;
+
+  if (n === 0) {
+    return { chosenIds: [], method: "exhaustive", timedOut: false };
+  }
+
+  const feasibleFactors: FactorDef[] = [];
+  for (const factor of candidates) {
+    if (Date.now() - startTime > EXHAUSTIVE_TIMEOUT_MS) break;
+    const { result } = autoAssignFactor(factor, baseState, character, options);
+    if (result.success) {
+      feasibleFactors.push(factor);
+    }
+  }
+
+  if (feasibleFactors.length === 0) {
+    return { chosenIds: [], method: "exhaustive", timedOut: false };
+  }
+
+  const fN = feasibleFactors.length;
+
+  if (fN > 20) {
+    return {
+      chosenIds: greedySelect(feasibleFactors, baseState, character, options),
+      method: "greedy",
+      timedOut: false,
+    };
+  }
+
+  let bestScore = -Infinity;
+  let bestSubset: FactorDef[] = [];
+  let timedOut = false;
+
+  const totalCombos = 1 << fN;
+  for (let mask = 0; mask < totalCombos; mask++) {
+    if (Date.now() - startTime > EXHAUSTIVE_TIMEOUT_MS) {
+      timedOut = true;
+      break;
+    }
+
+    const subset: FactorDef[] = [];
+    for (let i = 0; i < fN; i++) {
+      if (mask & (1 << i)) subset.push(feasibleFactors[i]);
+    }
+
+    let trialState = baseState;
+    let allOk = true;
+    for (const factor of subset) {
+      const { state: nextState, result } = autoAssignFactor(
+        factor,
+        trialState,
+        character,
+        options
+      );
+      if (!result.success) {
+        allOk = false;
+        break;
+      }
+      trialState = nextState;
+    }
+    if (!allOk) continue;
+
+    const factorScore = subset.length * HIDDEN_FACTOR_SCORE;
+    const emptySlots = countEmptySlots(trialState);
+    const estG1Score = Math.min(emptySlots, 24) * G1_SCORE * 0.5;
+    const penalty = calculateG1AndPenaltyScore(trialState);
+    const totalScore = factorScore + estG1Score + penalty;
+
+    if (totalScore > bestScore) {
+      bestScore = totalScore;
+      bestSubset = subset;
+    }
+  }
+
+  if (timedOut && bestSubset.length === 0) {
+    return {
+      chosenIds: greedySelect(feasibleFactors, baseState, character, options),
+      method: "greedy",
+      timedOut: true,
+    };
+  }
+
+  return {
+    chosenIds: bestSubset.map((f) => f.id),
+    method: timedOut ? "greedy" : "exhaustive",
+    timedOut,
+  };
+}
+
+function greedySelect(
+  factors: FactorDef[],
+  baseState: PlannerState,
+  character: Character,
+  options: AutoAssignOptions
+): string[] {
+  const withEfficiency = factors.map((f) => {
+    const { result } = autoAssignFactor(f, baseState, character, options);
+    const slotsNeeded = result.success ? result.assigned.length : Infinity;
+    const efficiency = slotsNeeded > 0 ? HIDDEN_FACTOR_SCORE / slotsNeeded : 0;
+    return { factor: f, efficiency, slotsNeeded };
+  });
+
+  withEfficiency.sort((a, b) => b.efficiency - a.efficiency);
+
+  const chosen: string[] = [];
+  let workingState = baseState;
+
+  for (const { factor } of withEfficiency) {
+    const { state: nextState, result } = autoAssignFactor(
+      factor,
+      workingState,
+      character,
+      options
+    );
+    if (result.success) {
+      workingState = nextState;
+      chosen.push(factor.id);
+    }
+  }
+
+  return chosen;
+}
+
+function countEmptySlots(state: PlannerState): number {
+  let count = 0;
+  for (let i = 0; i < MAX_TURN_INDEX; i++) {
+    if (!state.selections[i]) count++;
+  }
+  return count;
+}
+
+// ─── 낮은 승률 슬롯 수집 ─────────
 
 export interface LowWinrateEntry {
   turnIndex: number;
