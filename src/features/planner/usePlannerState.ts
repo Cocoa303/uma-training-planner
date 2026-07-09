@@ -186,29 +186,21 @@ export function usePlannerState() {
     });
   }, []);
 
+  /**
+   * 전체 초기화.
+   * - 목표 슬롯만 남기고 나머지 슬롯 (수동/자동/인자/G1/filler) 모두 제거
+   * - 필터 설정은 유지 (유저가 설정한 A/B/C 등급 그대로)
+   */
   const resetAll = useCallback(() => {
     setState((s) => {
       if (!s.characterId) return INITIAL_STATE;
       const c = characters.find((x) => x.id === s.characterId);
       if (!c) return INITIAL_STATE;
 
-      const originalGrades = {
-        turf: c.aptitudes.surface.turf,
-        dirt: c.aptitudes.surface.dirt,
-        sprint: c.aptitudes.distance.sprint,
-        mile: c.aptitudes.distance.mile,
-        medium: c.aptitudes.distance.medium,
-        long: c.aptitudes.distance.long,
-        runner: c.aptitudes.style.runner,
-        leader: c.aptitudes.style.leader,
-        betweener: c.aptitudes.style.betweener,
-        chaser: c.aptitudes.style.chaser,
-      };
-
       const { selections, ownerships } = buildInitialGoalSlots(c);
       return {
         characterId: s.characterId,
-        filter: autoActivateFilter(originalGrades),
+        filter: s.filter, // 필터 유지
         selections,
         ownerships,
       };
