@@ -292,3 +292,63 @@
 .slot-cell--filler .filled-slot {
   opacity: 0.85;
 }
+
+/* filler 배지 (자동 채움 슬롯) - 기존에 있으면 유지 */
+.badge--filler {
+  background: #6b7280;
+  color: white;
+}
+
+.slot-cell--filler {
+  background: #f9fafb;
+  border-color: #e5e7eb;
+}
+
+.slot-cell--filler .filled-slot {
+  opacity: 0.85;
+}
+
+/* ─── 전체 보기 탭 ─── */
+
+.class-tab--all {
+  background: #eef2ff;
+  color: #4338ca;
+  font-weight: 600;
+}
+
+.class-tab--all.class-tab--active {
+  background: #4338ca;
+  color: white;
+}
+
+/* ─── 전체 뷰 컨테이너 ─── */
+
+.race-calendar__all-view {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ─── 학년 섹션 ─── */
+
+.class-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.class-section__header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  background: linear-gradient(90deg, #f3f4f6 0%, transparent 100%);
+  border-left: 4px solid #4338ca;
+  border-radius: 4px;
+}
+
+.class-section__title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1f2937;
+}

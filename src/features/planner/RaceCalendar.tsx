@@ -19,6 +19,12 @@ import "./RaceCalendar.css";
 
 const CLASSES: ClassLevel[] = ["주니어급", "클래식급", "시니어급"];
 
+/**
+ * 활성 뷰 상태.
+ * - 개별 학년 하나 선택 or "all" 로 전체 3학년 통합 뷰
+ */
+type ActiveView = ClassLevel | "all";
+
 interface Props {
   character: Character | null;
   filter: AptitudeFilter;
@@ -36,7 +42,7 @@ export function RaceCalendar({
   onSelectRace,
   onClearSlot,
 }: Props) {
-  const [activeClass, setActiveClass] = useState<ClassLevel>("클래식급");
+  const [activeView, setActiveView] = useState<ActiveView>("클래식급");
   const [pickerSlot, setPickerSlot] = useState<{
     turnIndex: number;
     className: ClassLevel;
@@ -49,7 +55,14 @@ export function RaceCalendar({
     return effectiveAptitudes(character.aptitudes, filter);
   }, [character, filter]);
 
-  const slots = getSlotsForClass(activeClass);
+  const openPicker = (
+    turnIndex: number,
+    className: ClassLevel,
+    month: number,
+    half: 1 | 2
+  ) => {
+    setPickerSlot({ turnIndex, className, month, half });
+  };
 
   return (
     <div className="race-calendar">
@@ -57,39 +70,44 @@ export function RaceCalendar({
         {CLASSES.map((cls) => (
           <button
             key={cls}
-            className={`class-tab ${activeClass === cls ? "class-tab--active" : ""}`}
-            onClick={() => setActiveClass(cls)}
+            className={`class-tab ${activeView === cls ? "class-tab--active" : ""}`}
+            onClick={() => setActiveView(cls)}
           >
             {cls.replace("급", "")}
           </button>
         ))}
+        <button
+          className={`class-tab class-tab--all ${activeView === "all" ? "class-tab--active" : ""}`}
+          onClick={() => setActiveView("all")}
+        >
+          전체
+        </button>
       </div>
 
-      <div className="race-calendar__grid">
-        {slots.map((slot) => {
-          const selectedRaceId = selections[slot.turnIndex];
-          return (
-            <SlotCell
-              key={slot.turnIndex}
-              slot={slot}
+      {activeView === "all" ? (
+        <div className="race-calendar__all-view">
+          {CLASSES.map((cls) => (
+            <ClassSection
+              key={cls}
+              className={cls}
               effective={effective}
-              filter={filter}
               selections={selections}
-              ownership={ownerships[slot.turnIndex]}
-              selectedRaceId={selectedRaceId}
-              onOpenPicker={() =>
-                setPickerSlot({
-                  turnIndex: slot.turnIndex,
-                  className: activeClass,
-                  month: slot.month,
-                  half: slot.half,
-                })
-              }
+              ownerships={ownerships}
+              onOpenPicker={openPicker}
               onClearSlot={onClearSlot}
             />
-          );
-        })}
-      </div>
+          ))}
+        </div>
+      ) : (
+        <ClassGrid
+          className={activeView}
+          effective={effective}
+          selections={selections}
+          ownerships={ownerships}
+          onOpenPicker={openPicker}
+          onClearSlot={onClearSlot}
+        />
+      )}
 
       {pickerSlot && (
         <RacePickerModal
@@ -112,10 +130,101 @@ export function RaceCalendar({
   );
 }
 
+// ─── 학년 섹션 (전체 뷰에서 사용) ───────────
+
+interface ClassSectionProps {
+  className: ClassLevel;
+  effective: ReturnType<typeof effectiveAptitudes> | null;
+  selections: SlotSelections;
+  ownerships: SlotOwnerships;
+  onOpenPicker: (
+    turnIndex: number,
+    className: ClassLevel,
+    month: number,
+    half: 1 | 2
+  ) => void;
+  onClearSlot: (turnIndex: number) => void;
+}
+
+function ClassSection({
+  className,
+  effective,
+  selections,
+  ownerships,
+  onOpenPicker,
+  onClearSlot,
+}: ClassSectionProps) {
+  return (
+    <section className="class-section">
+      <div className="class-section__header">
+        <span className="class-section__title">{className.replace("급", "")}</span>
+      </div>
+      <ClassGrid
+        className={className}
+        effective={effective}
+        selections={selections}
+        ownerships={ownerships}
+        onOpenPicker={onOpenPicker}
+        onClearSlot={onClearSlot}
+      />
+    </section>
+  );
+}
+
+// ─── 학년 그리드 (공통) ───────────────────
+
+interface ClassGridProps {
+  className: ClassLevel;
+  effective: ReturnType<typeof effectiveAptitudes> | null;
+  selections: SlotSelections;
+  ownerships: SlotOwnerships;
+  onOpenPicker: (
+    turnIndex: number,
+    className: ClassLevel,
+    month: number,
+    half: 1 | 2
+  ) => void;
+  onClearSlot: (turnIndex: number) => void;
+}
+
+function ClassGrid({
+  className,
+  effective,
+  selections,
+  ownerships,
+  onOpenPicker,
+  onClearSlot,
+}: ClassGridProps) {
+  const slots = getSlotsForClass(className);
+
+  return (
+    <div className="race-calendar__grid">
+      {slots.map((slot) => {
+        const selectedRaceId = selections[slot.turnIndex];
+        return (
+          <SlotCell
+            key={slot.turnIndex}
+            slot={slot}
+            effective={effective}
+            selections={selections}
+            ownership={ownerships[slot.turnIndex]}
+            selectedRaceId={selectedRaceId}
+            onOpenPicker={() =>
+              onOpenPicker(slot.turnIndex, className, slot.month, slot.half)
+            }
+            onClearSlot={onClearSlot}
+          />
+        );
+      })}
+    </div>
+  );
+}
+
+// ─── 개별 슬롯 ─────────────────────────
+
 interface SlotCellProps {
   slot: ReturnType<typeof getSlotsForClass>[number];
   effective: ReturnType<typeof effectiveAptitudes> | null;
-  filter: AptitudeFilter;
   selections: SlotSelections;
   ownership: SlotOwnership | undefined;
   selectedRaceId: string | undefined;
