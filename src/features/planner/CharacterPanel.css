@@ -106,7 +106,6 @@
   font-weight: 700;
 }
 
-/* 등급별로 글자색만 지정 (배경색 재정의) */
 .character-panel .apt-cell__grade.apt-grade--s { color: #dc2626; background: transparent; }
 .character-panel .apt-cell__grade.apt-grade--a { color: #ea580c; background: transparent; }
 .character-panel .apt-cell__grade.apt-grade--b { color: #ca8a04; background: transparent; }
@@ -175,111 +174,8 @@
   color: white;
   border-color: #10b981;
 }
-/* ═══ 아래 스타일들을 CharacterPanel.css 의 맨 아래에 추가하세요 ═══ */
-/* (기존 .filter-chip 관련 스타일은 그대로 둬도 되지만, 필요없어짐) */
 
-.filter-grade-selector {
-  position: relative;
-  flex: 1;
-  min-width: 0;
-}
-
-.filter-grade-selector__button {
-  width: 100%;
-  padding: 8px 10px;
-  border: 1px solid #d1d5db;
-  background: white;
-  border-radius: 6px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 4px;
-  font-size: 12px;
-  transition: all 0.15s;
-}
-
-.filter-grade-selector__button:hover:not(:disabled) {
-  border-color: #86efac;
-  background: #f0fdf4;
-}
-
-.filter-grade-selector__button--on {
-  background: #86efac !important;
-  border-color: #4ade80;
-  color: #111827;
-  font-weight: 700;
-}
-
-.filter-grade-selector__button--disabled {
-  background: #f3f4f6;
-  color: #9ca3af;
-  cursor: not-allowed;
-  border-color: #e5e7eb;
-}
-
-.filter-grade-selector__label {
-  font-weight: 600;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.filter-grade-selector__grade {
-  font-weight: 700;
-  font-size: 13px;
-  min-width: 22px;
-  text-align: center;
-}
-
-.filter-grade-selector__arrow {
-  font-size: 8px;
-  color: currentColor;
-  opacity: 0.6;
-}
-
-.filter-grade-selector__dropdown {
-  position: absolute;
-  top: calc(100% + 4px);
-  left: 0;
-  right: 0;
-  background: white;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  z-index: 50;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-}
-
-.filter-grade-selector__option {
-  padding: 8px 12px;
-  border: none;
-  background: white;
-  cursor: pointer;
-  text-align: center;
-  font-size: 13px;
-  font-weight: 600;
-  color: #111827;
-  transition: background 0.1s;
-}
-
-.filter-grade-selector__option:hover {
-  background: #f0fdf4;
-}
-
-.filter-grade-selector__option--active {
-  background: #86efac;
-  color: #111827;
-}
-
-.filter-grade-selector__option--active:hover {
-  background: #4ade80;
-}
-
-/* ═══ CharacterPanel.css 의 맨 아래에 이 스타일들을 유지/추가하세요 ═══ */
-/* (이전에 추가한 filter-grade-selector 스타일이 있으면 그것을 이걸로 교체) */
+/* ─── 필터 등급 선택기 ─── */
 
 .filter-grade-selector {
   position: relative;
@@ -396,7 +292,30 @@
   color: #065f46;
 }
 
-/* ─── 모바일 대응 (< 768px) ─── */
+/* ═══ PC (>= 1024px): 이미지 최대 250px ═══ */
+
+@media (min-width: 1024px) {
+  .character-panel__image-btn {
+    aspect-ratio: auto;
+    max-width: 250px;
+    max-height: 320px;
+    align-self: center;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .character-panel__image-btn img {
+    width: 100%;
+    height: 100%;
+    max-height: 320px;
+    object-fit: cover;
+    object-position: top;
+  }
+}
+
+/* ─── 모바일 대응 ─── */
 
 @media (max-width: 767px) {
   .character-panel {
@@ -404,7 +323,6 @@
     gap: 8px;
   }
 
-  /* 이미지: 세로 3:4 → 가로 4:3 로 뒤집어서 화면 덜 차지 */
   .character-panel__image-btn {
     aspect-ratio: auto;
     max-height: 140px;
@@ -420,7 +338,6 @@
     object-fit: contain;
   }
 
-  /* 캐릭터 이름 폰트 축소 */
   .character-panel__full-name {
     font-size: 13px;
   }
@@ -429,7 +346,6 @@
     font-size: 10px;
   }
 
-  /* 적성 셀 컴팩트 */
   .apt-cell {
     padding: 2px 1px;
   }
@@ -443,7 +359,6 @@
     padding: 2px;
   }
 
-  /* 필터 섹션 컴팩트 */
   .character-panel__filter-section h4 {
     font-size: 11px;
     padding: 3px;

@@ -1,19 +1,43 @@
 .planner-page {
-  display: grid;
-  grid-template-columns: 240px 1fr 240px;
+  display: flex;
+  flex-direction: column;
   gap: 12px;
-  align-items: start;
-  transition: grid-template-columns 0.2s ease;
+  width: 100%;
 }
 
-.planner-page--panel-closed {
-  grid-template-columns: 240px 1fr 44px;
+/* ═══ PC (>= 1024px): 상단 패널 (캐릭터 좁게 + 인자 넓게) ═══ */
+
+@media (min-width: 1024px) {
+  .planner-page__top-panels {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 16px;
+    align-items: start;
+    width: 100%;
+  }
+
+  .planner-page .character-panel {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .planner-page__right {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .planner-page .race-calendar {
+    width: 100%;
+  }
 }
 
-@media (max-width: 1100px) {
-  .planner-page,
-  .planner-page--panel-closed {
-    grid-template-columns: 1fr;
+/* ─── 모바일 (< 1024px): 세로 스택 ─── */
+
+@media (max-width: 1023px) {
+  .planner-page__top-panels {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
   }
 }
 
@@ -22,30 +46,6 @@
   flex-direction: column;
   gap: 10px;
   position: relative;
-}
-
-.factor-toggle {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  padding: 8px;
-  border: 1px solid var(--color-border);
-  border-radius: 6px;
-  background: var(--color-surface);
-  cursor: pointer;
-  font-size: 12px;
-  color: var(--color-text-muted);
-  transition: border-color 0.15s, color 0.15s;
-}
-
-.factor-toggle:hover {
-  border-color: var(--color-accent);
-  color: var(--color-accent);
-}
-
-.planner-page--panel-closed .factor-toggle__label {
-  display: none;
 }
 
 /* ─── 최소 승률 입력 ─── */
@@ -109,7 +109,6 @@
   margin: 0;
 }
 
-/* G1 자동 배치 버튼 */
 .g1-auto-btn {
   padding: 10px 16px;
   border: 1px solid #ec4899;
@@ -135,7 +134,6 @@
   background: #db2777;
 }
 
-/* 최적화 실행 버튼 */
 .optimize-btn {
   padding: 10px 12px;
   background: #7c3aed;
@@ -156,7 +154,6 @@
   background: #5b21b6;
 }
 
-/* 초기화 버튼 */
 .reset-btn {
   padding: 8px 16px;
   border: 1px solid var(--color-border);
@@ -172,7 +169,7 @@
   color: #ef4444;
 }
 
-/* ─── 알림창: 뷰포트 상단 중앙 고정 ─── */
+/* ─── 알림창 ─── */
 
 .assign-alert {
   position: fixed;
@@ -220,7 +217,6 @@
   white-space: pre-wrap;
 }
 
-/* 첫 줄 강조 */
 .assign-alert__line:first-child {
   font-weight: 700;
   margin-bottom: 4px;
@@ -253,15 +249,13 @@
   background: rgba(0, 0, 0, 0.1);
 }
 
-/* ─── 모바일 대응 (< 768px) ─── */
+/* ─── 모바일 대응 ─── */
 
 @media (max-width: 767px) {
-  /* 최소 승률 입력 컴팩트 */
   .winrate-input-group {
     padding: 8px 10px;
   }
 
-  /* 자동 배치 버튼 폰트 축소 */
   .auto-btn-row {
     gap: 4px;
   }
@@ -277,12 +271,6 @@
     font-size: 12px;
   }
 
-  /* 인자 토글 버튼 - 모바일에서 숨김 (항상 열림) */
-  .factor-toggle {
-    display: none;
-  }
-
-  /* 알림창 모바일 사이즈 조정 */
   .assign-alert {
     top: 12px;
     width: calc(100% - 20px);

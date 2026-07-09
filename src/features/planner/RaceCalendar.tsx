@@ -19,11 +19,7 @@ import "./RaceCalendar.css";
 
 const CLASSES: ClassLevel[] = ["주니어급", "클래식급", "시니어급"];
 
-/**
- * 활성 뷰 상태.
- * - 개별 학년 하나 선택 or "all" 로 전체 3학년 통합 뷰
- */
-type ActiveView = ClassLevel | "all";
+export type ActiveView = ClassLevel | "all";
 
 interface Props {
   character: Character | null;
@@ -32,6 +28,9 @@ interface Props {
   ownerships: SlotOwnerships;
   onSelectRace: (turnIndex: number, raceId: string) => void;
   onClearSlot: (turnIndex: number) => void;
+  /** 활성 뷰 (외부 관리) */
+  activeView: ActiveView;
+  onChangeView: (view: ActiveView) => void;
 }
 
 export function RaceCalendar({
@@ -41,8 +40,9 @@ export function RaceCalendar({
   ownerships,
   onSelectRace,
   onClearSlot,
+  activeView,
+  onChangeView,
 }: Props) {
-  const [activeView, setActiveView] = useState<ActiveView>("클래식급");
   const [pickerSlot, setPickerSlot] = useState<{
     turnIndex: number;
     className: ClassLevel;
@@ -64,27 +64,29 @@ export function RaceCalendar({
     setPickerSlot({ turnIndex, className, month, half });
   };
 
+  const isAllView = activeView === "all";
+
   return (
-    <div className="race-calendar">
+    <div className={`race-calendar ${isAllView ? "race-calendar--all" : ""}`}>
       <div className="race-calendar__tabs">
         {CLASSES.map((cls) => (
           <button
             key={cls}
             className={`class-tab ${activeView === cls ? "class-tab--active" : ""}`}
-            onClick={() => setActiveView(cls)}
+            onClick={() => onChangeView(cls)}
           >
             {cls.replace("급", "")}
           </button>
         ))}
         <button
           className={`class-tab class-tab--all ${activeView === "all" ? "class-tab--active" : ""}`}
-          onClick={() => setActiveView("all")}
+          onClick={() => onChangeView("all")}
         >
           전체
         </button>
       </div>
 
-      {activeView === "all" ? (
+      {isAllView ? (
         <div className="race-calendar__all-view">
           {CLASSES.map((cls) => (
             <ClassSection
@@ -130,7 +132,7 @@ export function RaceCalendar({
   );
 }
 
-// ─── 학년 섹션 (전체 뷰에서 사용) ───────────
+// ─── 학년 섹션 (전체 뷰) ───────────
 
 interface ClassSectionProps {
   className: ClassLevel;
@@ -171,7 +173,7 @@ function ClassSection({
   );
 }
 
-// ─── 학년 그리드 (공통) ───────────────────
+// ─── 학년 그리드 (공통) ───────────
 
 interface ClassGridProps {
   className: ClassLevel;

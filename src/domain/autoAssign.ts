@@ -25,7 +25,6 @@ export interface AssignResult {
   skippedCount?: number;
   reason?: string;
   failureDetails?: string[];
-  /** 충돌 해결로 이동된 슬롯 정보 (사용자에게 표시) */
   relocatedInfo?: string[];
 }
 
@@ -52,9 +51,25 @@ const DEFAULT_OPTIONS: AutoAssignOptions = {
 
 // ─── 점수 상수 ─────────────────────────
 
-const HIDDEN_FACTOR_SCORE = 20;
+const HIDDEN_FACTOR_SCORE_DEFAULT = 20;
 const G1_SCORE = 10;
 const DUPLICATE_NAME_PENALTY = -5;
+
+/**
+ * 특정 인자에 대한 점수 예외 처리.
+ * - 퍼펙트 크라운: 트리플 크라운 조건을 포함하므로 2배
+ * - 퍼펙트 티아라: 트리플 티아라 조건을 포함하므로 2배
+ * - 전 계급 제패: G1 여러 개를 포함하므로 2배
+ */
+const HIDDEN_FACTOR_SCORE_MAP: Record<string, number> = {
+  "perfect-crown": 40,
+  "perfect-tiara": 40,
+  "all-class-champion": 40,
+};
+
+function getFactorScore(factorId: string): number {
+  return HIDDEN_FACTOR_SCORE_MAP[factorId] ?? HIDDEN_FACTOR_SCORE_DEFAULT;
+}
 
 const GRADE_SCORE_MAP: Record<RaceGrade, number> = {
   G1: 10,
@@ -333,15 +348,6 @@ function buildWinrateFailureDetails(
 
 // ─── 충돌 해결: 기존 인자 슬롯을 이동 ─────────────────────────
 
-/**
- * 특정 슬롯을 차지하고 있는 인자/G1 을 다른 슬롯으로 이동 시도.
- *
- * @param turnIndex 비우고 싶은 슬롯
- * @param state 현재 상태
- * @param effective 실효 적성
- * @param options 최소 승률 등
- * @returns 이동 성공 시 { newState, moveDescription }, 실패 시 null
- */
 function tryRelocateSlotOccupant(
   turnIndex: number,
   state: PlannerState,
@@ -352,7 +358,6 @@ function tryRelocateSlotOccupant(
   const existingRaceId = state.selections[turnIndex];
   if (!existingOwnership || !existingRaceId) return null;
 
-  // 이동 대상은 hidden 또는 g1 만 (수동/목표는 이동 안 함)
   if (existingOwnership.kind !== "hidden" && existingOwnership.kind !== "g1") {
     return null;
   }
@@ -360,14 +365,12 @@ function tryRelocateSlotOccupant(
   const existingRace = allRaces.find((r) => r.id === existingRaceId);
   if (!existingRace) return null;
 
-  // 이 레이스의 다른 개최 슬롯 찾기 (같은 이름 or 같은 인자 요건 만족하는 다른 레이스)
   const alternatives: Candidate[] = [];
 
-  // 1. 같은 이름의 다른 슬롯 (예: 같은 스프린터스 다른 학년)
   const sameNameSlots = findRaceSlots(existingRace.name);
   for (const { turnIndex: altIdx, race } of sameNameSlots) {
     if (altIdx === turnIndex) continue;
-    if (state.selections[altIdx]) continue; // 이미 뭐가 있음
+    if (state.selections[altIdx]) continue;
     if (!canOverwrite(existingOwnership, state.ownerships[altIdx])) continue;
 
     const trialSelections = { ...state.selections };
@@ -381,8 +384,6 @@ function tryRelocateSlotOccupant(
     alternatives.push({ turnIndex: altIdx, race, winrate });
   }
 
-  // 2. G1 이었으면 다른 G1 도 대안 (같은 카테고리 or 아무 G1)
-  //    hidden 인자는 조건이 복잡해서 이 함수에서는 같은 이름 이동만 시도
   if (existingOwnership.kind === "g1" && alternatives.length === 0) {
     const g1Races = allRaces.filter(
       (r) => r.grade === "G1" && !r.isOverseas && r.id !== existingRace.id
@@ -410,11 +411,9 @@ function tryRelocateSlotOccupant(
 
   if (alternatives.length === 0) return null;
 
-  // 승률 높은 순으로 정렬, 첫 번째 시도
   alternatives.sort((a, b) => b.winrate - a.winrate);
 
   for (const alt of alternatives) {
-    // 실제 이동 시뮬레이션
     const nextSelections = { ...state.selections };
     const nextOwnerships = { ...state.ownerships };
     delete nextSelections[turnIndex];
@@ -422,7 +421,6 @@ function tryRelocateSlotOccupant(
     nextSelections[alt.turnIndex] = alt.race.id;
     nextOwnerships[alt.turnIndex] = existingOwnership;
 
-    // 이동 후 전체 승률 검증
     if (
       !wouldNotWorsenExistingSlots(
         state.selections,
@@ -490,13 +488,6 @@ function assignForCondition(
   }
 }
 
-/**
- * 특정 이름의 레이스를 배치할 슬롯 찾기 (충돌 해결 포함).
- *
- * 1. 승률 OK + 슬롯 자유 → 그대로 배치
- * 2. 슬롯 점유 (hidden/g1) → 점유자 이동 시도 후 배치
- * 3. 다 실패 → null
- */
 function findSlotForRaceWithRelocation(
   raceName: string,
   owner: SlotOwnership,
@@ -512,7 +503,6 @@ function findSlotForRaceWithRelocation(
   const candidates = collectCandidates([raceName], state, effective);
   if (candidates.length === 0) return null;
 
-  // 1차: 슬롯 자유 + 승률 OK 우선
   const primaryUsable = candidates
     .filter((c) => !claimed.has(c.turnIndex))
     .filter((c) => canOverwrite(owner, state.ownerships[c.turnIndex]))
@@ -532,13 +522,11 @@ function findSlotForRaceWithRelocation(
     };
   }
 
-  // 2차: 점유된 슬롯에 대해 점유자 이동 시도
   const occupiedCandidates = candidates
     .filter((c) => !claimed.has(c.turnIndex))
     .filter((c) => c.winrate >= options.minWinrate)
     .filter((c) => {
       const existing = state.ownerships[c.turnIndex];
-      // 이미 뭔가 있는데 우선순위가 낮은 것 (hidden/g1) 이면 이동 시도 대상
       return (
         existing &&
         (existing.kind === "hidden" || existing.kind === "g1") &&
@@ -602,7 +590,6 @@ function assignAllRaces(
     );
 
     if (!result) {
-      // 실패 로그
       const candidates = collectCandidates([name], workingState, effective);
       const verdicts = candidates.map((c) => ({
         cand: c,
@@ -626,8 +613,6 @@ function assignAllRaces(
     if (result.relocation) relocations.push(result.relocation);
   }
 
-  // 이동된 슬롯의 새 위치 정보를 assigned 에 반영 (외부에서 상태 병합할 때 사용)
-  // workingState 자체가 이미 이동을 반영한 상태이므로 여기서는 assigned 만 반환
   return {
     success: true,
     assigned,
@@ -642,7 +627,6 @@ function assignAnyRace(
   effective: ReturnType<typeof effectiveAptitudes>,
   options: AutoAssignOptions
 ): AssignResult {
-  // 이미 배치된 것이 있으면 성공
   for (const [, id] of Object.entries(state.selections)) {
     if (!id) continue;
     const race = allRaces.find((r) => r.id === id);
@@ -683,7 +667,6 @@ function assignAnyRace(
     };
   }
 
-  // 이동 시도
   const occupiedUsable = candidates
     .filter((c) => c.winrate >= options.minWinrate)
     .filter((c) => {
@@ -709,10 +692,6 @@ function assignAnyRace(
       options
     );
     if (relocation) {
-      // 이동한 새 상태에서의 배치를 assigned 에 담음
-      // 상태 병합은 호출부에서 처리하기 어려우므로, 여기서 반환하는 것은
-      // "이 슬롯이 비었다고 가정한 상태에서의 배치" 로 보고 호출부에서 처리
-      // 하지만 assignAnyRace 는 단일 배치니 그냥 신호만 주면 됨
       return {
         success: true,
         assigned: [{ turnIndex: cand.turnIndex, raceId: cand.race.id }],
@@ -1025,10 +1004,6 @@ export function autoAssignFactor(
     };
   }
 
-  // assignAllRaces/assignAnyRace 는 내부에서 이동을 하며 workingState 를 변경할 수 있음
-  // custom 인자는 assignCustom 내부에서 workingState 관리
-  // 하지만 relocatedInfo 를 통해 어떤 이동이 있었는지 알 수 있음
-
   const result =
     cond.kind === "custom"
       ? assignCustom(factor.id, state, effective, options)
@@ -1038,24 +1013,7 @@ export function autoAssignFactor(
     return { state, result };
   }
 
-  // 이동이 있었는지 확인: relocatedInfo 존재 여부로 판단
-  // 이동이 있었으면 workingState 를 재구성해야 하는데,
-  // assignForCondition/assignCustom 이 이미 이동을 반영한 assigned 를 반환하므로
-  // 여기서는 state 에 assigned 만 적용하면 됨
-  // 다만 이동 대상 슬롯은 clear 되어야 함 → 이걸 정확히 하려면 이동 정보 필요
-
-  // 간단한 접근: relocation 정보가 있으면 assignAllRaces 등이 이미 workingState 를
-  // 변경했지만, 이 함수는 그걸 못 봄. 대안: 이동한 슬롯을 assigned 에 clear 지시로 포함
-  // 하지만 현재 구조상 어려움
-
-  // 실용적 접근: assignAllRaces 등이 이동 대상 슬롯을 명시적으로 반환하지 않으므로
-  // 여기서는 relocatedInfo 를 result 에 그대로 담고, 실제 이동은 rebuild
-  // → 재검증을 위해 relocatedInfo 가 있으면 시뮬레이션 재실행
-
   if (result.relocatedInfo && result.relocatedInfo.length > 0) {
-    // 이동이 있었으니 workingState 를 재구성해야 함
-    // assignForCondition 이 내부 workingState 를 반환하지 않으므로,
-    // 여기서 rebuild: relocation 을 실제 상태에 반영
     const rebuiltState = rebuildStateWithRelocations(
       state,
       result.assigned,
@@ -1127,10 +1085,6 @@ export function autoAssignFactor(
   return { state: newState, result };
 }
 
-/**
- * relocation 정보 문자열 (예: "스프린터스 스테이크스 (클래식 9월 후반 → 시니어 9월 후반)")
- * 을 파싱해서 실제 상태에 반영.
- */
 function rebuildStateWithRelocations(
   originalState: PlannerState,
   newAssignments: { turnIndex: number; raceId: string }[],
@@ -1139,9 +1093,7 @@ function rebuildStateWithRelocations(
 ): PlannerState {
   let workingState = originalState;
 
-  // 각 relocation 을 파싱해서 이동 반영
   for (const relocDesc of relocations) {
-    // 형식: "레이스명 (원위치 → 새위치)"
     const match = relocDesc.match(/^(.+?) \((.+?) → (.+?)\)$/);
     if (!match) continue;
 
@@ -1154,7 +1106,6 @@ function rebuildStateWithRelocations(
     const ownership = workingState.ownerships[fromIdx];
     if (!raceId || !ownership) continue;
 
-    // 원래 이 이름의 다른 레이스 (다른 turnIndex 에 있는 레이스) 찾기
     const targetRace = allRaces.find((r) => {
       if (r.name !== raceName) return false;
       for (const cls of r.eligibleClasses) {
@@ -1164,7 +1115,6 @@ function rebuildStateWithRelocations(
     });
     if (!targetRace) continue;
 
-    // 이동
     const nextSelections = { ...workingState.selections };
     const nextOwnerships = { ...workingState.ownerships };
     delete nextSelections[fromIdx];
@@ -1179,7 +1129,6 @@ function rebuildStateWithRelocations(
     };
   }
 
-  // 새 인자 배치
   workingState = applyAssignments(workingState, newAssignments, {
     kind: "hidden",
     factorId: newFactorId,
@@ -1188,9 +1137,6 @@ function rebuildStateWithRelocations(
   return workingState;
 }
 
-/**
- * "클래식 9월 후반" 같은 label 을 turnIndex 로 변환.
- */
 function labelToTurnIndex(label: string): number {
   const match = label.match(/^(주니어|클래식|시니어)\s+(\d+)월\s+(전반|후반)$/);
   if (!match) return -1;
@@ -1313,6 +1259,21 @@ function calculateG1AndPenaltyScore(state: PlannerState): number {
   }
 
   return score;
+}
+
+/**
+ * 상태의 hidden 인자 점수 합계 (인자 종류별 가중치 반영).
+ */
+function calculateHiddenFactorScore(state: PlannerState): number {
+  const factorIds = new Set<string>();
+  for (const [, ownership] of Object.entries(state.ownerships)) {
+    if (ownership?.kind === "hidden") {
+      factorIds.add(ownership.factorId);
+    }
+  }
+  let sum = 0;
+  for (const id of factorIds) sum += getFactorScore(id);
+  return sum;
 }
 
 // ─── 빈 슬롯 채우기 ─────────
@@ -1564,7 +1525,7 @@ export function runOptimization(
   const filledEmptyCount = fillResult.filledCount;
 
   const g1AndPenalty = calculateG1AndPenaltyScore(workingState);
-  const factorScore = chosenFactorCount * HIDDEN_FACTOR_SCORE;
+  const factorScore = calculateHiddenFactorScore(workingState);
   const totalScore = g1AndPenalty + factorScore;
 
   const elapsedMs = Date.now() - startTime;
@@ -1663,11 +1624,14 @@ function findBestFactorCombination(
     }
     if (!allOk) continue;
 
-    const factorScore = subset.length * HIDDEN_FACTOR_SCORE;
+    // 인자별 점수 (예외 처리 반영)
+    let subsetFactorScore = 0;
+    for (const f of subset) subsetFactorScore += getFactorScore(f.id);
+
     const emptySlots = countEmptySlots(trialState);
     const estG1Score = Math.min(emptySlots, 24) * G1_SCORE * 0.5;
     const penalty = calculateG1AndPenaltyScore(trialState);
-    const totalScore = factorScore + estG1Score + penalty;
+    const totalScore = subsetFactorScore + estG1Score + penalty;
 
     if (totalScore > bestScore) {
       bestScore = totalScore;
@@ -1699,7 +1663,8 @@ function greedySelect(
   const withEfficiency = factors.map((f) => {
     const { result } = autoAssignFactor(f, baseState, character, options);
     const slotsNeeded = result.success ? result.assigned.length : Infinity;
-    const efficiency = slotsNeeded > 0 ? HIDDEN_FACTOR_SCORE / slotsNeeded : 0;
+    // 효율: 인자별 점수 / 필요 슬롯 수
+    const efficiency = slotsNeeded > 0 ? getFactorScore(f.id) / slotsNeeded : 0;
     return { factor: f, efficiency, slotsNeeded };
   });
 

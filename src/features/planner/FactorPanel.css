@@ -35,11 +35,15 @@
   font-size: 12px;
 }
 
+/* ─── 인자 리스트: 최대 6개 항목만 표시, 이후 스크롤 ─── */
+
 .factor-list {
   list-style: none;
   margin: 0;
   padding: 0;
-  max-height: 300px;
+  /* 6개 항목 = 6 * 항목 높이 */
+  /* 항목 = padding 12px + line 15px + border 1px ≈ 32px */
+  max-height: calc(32px * 6);
   overflow-y: auto;
 }
 
@@ -51,7 +55,7 @@
   padding: 6px 12px;
   border-bottom: 1px solid var(--color-border);
   font-size: 12px;
-  cursor: help;
+  cursor: default;
   transition: background 0.15s;
 }
 
@@ -73,6 +77,22 @@
 
 .factor-item--assigned:hover {
   background: #fde68a;
+}
+
+/* 배치 불가 (회색) */
+.factor-item--grayed {
+  color: #9ca3af;
+  background: #f9fafb;
+  cursor: not-allowed;
+}
+
+.factor-item--grayed .factor-item__status {
+  color: #9ca3af;
+  background: #f3f4f6;
+}
+
+.factor-item--grayed:hover {
+  background: #f3f4f6;
 }
 
 .factor-item__name {
@@ -119,4 +139,69 @@
   height: 100%;
   background: #6366f1;
   transition: width 0.2s ease;
+}
+
+/* ─── 커스텀 툴팁 (뷰포트 기준 fixed) ─── */
+
+.factor-tooltip {
+  position: fixed;
+  z-index: 1000;
+  padding: 10px 12px;
+  background: #1f2937;
+  color: white;
+  border-radius: 6px;
+  font-size: 11px;
+  line-height: 1.5;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+  pointer-events: none;
+  animation: tooltipFade 0.15s ease-out;
+  width: 400px;
+  max-width: calc(100vw - 24px);
+  word-break: keep-all;
+}
+
+@keyframes tooltipFade {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.factor-tooltip__summary {
+  font-weight: 700;
+  font-size: 12px;
+  margin-bottom: 4px;
+  color: #fef3c7;
+}
+
+.factor-tooltip__desc {
+  font-size: 11px;
+  color: #d1d5db;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #374151;
+  margin-bottom: 6px;
+}
+
+.factor-tooltip__details {
+  font-size: 10.5px;
+  color: #e5e7eb;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.factor-tooltip__detail-line {
+  white-space: pre-wrap;
+}
+
+.factor-tooltip__detail-more {
+  color: #9ca3af;
+  font-style: italic;
+  margin-top: 2px;
 }

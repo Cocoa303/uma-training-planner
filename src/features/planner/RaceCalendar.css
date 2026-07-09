@@ -3,6 +3,7 @@
   flex-direction: column;
   gap: 8px;
   flex: 1;
+  width: 100%;
 }
 
 .race-calendar__tabs {
@@ -36,280 +37,6 @@
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
-/* 4x6 그리드 */
-.race-calendar__grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 8px;
-  flex: 1;
-}
-
-.slot-cell {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: 8px;
-  padding: 6px;
-  min-height: 140px;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  position: relative;
-}
-
-.slot-cell--filled {
-  background: #f9fafb;
-}
-
-.slot-cell--goal {
-  background: #eff6ff;
-  border-color: #93c5fd;
-}
-
-.slot-cell--hidden-factor {
-  background: #fef3c7;
-  border-color: #fcd34d;
-}
-
-.slot-cell--g1-auto {
-  background: #fce7f3;
-  border-color: #f9a8d4;
-}
-
-/* 날짜: 볼드 */
-.slot-cell__header {
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--color-text);
-  padding-bottom: 2px;
-  border-bottom: 1px dashed var(--color-border);
-  text-align: center;
-  letter-spacing: 0.02em;
-  flex-shrink: 0;
-}
-
-/* ─── 채워진 슬롯 ─── */
-.filled-slot {
-  position: relative;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-  cursor: pointer;
-  border-radius: 4px;
-  overflow: hidden;
-  transition: transform 0.1s;
-  min-height: 0;
-}
-
-.filled-slot:hover:not(.filled-slot--locked) {
-  transform: scale(1.02);
-}
-
-.filled-slot--locked {
-  cursor: default;
-}
-
-.filled-slot__badge {
-  position: absolute;
-  top: 2px;
-  right: 2px;
-  color: white;
-  font-size: 9px;
-  padding: 1px 5px;
-  border-radius: 3px;
-  font-weight: 600;
-  z-index: 2;
-}
-
-.badge--goal {
-  background: #3b82f6;
-}
-
-.badge--hidden {
-  background: #f59e0b;
-}
-
-.badge--g1auto {
-  background: #ec4899;
-}
-
-/* 이미지: 남은 공간 다 차지 */
-.filled-slot__image {
-  width: 100%;
-  flex: 1;
-  min-height: 0;
-  border-radius: 4px;
-  overflow: hidden;
-  background: #f3f4f6;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  image-rendering: -webkit-optimize-contrast;
-}
-
-.filled-slot__image img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  display: block;
-  image-rendering: -webkit-optimize-contrast;
-}
-
-.filled-slot__placeholder {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-weight: 700;
-  font-size: 16px;
-}
-
-.filled-slot__placeholder-grade {
-  padding: 4px 12px;
-  border-radius: 4px;
-  background: rgba(0, 0, 0, 0.3);
-}
-
-/* 등급별 배경 (이미지 없을 때) */
-.grade-bg--g1 { background: linear-gradient(135deg, #dc2626, #991b1b); }
-.grade-bg--g2 { background: linear-gradient(135deg, #ea580c, #9a3412); }
-.grade-bg--g3 { background: linear-gradient(135deg, #ca8a04, #713f12); }
-.grade-bg--op { background: linear-gradient(135deg, #3b82f6, #1e40af); }
-.grade-bg--preop { background: linear-gradient(135deg, #6b7280, #374151); }
-
-.filled-slot__info {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 4px;
-  padding: 0 2px;
-  flex-shrink: 0;
-}
-
-.filled-slot__name {
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--color-text);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  line-height: 1.3;
-  flex: 1;
-  min-width: 0;
-}
-
-.filled-slot__winrate {
-  font-size: 13px;
-  font-weight: 700;
-  font-variant-numeric: tabular-nums;
-  flex-shrink: 0;
-}
-
-.filled-slot__clear {
-  position: absolute;
-  top: 4px;
-  left: 4px;
-  width: 18px;
-  height: 18px;
-  border: none;
-  background: rgba(239, 68, 68, 0.9);
-  color: white;
-  border-radius: 50%;
-  cursor: pointer;
-  font-size: 12px;
-  line-height: 1;
-  display: none;
-  z-index: 3;
-  padding: 0;
-}
-
-.filled-slot:hover .filled-slot__clear {
-  display: block;
-}
-
-/* ─── 빈 슬롯 ─── */
-.empty-slot {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: white;
-  border: 2px dashed #d1d5db;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.15s;
-  padding: 0;
-  min-height: 0;
-}
-
-.empty-slot:hover {
-  border-color: var(--color-accent);
-  background: #f0f9ff;
-}
-
-.empty-slot__plus {
-  font-size: 30px;
-  font-weight: 300;
-  color: #86efac;
-  line-height: 1;
-}
-
-.empty-slot:hover .empty-slot__plus {
-  color: var(--color-accent);
-}
-
-.empty-slot--none {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #d1d5db;
-  font-size: 11px;
-  cursor: default;
-  background: transparent;
-  border: none;
-}
-
-/* 승률 색상 */
-.winrate--good { color: #059669; }
-.winrate--ok { color: #d97706; }
-.winrate--bad { color: #dc2626; }
-
-/* filler 배지 (자동 채움 슬롯) */
-.badge--filler {
-  background: #6b7280;
-  color: white;
-}
-
-/* filler 슬롯 배경 (다른 자동 배치보다 흐리게) */
-.slot-cell--filler {
-  background: #f9fafb;
-  border-color: #e5e7eb;
-}
-
-.slot-cell--filler .filled-slot {
-  opacity: 0.85;
-}
-
-/* filler 배지 (자동 채움 슬롯) - 기존에 있으면 유지 */
-.badge--filler {
-  background: #6b7280;
-  color: white;
-}
-
-.slot-cell--filler {
-  background: #f9fafb;
-  border-color: #e5e7eb;
-}
-
-.slot-cell--filler .filled-slot {
-  opacity: 0.85;
-}
-
-/* ─── 전체 보기 탭 ─── */
-
 .class-tab--all {
   background: #eef2ff;
   color: #4338ca;
@@ -321,101 +48,554 @@
   color: white;
 }
 
-/* ─── 전체 뷰 컨테이너 ─── */
+/* ═══════════════════════════════════════════════════════════════ */
+/* PC (>= 1024px): 컴팩트 슬롯                                       */
+/* ═══════════════════════════════════════════════════════════════ */
 
-.race-calendar__all-view {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
-
-/* ─── 학년 섹션 ─── */
-
-.class-section {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.class-section__header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 8px 12px;
-  background: linear-gradient(90deg, #f3f4f6 0%, transparent 100%);
-  border-left: 4px solid #4338ca;
-  border-radius: 4px;
-}
-
-.class-section__title {
-  font-size: 16px;
-  font-weight: 700;
-  color: #1f2937;
-}
-
-/* ─── 모바일 대응 (< 768px) ─── */
-
-@media (max-width: 767px) {
-  /* 그리드: 4열 → 2열 */
+@media (min-width: 1024px) {
   .race-calendar__grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 6px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 4px;
+    width: 100%;
   }
 
-  /* 슬롯 최소 높이 축소 */
   .slot-cell {
-    min-height: 110px;
-    padding: 4px;
-  }
-
-  /* 이미지 aspect-ratio 명시하여 세로로 늘어나지 않게 */
-  .filled-slot__image {
-    aspect-ratio: 3 / 1;
-    flex: none;
-    max-height: 80px;
-  }
-
-  /* 빈 슬롯 최소 높이 통일 */
-  .empty-slot {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 5px;
+    padding: 0;
     min-height: 60px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    position: relative;
+    overflow: hidden;
   }
 
-  .empty-slot__plus {
-    font-size: 24px;
-  }
+  .slot-cell--filled { background: #f9fafb; }
+  .slot-cell--goal { background: #eff6ff; border-color: #93c5fd; }
+  .slot-cell--hidden-factor { background: #fef3c7; border-color: #fcd34d; }
+  .slot-cell--g1-auto { background: #fce7f3; border-color: #f9a8d4; }
+  .slot-cell--filler { background: #f9fafb; border-color: #e5e7eb; }
+  .slot-cell--filler .filled-slot { opacity: 0.85; }
 
-  /* 슬롯 헤더 폰트 축소 */
   .slot-cell__header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 3;
     font-size: 10px;
-    padding-bottom: 1px;
+    font-weight: 600;
+    padding: 1px 6px;
+    background: rgba(0, 0, 0, 0.65);
+    color: white;
+    border: none;
+    border-radius: 5px 0 5px 0;
+    letter-spacing: 0;
+    line-height: 1.3;
+    pointer-events: none;
   }
 
-  /* 레이스 이름/승률 폰트 축소 */
+  .filled-slot {
+    position: relative;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    cursor: pointer;
+    border-radius: 0;
+    overflow: hidden;
+    transition: transform 0.1s;
+    min-height: 0;
+  }
+
+  .filled-slot:hover:not(.filled-slot--locked) {
+    transform: scale(1.02);
+  }
+
+  .filled-slot--locked {
+    cursor: default;
+  }
+
+  .filled-slot__badge {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    color: white;
+    font-size: 9px;
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-weight: 600;
+    z-index: 3;
+  }
+
+  .badge--goal { background: #3b82f6; }
+  .badge--hidden { background: #f59e0b; }
+  .badge--g1auto { background: #ec4899; }
+  .badge--filler { background: #6b7280; }
+
+  .filled-slot__image {
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+    overflow: hidden;
+    background: #f3f4f6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    image-rendering: -webkit-optimize-contrast;
+    flex: 1;
+    min-height: 0;
+  }
+
+  .filled-slot__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    image-rendering: -webkit-optimize-contrast;
+  }
+
+  .filled-slot__placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    font-size: 14px;
+  }
+
+  .filled-slot__placeholder-grade {
+    padding: 3px 10px;
+    border-radius: 4px;
+    background: rgba(0, 0, 0, 0.3);
+  }
+
+  .grade-bg--g1 { background: linear-gradient(135deg, #dc2626, #991b1b); }
+  .grade-bg--g2 { background: linear-gradient(135deg, #ea580c, #9a3412); }
+  .grade-bg--g3 { background: linear-gradient(135deg, #ca8a04, #713f12); }
+  .grade-bg--op { background: linear-gradient(135deg, #3b82f6, #1e40af); }
+  .grade-bg--preop { background: linear-gradient(135deg, #6b7280, #374151); }
+
   .filled-slot__name {
-    font-size: 10px;
+    display: none;
+  }
+
+  .filled-slot__info {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    padding: 1px 6px;
+    background: rgba(0, 0, 0, 0.65);
+    color: white;
+    border-radius: 5px 0 0 0;
+    z-index: 3;
+    gap: 0;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
   }
 
   .filled-slot__winrate {
     font-size: 11px;
+    color: white !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
   }
 
-  /* 탭 폰트 축소 */
+  .winrate--good { color: #4ade80 !important; }
+  .winrate--ok { color: #fbbf24 !important; }
+  .winrate--bad { color: #f87171 !important; }
+
+  .empty-slot {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    border: 1px dashed #d1d5db;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.15s;
+    padding: 0;
+    min-height: 0;
+  }
+
+  .empty-slot:hover {
+    border-color: var(--color-accent);
+    background: #f0f9ff;
+  }
+
+  .empty-slot__plus {
+    font-size: 22px;
+    font-weight: 300;
+    color: #86efac;
+    line-height: 1;
+  }
+
+  .empty-slot:hover .empty-slot__plus {
+    color: var(--color-accent);
+  }
+
+  .empty-slot--none {
+    background: transparent;
+    color: #d1d5db;
+    font-size: 10px;
+    cursor: default;
+    border: none;
+  }
+
+  .filled-slot__clear {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 15px;
+    height: 15px;
+    border: none;
+    background: rgba(239, 68, 68, 0.9);
+    color: white;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 10px;
+    line-height: 1;
+    display: none;
+    z-index: 3;
+    padding: 0;
+  }
+
+  .filled-slot:hover .filled-slot__clear {
+    display: block;
+  }
+
+  /* ─── 전체 뷰: 3학년 좌우 배치 (컴팩트 유지) ─── */
+
+  .race-calendar__all-view {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 12px;
+    width: 100%;
+  }
+
+  .class-section {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .class-section__header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 8px 12px;
+    background: #1f2937;
+    color: white;
+    border: none;
+    border-radius: 4px;
+  }
+
+  .class-section__title {
+    font-size: 14px;
+    font-weight: 700;
+    color: white;
+  }
+
+  /* ═══════════════════════════════════════════════════════════ */
+  /* 개별 뷰: aspect-ratio 2.5:1 고정, 폰트 2배                     */
+  /* ═══════════════════════════════════════════════════════════ */
+
+  .race-calendar:not(.race-calendar--all) .slot-cell {
+    aspect-ratio: 2.5 / 1;
+    min-height: 0;
+  }
+
+  .race-calendar:not(.race-calendar--all) .slot-cell__header {
+    font-size: 20px;
+    padding: 2px 10px;
+    border-radius: 5px 0 8px 0;
+  }
+
+  .race-calendar:not(.race-calendar--all) .filled-slot__winrate {
+    font-size: 22px;
+  }
+
+  .race-calendar:not(.race-calendar--all) .filled-slot__info {
+    padding: 2px 10px;
+    border-radius: 8px 0 0 0;
+  }
+
+  .race-calendar:not(.race-calendar--all) .filled-slot__badge {
+    font-size: 18px;
+    padding: 2px 10px;
+    top: 4px;
+    right: 4px;
+    border-radius: 4px;
+  }
+
+  .race-calendar:not(.race-calendar--all) .empty-slot__plus {
+    font-size: 44px;
+  }
+
+  .race-calendar:not(.race-calendar--all) .filled-slot__clear {
+    top: 4px;
+    left: 4px;
+    width: 24px;
+    height: 24px;
+    font-size: 14px;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* 모바일 (< 1024px): 세로 스택, 2열, 이미지 카드                    */
+/* ═══════════════════════════════════════════════════════════════ */
+
+@media (max-width: 1023px) {
+  .race-calendar__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+    flex: 1;
+  }
+
+  .slot-cell {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 4px;
+    min-height: 110px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    position: relative;
+  }
+
+  .slot-cell--filled { background: #f9fafb; }
+  .slot-cell--goal { background: #eff6ff; border-color: #93c5fd; }
+  .slot-cell--hidden-factor { background: #fef3c7; border-color: #fcd34d; }
+  .slot-cell--g1-auto { background: #fce7f3; border-color: #f9a8d4; }
+  .slot-cell--filler { background: #f9fafb; border-color: #e5e7eb; }
+  .slot-cell--filler .filled-slot { opacity: 0.85; }
+
+  .slot-cell__header {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--color-text);
+    padding-bottom: 1px;
+    border-bottom: 1px dashed var(--color-border);
+    text-align: center;
+    letter-spacing: 0.02em;
+    flex-shrink: 0;
+  }
+
+  .filled-slot {
+    position: relative;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    cursor: pointer;
+    border-radius: 4px;
+    overflow: hidden;
+    transition: transform 0.1s;
+    min-height: 0;
+  }
+
+  .filled-slot:hover:not(.filled-slot--locked) {
+    transform: scale(1.02);
+  }
+
+  .filled-slot--locked {
+    cursor: default;
+  }
+
+  .filled-slot__badge {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    color: white;
+    font-size: 9px;
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-weight: 600;
+    z-index: 2;
+  }
+
+  .badge--goal { background: #3b82f6; }
+  .badge--hidden { background: #f59e0b; }
+  .badge--g1auto { background: #ec4899; }
+  .badge--filler { background: #6b7280; }
+
+  .filled-slot__image {
+    width: 100%;
+    aspect-ratio: 3 / 1;
+    flex: none;
+    max-height: 80px;
+    border-radius: 4px;
+    overflow: hidden;
+    background: #f3f4f6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .filled-slot__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+  }
+
+  .filled-slot__placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    font-size: 14px;
+  }
+
+  .filled-slot__placeholder-grade {
+    padding: 3px 10px;
+    border-radius: 4px;
+    background: rgba(0, 0, 0, 0.3);
+  }
+
+  .grade-bg--g1 { background: linear-gradient(135deg, #dc2626, #991b1b); }
+  .grade-bg--g2 { background: linear-gradient(135deg, #ea580c, #9a3412); }
+  .grade-bg--g3 { background: linear-gradient(135deg, #ca8a04, #713f12); }
+  .grade-bg--op { background: linear-gradient(135deg, #3b82f6, #1e40af); }
+  .grade-bg--preop { background: linear-gradient(135deg, #6b7280, #374151); }
+
+  .filled-slot__info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 3px;
+    padding: 0 2px;
+    flex-shrink: 0;
+  }
+
+  .filled-slot__name {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--color-text);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    line-height: 1.3;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .filled-slot__winrate {
+    font-size: 11px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    flex-shrink: 0;
+  }
+
+  .winrate--good { color: #059669; }
+  .winrate--ok { color: #d97706; }
+  .winrate--bad { color: #dc2626; }
+
+  .filled-slot__clear {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: 18px;
+    height: 18px;
+    border: none;
+    background: rgba(239, 68, 68, 0.9);
+    color: white;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 12px;
+    line-height: 1;
+    display: none;
+    z-index: 3;
+    padding: 0;
+  }
+
+  .filled-slot:hover .filled-slot__clear {
+    display: block;
+  }
+
+  .empty-slot {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    border: 2px dashed #d1d5db;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s;
+    padding: 0;
+    min-height: 60px;
+  }
+
+  .empty-slot:hover {
+    border-color: var(--color-accent);
+    background: #f0f9ff;
+  }
+
+  .empty-slot__plus {
+    font-size: 24px;
+    font-weight: 300;
+    color: #86efac;
+    line-height: 1;
+  }
+
+  .empty-slot--none {
+    background: transparent;
+    color: #d1d5db;
+    font-size: 11px;
+    cursor: default;
+    border: none;
+  }
+
   .class-tab {
     padding: 6px 8px;
     font-size: 12px;
   }
 
-  /* 전체 뷰: 학년 헤더 컴팩트 */
+  .race-calendar__all-view {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .class-section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
   .class-section__header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
     padding: 6px 10px;
+    background: linear-gradient(90deg, #f3f4f6 0%, transparent 100%);
+    border-left: 4px solid #4338ca;
+    border-radius: 4px;
   }
 
   .class-section__title {
     font-size: 14px;
+    font-weight: 700;
+    color: #1f2937;
   }
 }
-
-/* ─── 초소형 모바일 (< 400px) ─── */
 
 @media (max-width: 399px) {
   .race-calendar__grid {
@@ -436,7 +616,6 @@
     padding: 1px 4px;
   }
 
-  /* 탭이 4개면 좁을 수 있으니 폰트 더 축소 */
   .class-tab {
     padding: 6px 4px;
     font-size: 11px;

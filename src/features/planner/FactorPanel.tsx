@@ -1,8 +1,9 @@
-import { useMemo } from "react";
+import { useMemo, useState, useRef, useEffect } from "react";
 import type { Character } from "../../types/character";
 import type { SlotSelections, AptitudeFilter } from "../../domain/scheduler";
 import { computeFactorStatuses } from "../../domain/factors";
 import type { FactorDef, FactorStatus } from "../../types/factor";
+import { useFactorFeasibility, type FactorFeasibility } from "./useFactorFeasibility";
 import "./FactorPanel.css";
 
 interface Props {
@@ -11,6 +12,8 @@ interface Props {
   filter: AptitudeFilter;
   onFactorClick: (factor: FactorDef) => void;
   isFactorAssigned: (factorId: string) => boolean;
+  minWinrate: number;
+  plannerState: import("../../domain/scheduler").PlannerState;
 }
 
 export function FactorPanel({
@@ -19,13 +22,28 @@ export function FactorPanel({
   filter,
   onFactorClick,
   isFactorAssigned,
+  minWinrate,
+  plannerState,
 }: Props) {
   const statuses = useMemo(
     () => computeFactorStatuses(selections, character, filter),
     [selections, character, filter]
   );
 
-  const canAssign = character !== null;
+  const allFactors = useMemo(() => {
+    const arr: FactorDef[] = [];
+    for (const s of statuses.nickname) arr.push(s.factor);
+    for (const s of statuses.hidden) arr.push(s.factor);
+    for (const s of statuses.g1) arr.push(s.factor);
+    return arr;
+  }, [statuses]);
+
+  const feasibility = useFactorFeasibility(
+    allFactors,
+    plannerState,
+    character,
+    minWinrate
+  );
 
   return (
     <div className="factor-panel">
@@ -35,7 +53,7 @@ export function FactorPanel({
         emptyText="데이터 없음"
         onFactorClick={onFactorClick}
         isFactorAssigned={isFactorAssigned}
-        canAssign={canAssign}
+        feasibility={feasibility}
       />
       <FactorSection
         title="히든 인자"
@@ -43,16 +61,16 @@ export function FactorPanel({
         emptyText="데이터 없음"
         onFactorClick={onFactorClick}
         isFactorAssigned={isFactorAssigned}
-        canAssign={canAssign}
+        feasibility={feasibility}
       />
       <FactorSection
         title="G1 인자"
         statuses={statuses.g1}
         emptyText="레이스 없음"
-        showOnlyRelevant
         onFactorClick={onFactorClick}
         isFactorAssigned={isFactorAssigned}
-        canAssign={canAssign}
+        feasibility={feasibility}
+        sortG1
       />
     </div>
   );
@@ -62,22 +80,32 @@ function FactorSection({
   title,
   statuses,
   emptyText,
-  showOnlyRelevant,
   onFactorClick,
   isFactorAssigned,
-  canAssign,
+  feasibility,
+  sortG1,
 }: {
   title: string;
   statuses: FactorStatus[];
   emptyText: string;
-  showOnlyRelevant?: boolean;
   onFactorClick: (factor: FactorDef) => void;
   isFactorAssigned: (factorId: string) => boolean;
-  canAssign: boolean;
+  feasibility: Map<string, FactorFeasibility>;
+  sortG1?: boolean;
 }) {
-  const displayed = showOnlyRelevant
-    ? statuses.filter((s) => s.satisfied)
-    : statuses;
+  const displayed = useMemo(() => {
+    if (!sortG1) return statuses;
+
+    const withMeta = statuses.map((s) => {
+      const feas = feasibility.get(s.factor.id);
+      const canAssign = feas?.canAssign ?? true;
+      const priority = s.satisfied ? 0 : canAssign ? 1 : 2;
+      return { status: s, priority };
+    });
+
+    withMeta.sort((a, b) => a.priority - b.priority);
+    return withMeta.map((x) => x.status);
+  }, [statuses, feasibility, sortG1]);
 
   const satisfiedCount = statuses.filter((s) => s.satisfied).length;
 
@@ -93,9 +121,7 @@ function FactorSection({
       </div>
 
       {displayed.length === 0 ? (
-        <div className="factor-section__empty">
-          {statuses.length === 0 ? emptyText : "충족한 인자 없음"}
-        </div>
+        <div className="factor-section__empty">{emptyText}</div>
       ) : (
         <ul className="factor-list">
           {displayed.map((s) => (
@@ -104,7 +130,7 @@ function FactorSection({
               status={s}
               assigned={isFactorAssigned(s.factor.id)}
               onClick={() => onFactorClick(s.factor)}
-              canAssign={canAssign}
+              feasibility={feasibility.get(s.factor.id)}
             />
           ))}
         </ul>
@@ -117,36 +143,70 @@ function FactorItem({
   status,
   assigned,
   onClick,
-  canAssign,
+  feasibility,
 }: {
   status: FactorStatus;
   assigned: boolean;
   onClick: () => void;
-  canAssign: boolean;
+  feasibility: FactorFeasibility | undefined;
 }) {
   const { factor, satisfied, detail, progress } = status;
 
-  // G1 인자는 클릭 시 자동 배치가 딱히 의미 없어서 비활성화
-  const isClickable = canAssign && factor.category !== "g1";
+  const canAssign = feasibility?.canAssign ?? true;
+  const isClickable = assigned || (canAssign && !satisfied);
+  const isGrayed = !canAssign && !assigned && !satisfied;
+
+  const [tooltipPos, setTooltipPos] = useState<{ x: number; y: number } | null>(
+    null
+  );
+  const itemRef = useRef<HTMLLIElement>(null);
+  const hoverTimerRef = useRef<number | null>(null);
+
+  const showTooltip = () => {
+    if (!itemRef.current) return;
+    const rect = itemRef.current.getBoundingClientRect();
+    setTooltipPos({
+      x: rect.left,
+      y: rect.bottom + 4,
+    });
+  };
+
+  const handleMouseEnter = () => {
+    if (hoverTimerRef.current !== null) window.clearTimeout(hoverTimerRef.current);
+    hoverTimerRef.current = window.setTimeout(() => {
+      showTooltip();
+    }, 400);
+  };
+
+  const handleMouseLeave = () => {
+    if (hoverTimerRef.current !== null) {
+      window.clearTimeout(hoverTimerRef.current);
+      hoverTimerRef.current = null;
+    }
+    setTooltipPos(null);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (hoverTimerRef.current !== null) window.clearTimeout(hoverTimerRef.current);
+    };
+  }, []);
 
   return (
     <li
+      ref={itemRef}
       className={[
         "factor-item",
         satisfied ? "factor-item--satisfied" : "",
         assigned ? "factor-item--assigned" : "",
         isClickable ? "factor-item--clickable" : "",
+        isGrayed ? "factor-item--grayed" : "",
       ]
         .filter(Boolean)
         .join(" ")}
-      title={
-        isClickable
-          ? assigned
-            ? "클릭해서 자동 배치 취소"
-            : `클릭해서 자동 배치: ${factor.description}`
-          : factor.description
-      }
       onClick={isClickable ? onClick : undefined}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
       <span className="factor-item__name">
         {assigned && <span className="factor-item__pin">📌</span>}
@@ -165,6 +225,87 @@ function FactorItem({
           />
         </div>
       )}
+
+      {tooltipPos && (
+        <FactorTooltip
+          x={tooltipPos.x}
+          y={tooltipPos.y}
+          factor={factor}
+          feasibility={feasibility}
+          satisfied={satisfied}
+          assigned={assigned}
+        />
+      )}
     </li>
+  );
+}
+
+function FactorTooltip({
+  x,
+  y,
+  factor,
+  feasibility,
+  satisfied,
+  assigned,
+}: {
+  x: number;
+  y: number;
+  factor: FactorDef;
+  feasibility: FactorFeasibility | undefined;
+  satisfied: boolean;
+  assigned: boolean;
+}) {
+  let summary: string;
+  if (assigned) {
+    summary = "클릭해서 자동 배치 취소";
+  } else if (satisfied) {
+    summary = "이미 조건 만족됨";
+  } else if (feasibility && !feasibility.canAssign) {
+    summary = `배치 불가: ${feasibility.summary ?? "이유 불명"}`;
+  } else if (feasibility?.canAssign) {
+    summary = "클릭해서 자동 배치";
+  } else {
+    summary = "계산 중…";
+  }
+
+  const details = feasibility?.details;
+
+  // 뷰포트 오른쪽 넘어가면 조정
+  const maxWidth = 400;
+  const adjustedX = Math.min(x, window.innerWidth - maxWidth - 12);
+  // 아래로 넘어가면 위로 올림
+  const estimatedHeight = 200;
+  const adjustedY =
+    y + estimatedHeight > window.innerHeight
+      ? Math.max(12, window.innerHeight - estimatedHeight - 12)
+      : y;
+
+  return (
+    <div
+      className="factor-tooltip"
+      style={{
+        left: `${adjustedX}px`,
+        top: `${adjustedY}px`,
+      }}
+    >
+      <div className="factor-tooltip__summary">{summary}</div>
+      {factor.description && (
+        <div className="factor-tooltip__desc">{factor.description}</div>
+      )}
+      {details && details.length > 0 && (
+        <div className="factor-tooltip__details">
+          {details.slice(0, 8).map((d, i) => (
+            <div key={i} className="factor-tooltip__detail-line">
+              {d}
+            </div>
+          ))}
+          {details.length > 8 && (
+            <div className="factor-tooltip__detail-more">
+              …외 {details.length - 8}줄
+            </div>
+          )}
+        </div>
+      )}
+    </div>
   );
 }
