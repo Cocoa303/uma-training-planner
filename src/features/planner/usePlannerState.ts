@@ -186,11 +186,6 @@ export function usePlannerState() {
     });
   }, []);
 
-  /**
-   * 전체 초기화.
-   * - 목표 슬롯만 남기고 나머지 슬롯 (수동/자동/인자/G1/filler) 모두 제거
-   * - 필터 설정은 유지 (유저가 설정한 A/B/C 등급 그대로)
-   */
   const resetAll = useCallback(() => {
     setState((s) => {
       if (!s.characterId) return INITIAL_STATE;
@@ -200,7 +195,7 @@ export function usePlannerState() {
       const { selections, ownerships } = buildInitialGoalSlots(c);
       return {
         characterId: s.characterId,
-        filter: s.filter, // 필터 유지
+        filter: s.filter,
         selections,
         ownerships,
       };
@@ -255,10 +250,22 @@ export function usePlannerState() {
       }
 
       setState(newState);
+
+      // 성공 메시지 + 이동 정보 (있으면)
+      const lines: string[] = [
+        `[${factor.name}] ${result.assigned.length}개 배치됨`,
+      ];
+      if (result.relocatedInfo && result.relocatedInfo.length > 0) {
+        lines.push("자리 조정:");
+        for (const info of result.relocatedInfo) {
+          lines.push(`  ${info}`);
+        }
+      }
+
       setLastAssignResult({
         factorId: factor.id,
         success: true,
-        message: `[${factor.name}] ${result.assigned.length}개 배치됨`,
+        message: lines.join("\n"),
       });
     },
     [character, state, minWinrate]
