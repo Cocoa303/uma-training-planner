@@ -77,11 +77,6 @@ function collectCandidates(
   return candidates;
 }
 
-/**
- * 이 슬롯을 새 소유권이 사용할 수 있는가?
- * - 이번 iteration 에서 이미 사용한 슬롯이면 false
- * - 기존 소유권을 덮어쓸 수 있으면 true
- */
 function canUseSlot(
   turnIndex: number,
   claimedThisIteration: Set<number>,
@@ -92,7 +87,52 @@ function canUseSlot(
   return canOverwrite(newOwner, state.ownerships[turnIndex]);
 }
 
-// ─── 핵심 배치 로직 ─────────────────────────
+// ─── 승률 유지 검증 ─────────────────────────
+
+/**
+ * 슬롯 하나를 새로 채웠을 때, 그 슬롯과 그 슬롯 이후의 연속된 슬롯들의
+ * 승률이 모두 minWinrate 이상인지 검증한다.
+ *
+ * 연속 출전 감점은 뒤로 이어지는 슬롯들에도 영향을 주므로,
+ * 새 슬롯을 채우면 그 뒤에 있는 (그리고 앞에 있는) 슬롯들의 승률이 바뀔 수 있다.
+ *
+ * 목표 슬롯(kind='goal')은 승률 검증에서 제외 — 어차피 필수 참여이기 때문.
+ */
+function wouldMaintainMinWinrate(
+  newTurnIndex: number,
+  newRace: Race,
+  state: PlannerState,
+  effective: ReturnType<typeof effectiveAptitudes>,
+  minWinrate: number
+): boolean {
+  const trialSelections = { ...state.selections, [newTurnIndex]: newRace.id };
+
+  // 검증할 슬롯: 새 슬롯 + 새 슬롯 뒤로 이어지는 연속 슬롯들 + 새 슬롯 앞의 연속 슬롯들
+  // 연속 출전 감점이 앞뒤로 전파되므로 안전하게 전체 검사
+
+  for (const [key, raceId] of Object.entries(trialSelections)) {
+    if (!raceId) continue;
+    const turnIndex = Number(key);
+
+    // 목표 슬롯은 승률 검증 스킵
+    const ownership = state.ownerships[turnIndex];
+    if (ownership?.kind === "goal") continue;
+
+    const race = allRaces.find((r) => r.id === raceId);
+    if (!race) continue;
+
+    const consec = countConsecutive(trialSelections, turnIndex);
+    const winrate = computeRaceWinrate(race, effective, consec);
+
+    if (winrate < minWinrate) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+// ─── 인자 조건 배치 ─────────────────────────
 
 function assignForCondition(
   condition: FactorCondition,
@@ -242,7 +282,6 @@ function assignCountRaces(
     return { success: true, assigned: [] };
   }
 
-  // 승률 순으로 정렬된 후보들
   const candidates = collectCandidates(raceNames, state, effective)
     .filter((c) => c.winrate >= options.minWinrate)
     .sort((a, b) => b.winrate - a.winrate);
@@ -253,14 +292,8 @@ function assignCountRaces(
 
   for (const cand of candidates) {
     if (chosen.length >= remaining) break;
-
-    // 이번 iteration 에서 이미 이 슬롯 사용했으면 스킵
     if (claimed.has(cand.turnIndex)) continue;
-
-    // 기존 소유권 덮어쓸 수 없으면 스킵
     if (!canOverwrite(owner, state.ownerships[cand.turnIndex])) continue;
-
-    // unique 제약
     if (uniqueOnly && usedNames.has(cand.race.name)) continue;
 
     chosen.push({ turnIndex: cand.turnIndex, raceId: cand.race.id });
@@ -446,6 +479,11 @@ export function autoAssignFactor(
   return { state: newState, result };
 }
 
+/**
+ * G1 자동 배치.
+ * 순차적으로 배치하면서, 각 배치 후에 기존 슬롯들의 승률이 minWinrate 이상 유지되는지 확인.
+ * 유지 안 되면 그 G1 은 스킵.
+ */
 export function autoAssignG1(
   state: PlannerState,
   character: Character,
@@ -455,7 +493,8 @@ export function autoAssignG1(
   const owner: SlotOwnership = { kind: "g1" };
   const g1Races = allRaces.filter((r) => r.grade === "G1" && !r.isOverseas);
 
-  const candidates: { turnIndex: number; race: Race; winrate: number }[] = [];
+  // 후보 초기 수집 (일단 현 state 기준 승률로 정렬해서 우선순위 정함)
+  const initialCandidates: { turnIndex: number; race: Race; initialWinrate: number }[] = [];
   for (const race of g1Races) {
     for (const cls of race.eligibleClasses) {
       const idx = toTurnIndex(cls, race.turn.month, race.turn.half);
@@ -468,20 +507,46 @@ export function autoAssignG1(
       );
       const winrate = computeRaceWinrate(race, effective, consec);
       if (winrate < options.minWinrate) continue;
-      candidates.push({ turnIndex: idx, race, winrate });
+
+      initialCandidates.push({ turnIndex: idx, race, initialWinrate: winrate });
     }
   }
 
-  candidates.sort((a, b) => b.winrate - a.winrate);
+  // 초기 승률 높은 순으로 정렬 (동점이면 turnIndex 순)
+  initialCandidates.sort((a, b) => {
+    if (b.initialWinrate !== a.initialWinrate) return b.initialWinrate - a.initialWinrate;
+    return a.turnIndex - b.turnIndex;
+  });
 
+  // 순차적으로 배치하면서 매번 workingState 로 검증
   const chosen: { turnIndex: number; raceId: string }[] = [];
-  const claimed = new Set<number>();
+  let workingState = state;
+  let skippedCount = 0;
 
-  for (const cand of candidates) {
-    // 이번 iteration 에서 이미 이 슬롯 사용했으면 스킵
-    if (claimed.has(cand.turnIndex)) continue;
+  for (const cand of initialCandidates) {
+    // 이미 이번 iteration 에서 사용한 슬롯이면 스킵
+    if (workingState.selections[cand.turnIndex] && workingState.ownerships[cand.turnIndex]?.kind !== "g1") {
+      // 실제로는 초기 수집 시 canOverwrite 로 걸러졌지만, iteration 중 다른 G1 이 이 슬롯을 이미 채웠을 수 있음
+      if (chosen.some((c) => c.turnIndex === cand.turnIndex)) continue;
+    }
+    if (chosen.some((c) => c.turnIndex === cand.turnIndex)) continue;
+
+    // 이 슬롯에 이 레이스를 넣었을 때 모든 슬롯의 승률이 minWinrate 이상 유지되는지 검증
+    if (
+      !wouldMaintainMinWinrate(
+        cand.turnIndex,
+        cand.race,
+        workingState,
+        effective,
+        options.minWinrate
+      )
+    ) {
+      skippedCount++;
+      continue;
+    }
+
     chosen.push({ turnIndex: cand.turnIndex, raceId: cand.race.id });
-    claimed.add(cand.turnIndex);
+    workingState = applyAssignments(workingState, [{ turnIndex: cand.turnIndex, raceId: cand.race.id }], owner);
   }
 
   if (chosen.length === 0) {
@@ -491,14 +556,14 @@ export function autoAssignG1(
         success: false,
         assigned: [],
         reason: `배치 가능한 G1 없음 (최소 승률 ${options.minWinrate}%)`,
+        skippedCount,
       },
     };
   }
 
-  const newState = applyAssignments(state, chosen, owner);
   return {
-    state: newState,
-    result: { success: true, assigned: chosen },
+    state: workingState,
+    result: { success: true, assigned: chosen, skippedCount },
   };
 }
 
