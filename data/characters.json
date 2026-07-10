@@ -1796,7 +1796,7 @@
       {
         "order": 3,
         "description": "스프링 S에서 3착 이내",
-        "raceName": "스프링 S",
+        "raceName": "스프링 스테이크스",
         "placement": "3착",
         "deadline": {
           "class": "클래식급",
@@ -2043,7 +2043,7 @@
       {
         "order": 3,
         "description": "스프링 S에서 3착 이내",
-        "raceName": "스프링 S",
+        "raceName": "스프링 스테이크스",
         "placement": "3착",
         "deadline": {
           "class": "클래식급",
@@ -2290,7 +2290,7 @@
       {
         "order": 3,
         "description": "스프링 S에서 3착 이내",
-        "raceName": "스프링 S",
+        "raceName": "스프링 스테이크스",
         "placement": "3착",
         "deadline": {
           "class": "클래식급",
@@ -13784,7 +13784,7 @@
       {
         "order": 3,
         "description": "스프링 S에서 5착 이내",
-        "raceName": "스프링 S",
+        "raceName": "스프링 스테이크스",
         "placement": "5착",
         "deadline": {
           "class": "클래식급",
@@ -14032,7 +14032,7 @@
       {
         "order": 3,
         "description": "스프링 S에서 5착 이내",
-        "raceName": "스프링 S",
+        "raceName": "스프링 스테이크스",
         "placement": "5착",
         "deadline": {
           "class": "클래식급",
@@ -15545,7 +15545,7 @@
       {
         "order": 2,
         "description": "스프링 S에서 5착 이내",
-        "raceName": "스프링 S",
+        "raceName": "스프링 스테이크스",
         "placement": "5착",
         "deadline": {
           "class": "클래식급",
@@ -15769,7 +15769,7 @@
       {
         "order": 2,
         "description": "스프링 S에서 5착 이내",
-        "raceName": "스프링 S",
+        "raceName": "스프링 스테이크스",
         "placement": "5착",
         "deadline": {
           "class": "클래식급",
@@ -15993,7 +15993,7 @@
       {
         "order": 2,
         "description": "스프링 S에서 5착 이내",
-        "raceName": "스프링 S",
+        "raceName": "스프링 스테이크스",
         "placement": "5착",
         "deadline": {
           "class": "클래식급",
@@ -21999,7 +21999,7 @@
       {
         "order": 3,
         "description": "스프링 S에 출전",
-        "raceName": null,
+        "raceName": "스프링 스테이크스",
         "placement": null,
         "deadline": {
           "class": "클래식급",
@@ -22293,7 +22293,7 @@
       {
         "order": 3,
         "description": "스프링 S에 출전",
-        "raceName": null,
+        "raceName": "스프링 스테이크스",
         "placement": null,
         "deadline": {
           "class": "클래식급",
