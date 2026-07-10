@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 import charactersData from "../../../data/characters.json";
 import racesData from "../../../data/races.json";
-import type { Character } from "../../types/character";
+import type { Character, TrainingGoal } from "../../types/character";
 import type { Race, ClassLevel } from "../../types/race";
 import type { FactorDef } from "../../types/factor";
 import {
@@ -30,29 +30,76 @@ import {
 const characters = charactersData as Character[];
 const allRaces = racesData as Race[];
 
+/**
+ * 캐릭터 목표 레이스를 races.json 의 실제 Race 로 매칭.
+ *
+ * 인벤 크롤 데이터에는 두 가지 종류의 이상이 존재하여 단순 이름 매칭만으로는 실패한다:
+ *   (A) 축약형 이름 저장 (예: "아사히배 FS", "스프린터스 S", "마일 CS")
+ *       → races.json 은 정식명 저장 ("아사히배 퓨처러티 스테이크스" 등)
+ *   (B) deadline 의 month/half 가 실제 개최 턴과 어긋남
+ *       예: 가와사키 기념은 시니어급 2월 전반인데 goal 은 2월 후반으로 저장
+ *
+ * 매칭 순서:
+ *   1. 이름 정확 매칭 (턴+학년 완전 일치)
+ *   2. 이름 양방향 부분 매칭 ("일본 더비" ↔ "도쿄 우준 (일본 더비)")
+ *   3. raceInfo 매칭 (grade+venue+surface+distance)
+ *      3a. 유일하면 채택 — (A) 처리
+ *      3b. 여러 개면 goalName 첫 토큰으로 disambiguate
+ *          (같은 자리의 "아사히배 퓨처러티 S" vs "한신 쥬버나일 필리스")
+ *   4. 학년 내 이름 정확 매칭 (턴 무시, 유일하면 채택) — (B) 처리
+ */
 function findRaceByGoal(
   goalName: string,
   classLevel: ClassLevel,
   month: number,
-  half: 1 | 2
+  half: 1 | 2,
+  raceInfo: TrainingGoal["raceInfo"]
 ): Race | null {
-  let match = allRaces.find(
+  const slotCandidates = allRaces.filter(
     (r) =>
-      r.name === goalName &&
       r.eligibleClasses.includes(classLevel) &&
       r.turn.month === month &&
       r.turn.half === half
   );
-  if (match) return match;
 
-  match = allRaces.find(
-    (r) =>
-      r.name.includes(goalName) &&
-      r.eligibleClasses.includes(classLevel) &&
-      r.turn.month === month &&
-      r.turn.half === half
+  // 1. 정확 매칭
+  const exact = slotCandidates.find((r) => r.name === goalName);
+  if (exact) return exact;
+
+  // 2. 양방향 부분 매칭
+  const partial = slotCandidates.find(
+    (r) => r.name.includes(goalName) || goalName.includes(r.name)
   );
-  return match ?? null;
+  if (partial) return partial;
+
+  // 3. raceInfo 매칭 — 축약형 이름 대응
+  if (raceInfo) {
+    const infoMatches = slotCandidates.filter(
+      (r) =>
+        r.grade === raceInfo.grade &&
+        r.venue === raceInfo.venue &&
+        r.surface === raceInfo.surface &&
+        r.distance === raceInfo.distance
+    );
+
+    if (infoMatches.length === 1) return infoMatches[0];
+
+    if (infoMatches.length > 1) {
+      const firstToken = goalName.trim().split(/\s+/)[0];
+      if (firstToken) {
+        const narrowed = infoMatches.filter((r) => r.name.includes(firstToken));
+        if (narrowed.length === 1) return narrowed[0];
+      }
+    }
+  }
+
+  // 4. 인벤 deadline 오류 대응: 학년만 맞추고 이름으로 exact 매칭
+  const classCandidates = allRaces.filter(
+    (r) => r.eligibleClasses.includes(classLevel) && r.name === goalName
+  );
+  if (classCandidates.length === 1) return classCandidates[0];
+
+  return null;
 }
 
 function buildInitialGoalSlots(character: Character): {
@@ -63,13 +110,14 @@ function buildInitialGoalSlots(character: Character): {
   const ownerships: SlotOwnerships = {};
 
   for (const goal of character.trainingGoals) {
-    if (!goal.raceName || !goal.deadline || !goal.raceInfo) continue;
+    if (!goal.raceName || !goal.deadline) continue;
 
     const race = findRaceByGoal(
       goal.raceName,
       goal.deadline.class,
       goal.deadline.turn.month,
-      goal.deadline.turn.half
+      goal.deadline.turn.half,
+      goal.raceInfo
     );
     if (!race) {
       console.warn(
@@ -78,10 +126,13 @@ function buildInitialGoalSlots(character: Character): {
       continue;
     }
 
+    // 슬롯 인덱스는 goal.deadline 이 아니라 매칭된 race 의 실제 개최 턴 기준.
+    // (goal.deadline 은 인벤 파싱 오류로 실제 turn 과 다를 수 있어
+    //  이걸 그대로 쓰면 잘못된 자리에 잠겨 슬롯의 races 목록에서 사라짐.)
     const turnIdx = toTurnIndex(
       goal.deadline.class,
-      goal.deadline.turn.month,
-      goal.deadline.turn.half
+      race.turn.month,
+      race.turn.half
     );
     if (turnIdx < 0) continue;
 
@@ -251,7 +302,6 @@ export function usePlannerState() {
 
       setState(newState);
 
-      // 성공 메시지 + 이동 정보 (있으면)
       const lines: string[] = [
         `[${factor.name}] ${result.assigned.length}개 배치됨`,
       ];
