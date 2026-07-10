@@ -18,6 +18,8 @@ export function PlannerPage() {
     resetAll,
     toggleFactorAssignment,
     isFactorAssigned,
+    isFactorPinned,
+    toggleFactorPin,
     runG1AutoAssign,
     clearG1AutoAssign,
     runOptimize,
@@ -118,6 +120,8 @@ export function PlannerPage() {
         filter={state.filter}
         onFactorClick={toggleFactorAssignment}
         isFactorAssigned={isFactorAssigned}
+        isFactorPinned={isFactorPinned}
+        onPinToggle={toggleFactorPin}
         minWinrate={minWinrate}
         plannerState={state}
       />

@@ -1409,19 +1409,29 @@ export function runOptimization(
     }
   }
 
-  let baseState: PlannerState = {
+  // baseState 구성:
+  // - goal 슬롯은 무조건 유지
+  // - pinned hidden 슬롯도 그대로 유지 (재배치 시도 안 함, 승률 재검사 안 함)
+  const baseState: PlannerState = {
     ...state,
     selections: {},
     ownerships: {},
   };
+  const pinnedFactorIds = new Set<string>();
+
   for (const [key, ownership] of Object.entries(state.ownerships)) {
-    if (ownership?.kind === "goal") {
-      const turnIndex = Number(key);
-      const raceId = state.selections[turnIndex];
-      if (raceId) {
-        baseState.selections[turnIndex] = raceId;
-        baseState.ownerships[turnIndex] = { kind: "goal" };
-      }
+    if (!ownership) continue;
+    const turnIndex = Number(key);
+    const raceId = state.selections[turnIndex];
+    if (!raceId) continue;
+
+    if (ownership.kind === "goal") {
+      baseState.selections[turnIndex] = raceId;
+      baseState.ownerships[turnIndex] = { kind: "goal" };
+    } else if (ownership.kind === "hidden" && ownership.pinned) {
+      baseState.selections[turnIndex] = raceId;
+      baseState.ownerships[turnIndex] = ownership;
+      pinnedFactorIds.add(ownership.factorId);
     }
   }
 
@@ -1432,6 +1442,12 @@ export function runOptimization(
   for (const factorId of activeFactorIds) {
     const factor = factorMap.get(factorId);
     if (!factor) continue;
+
+    // pinned 인자는 baseState 에 이미 유지됨. 재배치 시도 안 함.
+    if (pinnedFactorIds.has(factorId)) {
+      mandatorySuccess.push(`${factor.name} (고정)`);
+      continue;
+    }
 
     const { state: nextState, result } = autoAssignFactor(
       factor,

@@ -39,13 +39,14 @@ export const EMPTY_FILTER: AptitudeFilter = {
  * 슬롯 소유권.
  * - goal: 목표 레이스 (변경 불가)
  * - hidden: 히든 인자 자동 배치
+ *   - pinned=true: 유저가 명시적으로 고정. 최적화가 재배치하지 않음.
  * - g1: G1 자동 배치
  * - manual: 유저가 직접 선택
  * - filler: 최적화의 "빈 슬롯 채우기" 로 자동 배치 (재실행 시 초기화됨)
  */
 export type SlotOwnership =
   | { kind: "goal" }
-  | { kind: "hidden"; factorId: string }
+  | { kind: "hidden"; factorId: string; pinned?: boolean }
   | { kind: "g1" }
   | { kind: "manual" }
   | { kind: "filler" };
@@ -73,25 +74,27 @@ export const INITIAL_STATE: PlannerState = {
  * 우선순위 비교.
  * 높은 우선순위가 낮은 우선순위를 덮어쓸 수 있음.
  *
- * filler(-1) < manual(0) < g1(1) < hidden(2) < goal(3)
+ * filler(-1) < manual(0) < g1(1) < hidden(2) < hidden-pinned(3) < goal(4)
  *
- * filler 는 가장 낮음 → 자동 배치 무엇이든 filler 를 덮어쓸 수 있음.
- * manual 은 유저 의도가 있으므로 filler 보다 높음.
+ * hidden-pinned: 유저가 명시적으로 고정한 히든 인자.
+ * 최적화가 재배치하지 않고, 다른 자동 배치가 덮어쓰지 못한다.
  */
-const OWNERSHIP_PRIORITY: Record<SlotOwnership["kind"], number> = {
-  goal: 3,
-  hidden: 2,
-  g1: 1,
-  manual: 0,
-  filler: -1,
-};
+function getOwnershipPriority(o: SlotOwnership): number {
+  switch (o.kind) {
+    case "goal": return 4;
+    case "hidden": return o.pinned ? 3 : 2;
+    case "g1": return 1;
+    case "manual": return 0;
+    case "filler": return -1;
+  }
+}
 
 export function canOverwrite(
   newOwner: SlotOwnership,
   existing: SlotOwnership | undefined
 ): boolean {
   if (!existing) return true;
-  return OWNERSHIP_PRIORITY[newOwner.kind] > OWNERSHIP_PRIORITY[existing.kind];
+  return getOwnershipPriority(newOwner) > getOwnershipPriority(existing);
 }
 
 // ─── 등급 비교 ─────────────────────────

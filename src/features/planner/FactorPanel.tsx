@@ -12,6 +12,8 @@ interface Props {
   filter: AptitudeFilter;
   onFactorClick: (factor: FactorDef) => void;
   isFactorAssigned: (factorId: string) => boolean;
+  isFactorPinned: (factorId: string) => boolean;
+  onPinToggle: (factorId: string) => void;
   minWinrate: number;
   plannerState: import("../../domain/scheduler").PlannerState;
 }
@@ -22,6 +24,8 @@ export function FactorPanel({
   filter,
   onFactorClick,
   isFactorAssigned,
+  isFactorPinned,
+  onPinToggle,
   minWinrate,
   plannerState,
 }: Props) {
@@ -53,6 +57,8 @@ export function FactorPanel({
         emptyText="데이터 없음"
         onFactorClick={onFactorClick}
         isFactorAssigned={isFactorAssigned}
+        isFactorPinned={isFactorPinned}
+        onPinToggle={onPinToggle}
         feasibility={feasibility}
       />
       <FactorSection
@@ -61,6 +67,8 @@ export function FactorPanel({
         emptyText="데이터 없음"
         onFactorClick={onFactorClick}
         isFactorAssigned={isFactorAssigned}
+        isFactorPinned={isFactorPinned}
+        onPinToggle={onPinToggle}
         feasibility={feasibility}
       />
       <FactorSection
@@ -69,6 +77,8 @@ export function FactorPanel({
         emptyText="레이스 없음"
         onFactorClick={onFactorClick}
         isFactorAssigned={isFactorAssigned}
+        isFactorPinned={isFactorPinned}
+        onPinToggle={onPinToggle}
         feasibility={feasibility}
         sortG1
       />
@@ -82,6 +92,8 @@ function FactorSection({
   emptyText,
   onFactorClick,
   isFactorAssigned,
+  isFactorPinned,
+  onPinToggle,
   feasibility,
   sortG1,
 }: {
@@ -90,6 +102,8 @@ function FactorSection({
   emptyText: string;
   onFactorClick: (factor: FactorDef) => void;
   isFactorAssigned: (factorId: string) => boolean;
+  isFactorPinned: (factorId: string) => boolean;
+  onPinToggle: (factorId: string) => void;
   feasibility: Map<string, FactorFeasibility>;
   sortG1?: boolean;
 }) {
@@ -129,7 +143,9 @@ function FactorSection({
               key={s.factor.id}
               status={s}
               assigned={isFactorAssigned(s.factor.id)}
+              pinned={isFactorPinned(s.factor.id)}
               onClick={() => onFactorClick(s.factor)}
+              onPinToggle={() => onPinToggle(s.factor.id)}
               feasibility={feasibility.get(s.factor.id)}
             />
           ))}
@@ -142,12 +158,16 @@ function FactorSection({
 function FactorItem({
   status,
   assigned,
+  pinned,
   onClick,
+  onPinToggle,
   feasibility,
 }: {
   status: FactorStatus;
   assigned: boolean;
+  pinned: boolean;
   onClick: () => void;
+  onPinToggle: () => void;
   feasibility: FactorFeasibility | undefined;
 }) {
   const { factor, satisfied, detail, progress } = status;
@@ -199,6 +219,7 @@ function FactorItem({
         "factor-item",
         satisfied ? "factor-item--satisfied" : "",
         assigned ? "factor-item--assigned" : "",
+        pinned ? "factor-item--pinned" : "",
         isClickable ? "factor-item--clickable" : "",
         isGrayed ? "factor-item--grayed" : "",
       ]
@@ -208,10 +229,21 @@ function FactorItem({
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <span className="factor-item__name">
-        {assigned && <span className="factor-item__pin">📌</span>}
-        {factor.name}
-      </span>
+      <span className="factor-item__name">{factor.name}</span>
+
+      {assigned && (
+        <button
+          className={`factor-item__pin-btn ${pinned ? "factor-item__pin-btn--on" : ""}`}
+          onClick={(e) => {
+            e.stopPropagation();
+            onPinToggle();
+          }}
+          title={pinned ? "고정 해제" : "고정 (최적화 시 유지)"}
+        >
+          📌
+        </button>
+      )}
+
       <span className="factor-item__status">
         {satisfied ? "✓" : detail ?? "미충족"}
       </span>
@@ -234,6 +266,7 @@ function FactorItem({
           feasibility={feasibility}
           satisfied={satisfied}
           assigned={assigned}
+          pinned={pinned}
         />
       )}
     </li>
@@ -247,6 +280,7 @@ function FactorTooltip({
   feasibility,
   satisfied,
   assigned,
+  pinned,
 }: {
   x: number;
   y: number;
@@ -254,10 +288,13 @@ function FactorTooltip({
   feasibility: FactorFeasibility | undefined;
   satisfied: boolean;
   assigned: boolean;
+  pinned: boolean;
 }) {
   let summary: string;
-  if (assigned) {
-    summary = "클릭해서 자동 배치 취소";
+  if (pinned) {
+    summary = "📌 고정됨 (최적화 시 유지). 📌를 클릭해 해제하세요.";
+  } else if (assigned) {
+    summary = "클릭해서 자동 배치 취소 / 📌로 고정 가능";
   } else if (satisfied) {
     summary = "이미 조건 만족됨";
   } else if (feasibility && !feasibility.canAssign) {
@@ -270,10 +307,8 @@ function FactorTooltip({
 
   const details = feasibility?.details;
 
-  // 뷰포트 오른쪽 넘어가면 조정
   const maxWidth = 400;
   const adjustedX = Math.min(x, window.innerWidth - maxWidth - 12);
-  // 아래로 넘어가면 위로 올림
   const estimatedHeight = 200;
   const adjustedY =
     y + estimatedHeight > window.innerHeight

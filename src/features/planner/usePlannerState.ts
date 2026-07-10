@@ -35,9 +35,7 @@ const allRaces = racesData as Race[];
  *
  * 인벤 크롤 데이터에는 두 가지 종류의 이상이 존재하여 단순 이름 매칭만으로는 실패한다:
  *   (A) 축약형 이름 저장 (예: "아사히배 FS", "스프린터스 S", "마일 CS")
- *       → races.json 은 정식명 저장 ("아사히배 퓨처러티 스테이크스" 등)
  *   (B) deadline 의 month/half 가 실제 개최 턴과 어긋남
- *       예: 가와사키 기념은 시니어급 2월 전반인데 goal 은 2월 후반으로 저장
  *
  * 매칭 순서:
  *   1. 이름 정확 매칭 (턴+학년 완전 일치)
@@ -45,7 +43,6 @@ const allRaces = racesData as Race[];
  *   3. raceInfo 매칭 (grade+venue+surface+distance)
  *      3a. 유일하면 채택 — (A) 처리
  *      3b. 여러 개면 goalName 첫 토큰으로 disambiguate
- *          (같은 자리의 "아사히배 퓨처러티 S" vs "한신 쥬버나일 필리스")
  *   4. 학년 내 이름 정확 매칭 (턴 무시, 유일하면 채택) — (B) 처리
  */
 function findRaceByGoal(
@@ -62,17 +59,14 @@ function findRaceByGoal(
       r.turn.half === half
   );
 
-  // 1. 정확 매칭
   const exact = slotCandidates.find((r) => r.name === goalName);
   if (exact) return exact;
 
-  // 2. 양방향 부분 매칭
   const partial = slotCandidates.find(
     (r) => r.name.includes(goalName) || goalName.includes(r.name)
   );
   if (partial) return partial;
 
-  // 3. raceInfo 매칭 — 축약형 이름 대응
   if (raceInfo) {
     const infoMatches = slotCandidates.filter(
       (r) =>
@@ -93,7 +87,6 @@ function findRaceByGoal(
     }
   }
 
-  // 4. 인벤 deadline 오류 대응: 학년만 맞추고 이름으로 exact 매칭
   const classCandidates = allRaces.filter(
     (r) => r.eligibleClasses.includes(classLevel) && r.name === goalName
   );
@@ -127,8 +120,6 @@ function buildInitialGoalSlots(character: Character): {
     }
 
     // 슬롯 인덱스는 goal.deadline 이 아니라 매칭된 race 의 실제 개최 턴 기준.
-    // (goal.deadline 은 인벤 파싱 오류로 실제 turn 과 다를 수 있어
-    //  이걸 그대로 쓰면 잘못된 자리에 잠겨 슬롯의 races 목록에서 사라짐.)
     const turnIdx = toTurnIndex(
       goal.deadline.class,
       race.turn.month,
@@ -263,6 +254,20 @@ export function usePlannerState() {
       );
 
       if (hasAssigned) {
+        // 고정된 인자는 클릭으로 해제 불가
+        const hasPinned = Object.values(state.ownerships).some(
+          (o) =>
+            o?.kind === "hidden" && o.factorId === factor.id && o.pinned
+        );
+        if (hasPinned) {
+          setLastAssignResult({
+            factorId: factor.id,
+            success: false,
+            message: `[${factor.name}] 고정된 인자는 해제할 수 없습니다.\n📌 를 먼저 해제하세요.`,
+          });
+          return;
+        }
+
         setState((s) =>
           clearSlotsByOwnership(
             s,
@@ -329,6 +334,33 @@ export function usePlannerState() {
     },
     [state.ownerships]
   );
+
+  const isFactorPinned = useCallback(
+    (factorId: string): boolean =>
+      Object.values(state.ownerships).some(
+        (o) => o?.kind === "hidden" && o.factorId === factorId && o.pinned
+      ),
+    [state.ownerships]
+  );
+
+  const toggleFactorPin = useCallback((factorId: string) => {
+    setState((s) => {
+      const nextOwnerships = { ...s.ownerships };
+      let changed = false;
+      for (const [key, ownership] of Object.entries(nextOwnerships)) {
+        if (
+          ownership?.kind === "hidden" &&
+          ownership.factorId === factorId
+        ) {
+          const idx = Number(key);
+          nextOwnerships[idx] = { ...ownership, pinned: !ownership.pinned };
+          changed = true;
+        }
+      }
+      if (!changed) return s;
+      return { ...s, ownerships: nextOwnerships };
+    });
+  }, []);
 
   const runG1AutoAssign = useCallback(() => {
     if (!character) return;
@@ -407,6 +439,8 @@ export function usePlannerState() {
     resetAll,
     toggleFactorAssignment,
     isFactorAssigned,
+    isFactorPinned,
+    toggleFactorPin,
     runG1AutoAssign,
     clearG1AutoAssign,
     runOptimize,
