@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef, useEffect } from "react";
 import type { Character } from "../../types/character";
 import type { Race, ClassLevel } from "../../types/race";
 import type {
@@ -13,13 +13,35 @@ import {
   countConsecutive,
 } from "../../domain/scheduler";
 import { getSlotsForClass } from "../../domain/calendar";
+import { getG1Factors } from "../../domain/factors";
 import { RacePickerModal } from "./Racepickermodal";
 import { assetPath } from "../../utils/assetPath";
+import type { FactorDef } from "../../types/factor";
+import factorsData from "../../../data/factors.json";
 import "./RaceCalendar.css";
 
 const CLASSES: ClassLevel[] = ["주니어급", "클래식급", "시니어급"];
 
 export type ActiveView = ClassLevel | "all";
+
+interface FactorsFile {
+  nickname: FactorDef[];
+  hidden: FactorDef[];
+}
+const factors = factorsData as unknown as FactorsFile;
+
+/**
+ * factor id → 표시 이름 매핑.
+ * factors.json (nickname + hidden) 과 동적 생성 G1 인자를 한 번에 병합.
+ * 모듈 로드 시 한 번만 계산 (races.json / factors.json 모두 정적).
+ */
+const FACTOR_NAME_BY_ID: Map<string, string> = (() => {
+  const map = new Map<string, string>();
+  for (const f of factors.nickname) map.set(f.id, f.name);
+  for (const f of factors.hidden) map.set(f.id, f.name);
+  for (const f of getG1Factors()) map.set(f.id, f.name);
+  return map;
+})();
 
 interface Props {
   character: Character | null;
@@ -257,8 +279,45 @@ function SlotCell({
         )
       : null;
 
+  // ─── 툴팁 상태 ─────────────────────
+  const tooltipInfo = selectedRace ? getSlotTooltip(selectedRace, ownership) : null;
+  const [tooltipPos, setTooltipPos] = useState<{ x: number; y: number } | null>(null);
+  const cellRef = useRef<HTMLDivElement>(null);
+  const hoverTimerRef = useRef<number | null>(null);
+
+  const showTooltip = () => {
+    if (!cellRef.current) return;
+    const rect = cellRef.current.getBoundingClientRect();
+    setTooltipPos({ x: rect.left, y: rect.bottom + 4 });
+  };
+
+  const handleMouseEnter = () => {
+    if (!tooltipInfo) return;
+    if (hoverTimerRef.current !== null) window.clearTimeout(hoverTimerRef.current);
+    hoverTimerRef.current = window.setTimeout(showTooltip, 400);
+  };
+
+  const handleMouseLeave = () => {
+    if (hoverTimerRef.current !== null) {
+      window.clearTimeout(hoverTimerRef.current);
+      hoverTimerRef.current = null;
+    }
+    setTooltipPos(null);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (hoverTimerRef.current !== null) window.clearTimeout(hoverTimerRef.current);
+    };
+  }, []);
+
   return (
-    <div className={cellClassName}>
+    <div
+      ref={cellRef}
+      className={cellClassName}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
       <div className="slot-cell__header">
         {slot.month}월 {slot.half === 1 ? "전반" : "후반"}
       </div>
@@ -277,6 +336,10 @@ function SlotCell({
           hasRacesAvailable={slot.races.length > 0}
           onClick={onOpenPicker}
         />
+      )}
+
+      {tooltipPos && tooltipInfo && (
+        <SlotTooltip x={tooltipPos.x} y={tooltipPos.y} info={tooltipInfo} />
       )}
     </div>
   );
@@ -363,6 +426,65 @@ function EmptySlot({
     </button>
   );
 }
+
+// ─── 슬롯 툴팁 ─────────────────────
+
+/**
+ * 배치된 레이스가 어떤 사유로 이 슬롯에 있는지 요약.
+ * manual (사용자 직접 선택) 은 툴팁 생략.
+ */
+function getSlotTooltip(
+  race: Race,
+  ownership: SlotOwnership | undefined
+): { primary: string; secondary: string } | null {
+  if (!ownership) return null;
+
+  switch (ownership.kind) {
+    case "goal":
+      return { primary: race.name, secondary: "목표 레이스 (자동 잠금)" };
+    case "hidden": {
+      const factorName =
+        FACTOR_NAME_BY_ID.get(ownership.factorId) ?? ownership.factorId;
+      return { primary: race.name, secondary: `히든 인자 · ${factorName}` };
+    }
+    case "g1":
+      return { primary: race.name, secondary: "G1 자동 배치" };
+    case "filler":
+      return { primary: race.name, secondary: "빈 슬롯 자동 채움" };
+    case "manual":
+      return null;
+  }
+}
+
+function SlotTooltip({
+  x,
+  y,
+  info,
+}: {
+  x: number;
+  y: number;
+  info: { primary: string; secondary: string };
+}) {
+  const width = 260;
+  const estHeight = 60;
+  const adjX = Math.min(x, window.innerWidth - width - 12);
+  const adjY =
+    y + estHeight > window.innerHeight
+      ? Math.max(12, window.innerHeight - estHeight - 12)
+      : y;
+
+  return (
+    <div
+      className="slot-tooltip"
+      style={{ left: `${adjX}px`, top: `${adjY}px` }}
+    >
+      <div className="slot-tooltip__primary">{info.primary}</div>
+      <div className="slot-tooltip__secondary">{info.secondary}</div>
+    </div>
+  );
+}
+
+// ─── 헬퍼 ─────────────────────────
 
 function getSlotBadge(
   ownership: SlotOwnership | undefined
