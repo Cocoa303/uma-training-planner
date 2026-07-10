@@ -1865,7 +1865,7 @@
       {
         "order": 6,
         "description": "아리마 기념에 출전",
-        "raceName": null,
+        "raceName": "아리마 기념",
         "placement": null,
         "deadline": {
           "class": "클래식급",
@@ -2112,7 +2112,7 @@
       {
         "order": 6,
         "description": "아리마 기념에 출전",
-        "raceName": null,
+        "raceName": "아리마 기념",
         "placement": null,
         "deadline": {
           "class": "클래식급",
@@ -2359,7 +2359,7 @@
       {
         "order": 6,
         "description": "아리마 기념에 출전",
-        "raceName": null,
+        "raceName": "아리마 기념",
         "placement": null,
         "deadline": {
           "class": "클래식급",
@@ -2670,7 +2670,7 @@
       {
         "order": 10,
         "description": "아리마 기념에 출전",
-        "raceName": null,
+        "raceName": "아리마 기념",
         "placement": null,
         "deadline": {
           "class": "시니어급",
@@ -2913,7 +2913,7 @@
       {
         "order": 10,
         "description": "아리마 기념에 출전",
-        "raceName": null,
+        "raceName": "아리마 기념",
         "placement": null,
         "deadline": {
           "class": "시니어급",
@@ -4272,7 +4272,7 @@
       {
         "order": 7,
         "description": "아리마 기념에 출전",
-        "raceName": null,
+        "raceName": "아리마 기념",
         "placement": null,
         "deadline": {
           "class": "클래식급",
@@ -4542,7 +4542,7 @@
       {
         "order": 7,
         "description": "아리마 기념에 출전",
-        "raceName": null,
+        "raceName": "아리마 기념",
         "placement": null,
         "deadline": {
           "class": "클래식급",
@@ -13298,7 +13298,7 @@
       {
         "order": 5,
         "description": "국화상에 출전",
-        "raceName": null,
+        "raceName": "국화상",
         "placement": null,
         "deadline": {
           "class": "클래식급",
@@ -13560,7 +13560,7 @@
       {
         "order": 5,
         "description": "국화상에 출전",
-        "raceName": null,
+        "raceName": "국화상",
         "placement": null,
         "deadline": {
           "class": "클래식급",
@@ -16286,7 +16286,7 @@
       {
         "order": 5,
         "description": "국화상에 출전",
-        "raceName": null,
+        "raceName": "국화상",
         "placement": null,
         "deadline": {
           "class": "클래식급",
@@ -16534,7 +16534,7 @@
       {
         "order": 5,
         "description": "국화상에 출전",
-        "raceName": null,
+        "raceName": "국화상",
         "placement": null,
         "deadline": {
           "class": "클래식급",
@@ -17524,7 +17524,7 @@
       {
         "order": 5,
         "description": "국화상에 출전",
-        "raceName": null,
+        "raceName": "국화상",
         "placement": null,
         "deadline": {
           "class": "클래식급",
@@ -17748,7 +17748,7 @@
       {
         "order": 5,
         "description": "국화상에 출전",
-        "raceName": null,
+        "raceName": "국화상",
         "placement": null,
         "deadline": {
           "class": "클래식급",
@@ -19216,7 +19216,7 @@
       {
         "order": 6,
         "description": "재팬컵에 출전",
-        "raceName": null,
+        "raceName": "재팬컵",
         "placement": null,
         "deadline": {
           "class": "클래식급",
@@ -19487,7 +19487,7 @@
       {
         "order": 6,
         "description": "재팬컵에 출전",
-        "raceName": null,
+        "raceName": "재팬컵",
         "placement": null,
         "deadline": {
           "class": "클래식급",
@@ -19734,7 +19734,7 @@
       {
         "order": 5,
         "description": "재팬컵에 출전",
-        "raceName": null,
+        "raceName": "재팬컵",
         "placement": null,
         "deadline": {
           "class": "클래식급",
@@ -19757,7 +19757,7 @@
       {
         "order": 6,
         "description": "아리마 기념에 출전",
-        "raceName": null,
+        "raceName": "아리마 기념",
         "placement": null,
         "deadline": {
           "class": "클래식급",
@@ -20005,7 +20005,7 @@
       {
         "order": 5,
         "description": "재팬컵에 출전",
-        "raceName": null,
+        "raceName": "재팬컵",
         "placement": null,
         "deadline": {
           "class": "클래식급",
@@ -20028,7 +20028,7 @@
       {
         "order": 6,
         "description": "아리마 기념에 출전",
-        "raceName": null,
+        "raceName": "아리마 기념",
         "placement": null,
         "deadline": {
           "class": "클래식급",
@@ -20276,7 +20276,7 @@
       {
         "order": 5,
         "description": "재팬컵에 출전",
-        "raceName": null,
+        "raceName": "재팬컵",
         "placement": null,
         "deadline": {
           "class": "클래식급",
@@ -20299,7 +20299,7 @@
       {
         "order": 6,
         "description": "아리마 기념에 출전",
-        "raceName": null,
+        "raceName": "아리마 기념",
         "placement": null,
         "deadline": {
           "class": "클래식급",
@@ -24597,7 +24597,7 @@
       {
         "order": 3,
         "description": "사츠키상에 출전",
-        "raceName": null,
+        "raceName": "사츠키상",
         "placement": null,
         "deadline": {
           "class": "클래식급",
@@ -24882,7 +24882,7 @@
       {
         "order": 3,
         "description": "사츠키상에 출전",
-        "raceName": null,
+        "raceName": "사츠키상",
         "placement": null,
         "deadline": {
           "class": "클래식급",
@@ -25793,7 +25793,7 @@
       {
         "order": 5,
         "description": "아리마 기념에 출전",
-        "raceName": null,
+        "raceName": "아리마 기념",
         "placement": null,
         "deadline": {
           "class": "클래식급",
@@ -26041,7 +26041,7 @@
       {
         "order": 5,
         "description": "아리마 기념에 출전",
-        "raceName": null,
+        "raceName": "아리마 기념",
         "placement": null,
         "deadline": {
           "class": "클래식급",
@@ -26513,7 +26513,7 @@
       {
         "order": 5,
         "description": "국화상에 출전",
-        "raceName": null,
+        "raceName": "국화상",
         "placement": null,
         "deadline": {
           "class": "클래식급",
@@ -26761,7 +26761,7 @@
       {
         "order": 5,
         "description": "국화상에 출전",
-        "raceName": null,
+        "raceName": "국화상",
         "placement": null,
         "deadline": {
           "class": "클래식급",
@@ -27008,7 +27008,7 @@
       {
         "order": 5,
         "description": "국화상에 출전",
-        "raceName": null,
+        "raceName": "국화상",
         "placement": null,
         "deadline": {
           "class": "클래식급",
@@ -27817,7 +27817,7 @@
       {
         "order": 9,
         "description": "아리마 기념에 출전",
-        "raceName": null,
+        "raceName": "아리마 기념",
         "placement": null,
         "deadline": {
           "class": "시니어급",
@@ -28040,7 +28040,7 @@
       {
         "order": 9,
         "description": "아리마 기념에 출전",
-        "raceName": null,
+        "raceName": "아리마 기념",
         "placement": null,
         "deadline": {
           "class": "시니어급",
@@ -29602,7 +29602,7 @@
       {
         "order": 5,
         "description": "국화상에 출전",
-        "raceName": null,
+        "raceName": "국화상",
         "placement": null,
         "deadline": {
           "class": "클래식급",
@@ -29855,7 +29855,7 @@
       {
         "order": 5,
         "description": "국화상에 출전",
-        "raceName": null,
+        "raceName": "국화상",
         "placement": null,
         "deadline": {
           "class": "클래식급",
@@ -30587,7 +30587,7 @@
       {
         "order": 6,
         "description": "아리마 기념에 출전",
-        "raceName": null,
+        "raceName": "아리마 기념",
         "placement": null,
         "deadline": {
           "class": "클래식급",
@@ -30857,7 +30857,7 @@
       {
         "order": 6,
         "description": "아리마 기념에 출전",
-        "raceName": null,
+        "raceName": "아리마 기념",
         "placement": null,
         "deadline": {
           "class": "클래식급",
@@ -31847,7 +31847,7 @@
       {
         "order": 5,
         "description": "국화상에 출전",
-        "raceName": null,
+        "raceName": "국화상",
         "placement": null,
         "deadline": {
           "class": "클래식급",
@@ -32095,7 +32095,7 @@
       {
         "order": 5,
         "description": "국화상에 출전",
-        "raceName": null,
+        "raceName": "국화상",
         "placement": null,
         "deadline": {
           "class": "클래식급",
@@ -32343,7 +32343,7 @@
       {
         "order": 5,
         "description": "국화상에 출전",
-        "raceName": null,
+        "raceName": "국화상",
         "placement": null,
         "deadline": {
           "class": "클래식급",
@@ -32576,7 +32576,7 @@
       {
         "order": 5,
         "description": "국화상에 출전",
-        "raceName": null,
+        "raceName": "국화상",
         "placement": null,
         "deadline": {
           "class": "클래식급",
@@ -32832,7 +32832,7 @@
       {
         "order": 5,
         "description": "국화상에 출전",
-        "raceName": null,
+        "raceName": "국화상",
         "placement": null,
         "deadline": {
           "class": "클래식급",
@@ -33989,7 +33989,7 @@
       {
         "order": 9,
         "description": "아리마 기념에 출전",
-        "raceName": null,
+        "raceName": "아리마 기념",
         "placement": null,
         "deadline": {
           "class": "시니어급",
@@ -34237,7 +34237,7 @@
       {
         "order": 9,
         "description": "아리마 기념에 출전",
-        "raceName": null,
+        "raceName": "아리마 기념",
         "placement": null,
         "deadline": {
           "class": "시니어급",
@@ -37439,7 +37439,7 @@
       {
         "order": 5,
         "description": "국화상에 출전",
-        "raceName": null,
+        "raceName": "국화상",
         "placement": null,
         "deadline": {
           "class": "클래식급",
@@ -37687,7 +37687,7 @@
       {
         "order": 5,
         "description": "국화상에 출전",
-        "raceName": null,
+        "raceName": "국화상",
         "placement": null,
         "deadline": {
           "class": "클래식급",
@@ -37880,7 +37880,7 @@
       {
         "order": 3,
         "description": "국화상에 출전",
-        "raceName": null,
+        "raceName": "국화상",
         "placement": null,
         "deadline": {
           "class": "클래식급",
@@ -45387,7 +45387,7 @@
       {
         "order": 5,
         "description": "국화상에 출전",
-        "raceName": null,
+        "raceName": "국화상",
         "placement": null,
         "deadline": {
           "class": "클래식급",
@@ -45650,7 +45650,7 @@
       {
         "order": 5,
         "description": "국화상에 출전",
-        "raceName": null,
+        "raceName": "국화상",
         "placement": null,
         "deadline": {
           "class": "클래식급",
@@ -45934,7 +45934,7 @@
       {
         "order": 6,
         "description": "국화상에 출전",
-        "raceName": null,
+        "raceName": "국화상",
         "placement": null,
         "deadline": {
           "class": "클래식급",
@@ -46220,7 +46220,7 @@
       {
         "order": 6,
         "description": "국화상에 출전",
-        "raceName": null,
+        "raceName": "국화상",
         "placement": null,
         "deadline": {
           "class": "클래식급",
@@ -48928,7 +48928,7 @@
       {
         "order": 2,
         "description": "아사히배 FS에 출전",
-        "raceName": null,
+        "raceName": "아사히배 FS",
         "placement": null,
         "deadline": null,
         "requiredFans": 1000,
@@ -49410,7 +49410,7 @@
       {
         "order": 6,
         "description": "재팬컵에 출전",
-        "raceName": null,
+        "raceName": "재팬컵",
         "placement": null,
         "deadline": {
           "class": "클래식급",
