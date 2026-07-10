@@ -13274,8 +13274,8 @@
       },
       {
         "order": 4,
-        "description": "센트라이트 기념에서 3착 이내",
-        "raceName": "센트라이트 기념",
+        "description": "세인트 라이트 기념에서 3착 이내",
+        "raceName": "세인트 라이트 기념",
         "placement": "3착",
         "deadline": {
           "class": "클래식급",
@@ -13536,8 +13536,8 @@
       },
       {
         "order": 4,
-        "description": "센트라이트 기념에서 3착 이내",
-        "raceName": "센트라이트 기념",
+        "description": "세인트 라이트 기념에서 3착 이내",
+        "raceName": "세인트 라이트 기념",
         "placement": "3착",
         "deadline": {
           "class": "클래식급",
@@ -34365,8 +34365,8 @@
       },
       {
         "order": 4,
-        "description": "센트라이트 기념에서 5착 이내",
-        "raceName": "센트라이트 기념",
+        "description": "세인트 라이트 기념에서 5착 이내",
+        "raceName": "세인트 라이트 기념",
         "placement": "5착",
         "deadline": {
           "class": "클래식급",
@@ -35361,8 +35361,8 @@
       },
       {
         "order": 3,
-        "description": "센트라이트 기념에서 3착 이내",
-        "raceName": "센트라이트 기념",
+        "description": "세인트 라이트 기념에서 3착 이내",
+        "raceName": "세인트 라이트 기념",
         "placement": "3착",
         "deadline": {
           "class": "클래식급",
@@ -35647,8 +35647,8 @@
       },
       {
         "order": 3,
-        "description": "센트라이트 기념에서 3착 이내",
-        "raceName": "센트라이트 기념",
+        "description": "세인트 라이트 기념에서 3착 이내",
+        "raceName": "세인트 라이트 기념",
         "placement": "3착",
         "deadline": {
           "class": "클래식급",
@@ -35932,8 +35932,8 @@
       },
       {
         "order": 3,
-        "description": "센트라이트 기념에서 3착 이내",
-        "raceName": "센트라이트 기념",
+        "description": "세인트 라이트 기념에서 3착 이내",
+        "raceName": "세인트 라이트 기념",
         "placement": "3착",
         "deadline": {
           "class": "클래식급",
