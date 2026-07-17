@@ -1286,6 +1286,10 @@ function calculateHiddenFactorScore(state: PlannerState): number {
 
 const MAX_TURN_INDEX = 72;
 
+// 자동 채움 정책 상수
+const EXCLUDED_FILL_GRADES: RaceGrade[] = ["OP", "G3"];
+const SUMMER_CAMP_MONTHS = [7, 8]; // 여름 캠프 기간 - 자동 채움 스킵
+
 function fillEmptySlots(
   state: PlannerState,
   effective: ReturnType<typeof effectiveAptitudes>,
@@ -1296,9 +1300,12 @@ function fillEmptySlots(
   let filledCount = 0;
   const owner: SlotOwnership = { kind: "filler" };
 
+  // 자동 채움 후보 인덱싱 단계에서 이미 OP/G3, 해외 제외.
+  // (여기서 걸러야 이후 후보 배열이 아예 비어 스킵됨)
   const raceByTurn = new Map<number, Race[]>();
   for (const race of allRaces) {
     if (race.isOverseas) continue;
+    if (EXCLUDED_FILL_GRADES.includes(race.grade)) continue;
     for (const cls of race.eligibleClasses) {
       const idx = toTurnIndex(cls, race.turn.month, race.turn.half);
       if (idx < 0) continue;
@@ -1310,6 +1317,10 @@ function fillEmptySlots(
 
   for (let turnIdx = 0; turnIdx < MAX_TURN_INDEX; turnIdx++) {
     if (workingState.selections[turnIdx]) continue;
+
+    // 여름 캠프 기간(7-8월 전/후반)은 자동 채움 아예 스킵
+    const { month } = fromTurnIndexLocal(turnIdx);
+    if (SUMMER_CAMP_MONTHS.includes(month)) continue;
 
     const races = raceByTurn.get(turnIdx);
     if (!races || races.length === 0) continue;
