@@ -380,12 +380,34 @@
     font-size: 11px;
   }
 }
-/* ─── 배치 현황 (G1/G2/G3 카운트) ─── */
+/* ─── 배치 현황 (총 경기수 + G1/G2/G3 카운트) ─── */
 
 .race-stats {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
+}
+
+.race-stats__total {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: #f3f4f6;
+  border-radius: 4px;
+}
+
+.race-stats__total-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+
+.race-stats__total-count {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-text);
+  font-variant-numeric: tabular-nums;
 }
 
 .race-stats__cells {
@@ -400,36 +422,47 @@
   align-items: center;
   padding: 6px 2px;
   border-radius: 4px;
-  color: white;
   gap: 2px;
 }
 
 .race-stat__label {
-  font-size: 10px;
+  font-size: 13px;
   font-weight: 700;
-  opacity: 0.9;
+  color: white;
   letter-spacing: 0.03em;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .race-stat__count {
   font-size: 18px;
   font-weight: 700;
+  color: white;
   font-variant-numeric: tabular-nums;
   line-height: 1;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
-/* RaceCalendar 의 grade-bg--* 와 동일한 팔레트 재사용 */
+/* 새 팔레트 (RaceCalendar 의 grade-bg--* 와 동일) */
 .race-stat--g1 {
-  background: linear-gradient(135deg, #dc2626, #991b1b);
+  background: linear-gradient(135deg, #93c5fd, #60a5fa);
 }
 .race-stat--g2 {
-  background: linear-gradient(135deg, #ea580c, #9a3412);
+  background: linear-gradient(135deg, #f9a8d4, #f472b6);
 }
 .race-stat--g3 {
-  background: linear-gradient(135deg, #ca8a04, #713f12);
+  background: linear-gradient(135deg, #86efac, #4ade80);
 }
 
 @media (max-width: 767px) {
+  .race-stats__total {
+    padding: 6px 10px;
+  }
+  .race-stats__total-label {
+    font-size: 11px;
+  }
+  .race-stats__total-count {
+    font-size: 14px;
+  }
   .race-stat {
     padding: 4px 2px;
   }

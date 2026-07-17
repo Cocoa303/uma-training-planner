@@ -73,10 +73,10 @@
     overflow: hidden;
   }
 
-  .slot-cell--filled { background: #f9fafb; }
-  .slot-cell--goal { background: #eff6ff; border-color: #93c5fd; }
+.slot-cell--filled { background: #f9fafb; }
+  .slot-cell--goal { background: #fef2f2; border-color: #fca5a5; }
   .slot-cell--hidden-factor { background: #fef3c7; border-color: #fcd34d; }
-  .slot-cell--g1-auto { background: #fce7f3; border-color: #f9a8d4; }
+  .slot-cell--g1-auto { background: #dbeafe; border-color: #93c5fd; }
   .slot-cell--filler { background: #f9fafb; border-color: #e5e7eb; }
   .slot-cell--filler .filled-slot { opacity: 0.85; }
 
@@ -130,9 +130,9 @@
     z-index: 3;
   }
 
-  .badge--goal { background: #3b82f6; }
+.badge--goal { background: #ef4444; }
   .badge--hidden { background: #f59e0b; }
-  .badge--g1auto { background: #ec4899; }
+  .badge--g1auto { background: #3b82f6; }
   .badge--filler { background: #6b7280; }
 
   .filled-slot__image {
@@ -174,11 +174,11 @@
     background: rgba(0, 0, 0, 0.3);
   }
 
-  .grade-bg--g1 { background: linear-gradient(135deg, #dc2626, #991b1b); }
-  .grade-bg--g2 { background: linear-gradient(135deg, #ea580c, #9a3412); }
-  .grade-bg--g3 { background: linear-gradient(135deg, #ca8a04, #713f12); }
-  .grade-bg--op { background: linear-gradient(135deg, #3b82f6, #1e40af); }
-  .grade-bg--preop { background: linear-gradient(135deg, #6b7280, #374151); }
+.grade-bg--g1 { background: linear-gradient(135deg, #3b82f6, #1e40af); }
+  .grade-bg--g2 { background: linear-gradient(135deg, #ec4899, #be185d); }
+  .grade-bg--g3 { background: linear-gradient(135deg, #22c55e, #15803d); }
+  .grade-bg--op { background: linear-gradient(135deg, #6b7280, #374151); }
+  .grade-bg--preop { background: linear-gradient(135deg, #9ca3af, #4b5563); }
 
   .filled-slot__name {
     display: none;
@@ -377,9 +377,9 @@
   }
 
   .slot-cell--filled { background: #f9fafb; }
-  .slot-cell--goal { background: #eff6ff; border-color: #93c5fd; }
+  .slot-cell--goal { background: #fef2f2; border-color: #fca5a5; }
   .slot-cell--hidden-factor { background: #fef3c7; border-color: #fcd34d; }
-  .slot-cell--g1-auto { background: #fce7f3; border-color: #f9a8d4; }
+  .slot-cell--g1-auto { background: #dbeafe; border-color: #93c5fd; }
   .slot-cell--filler { background: #f9fafb; border-color: #e5e7eb; }
   .slot-cell--filler .filled-slot { opacity: 0.85; }
 
@@ -427,9 +427,9 @@
     z-index: 2;
   }
 
-  .badge--goal { background: #3b82f6; }
+.badge--goal { background: #ef4444; }
   .badge--hidden { background: #f59e0b; }
-  .badge--g1auto { background: #ec4899; }
+  .badge--g1auto { background: #3b82f6; }
   .badge--filler { background: #6b7280; }
 
   .filled-slot__image {
@@ -469,12 +469,11 @@
     background: rgba(0, 0, 0, 0.3);
   }
 
-  .grade-bg--g1 { background: linear-gradient(135deg, #dc2626, #991b1b); }
-  .grade-bg--g2 { background: linear-gradient(135deg, #ea580c, #9a3412); }
-  .grade-bg--g3 { background: linear-gradient(135deg, #ca8a04, #713f12); }
-  .grade-bg--op { background: linear-gradient(135deg, #3b82f6, #1e40af); }
-  .grade-bg--preop { background: linear-gradient(135deg, #6b7280, #374151); }
-
+.grade-bg--g1 { background: linear-gradient(135deg, #3b82f6, #1e40af); }
+  .grade-bg--g2 { background: linear-gradient(135deg, #ec4899, #be185d); }
+  .grade-bg--g3 { background: linear-gradient(135deg, #22c55e, #15803d); }
+  .grade-bg--op { background: linear-gradient(135deg, #6b7280, #374151); }
+  .grade-bg--preop { background: linear-gradient(135deg, #9ca3af, #4b5563); }
   .filled-slot__info {
     display: flex;
     align-items: center;
@@ -620,4 +619,47 @@
     padding: 6px 4px;
     font-size: 11px;
   }
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* 슬롯 툴팁 (배치 사유 표시)                                        */
+/* ═══════════════════════════════════════════════════════════════ */
+
+.slot-tooltip {
+  position: fixed;
+  z-index: 1000;
+  padding: 10px 12px;
+  background: #1f2937;
+  color: white;
+  border-radius: 6px;
+  line-height: 1.5;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+  pointer-events: none;
+  animation: slotTooltipFade 0.15s ease-out;
+  width: 260px;
+  max-width: calc(100vw - 24px);
+  word-break: keep-all;
+}
+
+@keyframes slotTooltipFade {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.slot-tooltip__primary {
+  font-weight: 700;
+  font-size: 13px;
+  margin-bottom: 4px;
+  color: white;
+}
+
+.slot-tooltip__secondary {
+  font-size: 11.5px;
+  color: #fef3c7;
 }

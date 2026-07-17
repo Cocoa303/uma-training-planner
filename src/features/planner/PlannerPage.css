@@ -161,10 +161,10 @@
 
 .g1-auto-btn {
   padding: 10px 16px;
-  border: 1px solid #ec4899;
+  border: 1px solid #3b82f6;
   border-radius: 6px;
   background: white;
-  color: #ec4899;
+  color: #3b82f6;
   cursor: pointer;
   font-size: 13px;
   font-weight: 600;
@@ -172,16 +172,16 @@
 }
 
 .g1-auto-btn:hover {
-  background: #fdf2f8;
+  background: #eff6ff;
 }
 
 .g1-auto-btn--active {
-  background: #ec4899;
+  background: #3b82f6;
   color: white;
 }
 
 .g1-auto-btn--active:hover {
-  background: #db2777;
+  background: #2563eb;
 }
 
 .optimize-btn {
