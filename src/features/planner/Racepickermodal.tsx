@@ -25,6 +25,7 @@ interface Props {
   selections: SlotSelections;
   ownership: SlotOwnership | undefined;
   onSelect: (raceId: string) => void;
+  onClear: () => void;
   onClose: () => void;
 }
 
@@ -44,7 +45,9 @@ export function RacePickerModal({
   character,
   filter,
   selections,
+  ownership,
   onSelect,
+  onClear,
   onClose,
 }: Props) {
   const effective = useMemo(() => {
@@ -65,6 +68,14 @@ export function RacePickerModal({
     const slot = slots.find((s) => s.turnIndex === turnIndex);
     return slot?.races ?? [];
   }, [turnIndex, className]);
+
+  const currentRaceId = selections[turnIndex];
+  const currentRace = races.find((r) => r.id === currentRaceId);
+  const isGoal = ownership?.kind === "goal";
+  const isPinned = ownership?.kind === "hidden" && ownership.pinned === true;
+
+  // 해제 가능 여부: 배치돼 있고 + goal 아님 + pinned 아님
+  const canClear = !!currentRace && !isGoal && !isPinned;
 
   const sortedEntries = useMemo(() => {
     const withWinrate = races.map((race) => {
@@ -90,6 +101,11 @@ export function RacePickerModal({
     return withWinrate;
   }, [races, effective, selections, turnIndex]);
 
+  const handleClear = () => {
+    onClear();
+    onClose();
+  };
+
   return (
     <div className="race-picker-backdrop" onClick={onClose}>
       <div className="race-picker" onClick={(e) => e.stopPropagation()}>
@@ -100,48 +116,74 @@ export function RacePickerModal({
           <button className="race-picker__close" onClick={onClose}>×</button>
         </div>
 
+        {/* 배치 해제 버튼: 현재 슬롯에 레이스가 있고, goal/pinned 아닐 때만 노출 */}
+        {currentRace && (
+          <div className="race-picker__current-bar">
+            <div className="race-picker__current-info">
+              <span className="race-picker__current-label">현재 배치:</span>
+              <span className="race-picker__current-name">{currentRace.name}</span>
+            </div>
+            {canClear ? (
+              <button
+                className="race-picker__clear-btn"
+                onClick={handleClear}
+                title="이 슬롯 비우기"
+              >
+                🗑 배치 해제
+              </button>
+            ) : (
+              <span className="race-picker__lock-info">
+                {isGoal ? "🔒 목표 레이스 (해제 불가)" : "📌 고정됨 (인자 고정 해제 필요)"}
+              </span>
+            )}
+          </div>
+        )}
+
         <div className="race-picker__body">
           {sortedEntries.length === 0 ? (
             <div className="race-picker__empty">개최 레이스 없음</div>
           ) : (
             <div className="race-picker__list">
-              {sortedEntries.map(({ race, winrate }) => (
-                <button
-                  key={race.id}
-                  className="race-option-card"
-                  onClick={() => onSelect(race.id)}
-                >
-                  <div className="race-option-card__image">
-                    {race.image ? (
-                      <img src={assetPath(race.image)} alt={race.name} />
-                    ) : (
-                      <div className={`race-option-card__placeholder grade-bg--${gradeClass(race.grade)}`}>
-                        <span>{race.grade}</span>
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="race-option-card__info">
-                    <div className="race-option-card__title-row">
-                      <span className={`grade-badge grade-badge--${gradeClass(race.grade)}`}>
-                        {race.grade}
-                      </span>
-                      <span className="race-option-card__name">{race.name}</span>
+              {sortedEntries.map(({ race, winrate }) => {
+                const isCurrent = race.id === currentRaceId;
+                return (
+                  <button
+                    key={race.id}
+                    className={`race-option-card ${isCurrent ? "race-option-card--current" : ""}`}
+                    onClick={() => onSelect(race.id)}
+                  >
+                    <div className="race-option-card__image">
+                      {race.image ? (
+                        <img src={assetPath(race.image)} alt={race.name} />
+                      ) : (
+                        <div className={`race-option-card__placeholder grade-bg--${gradeClass(race.grade)}`}>
+                          <span>{race.grade}</span>
+                        </div>
+                      )}
                     </div>
 
-                    <div className="race-option-card__meta">
-                      {race.venue} · {race.surface} · {race.distance}m ({race.distanceCategory})
-                      {race.side ? ` · ${race.side}` : ""}
-                    </div>
-
-                    {winrate !== null && (
-                      <div className={`race-option-card__winrate ${winrateClass(winrate)}`}>
-                        {winrate}%
+                    <div className="race-option-card__info">
+                      <div className="race-option-card__title-row">
+                        <span className={`grade-badge grade-badge--${gradeClass(race.grade)}`}>
+                          {race.grade}
+                        </span>
+                        <span className="race-option-card__name">{race.name}</span>
                       </div>
-                    )}
-                  </div>
-                </button>
-              ))}
+
+                      <div className="race-option-card__meta">
+                        {race.venue} · {race.surface} · {race.distance}m ({race.distanceCategory})
+                        {race.side ? ` · ${race.side}` : ""}
+                      </div>
+
+                      {winrate !== null && (
+                        <div className={`race-option-card__winrate ${winrateClass(winrate)}`}>
+                          {winrate}%
+                        </div>
+                      )}
+                    </div>
+                  </button>
+                );
+              })}
             </div>
           )}
         </div>

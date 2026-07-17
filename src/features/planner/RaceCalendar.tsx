@@ -135,21 +135,22 @@ export function RaceCalendar({
 
       {pickerSlot && (
         <RacePickerModal
-          turnIndex={pickerSlot.turnIndex}
-          className={pickerSlot.className}
-          month={pickerSlot.month}
-          half={pickerSlot.half}
-          character={character}
-          filter={filter}
-          selections={selections}
-          ownership={ownerships[pickerSlot.turnIndex]}
-          onSelect={(raceId) => {
-            onSelectRace(pickerSlot.turnIndex, raceId);
-            setPickerSlot(null);
-          }}
-          onClose={() => setPickerSlot(null)}
-        />
-      )}
+        turnIndex={pickerSlot.turnIndex}
+        className={pickerSlot.className}
+        month={pickerSlot.month}
+        half={pickerSlot.half}
+        character={character}
+        filter={filter}
+        selections={selections}
+        ownership={ownerships[pickerSlot.turnIndex]}
+        onSelect={(raceId) => {
+          onSelectRace(pickerSlot.turnIndex, raceId);
+          setPickerSlot(null);
+        }}
+        onClear={() => onClearSlot(pickerSlot.turnIndex)}
+        onClose={() => setPickerSlot(null)}
+      />
+    )}
     </div>
   );
 }
