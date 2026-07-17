@@ -92,9 +92,9 @@ const GRADE_SCORE_MAP: Record<RaceGrade, number> = {
 const EXHAUSTIVE_TIMEOUT_MS = 5000;
 
 // 자동 채움 정책 상수
-const EXCLUDED_FILL_GRADES: RaceGrade[] = ["OP", "G3"];
+// 자동 채움 정책 상수
+const EXCLUDED_FILL_GRADES: RaceGrade[] = ["OP", "Pre-OP"];
 const SUMMER_CAMP_MONTHS = [7, 8]; // 여름 캠프 기간 - 자동 채움 스킵
-
 interface Candidate {
   turnIndex: number;
   race: Race;
