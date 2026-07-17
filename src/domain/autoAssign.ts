@@ -92,9 +92,58 @@ const GRADE_SCORE_MAP: Record<RaceGrade, number> = {
 const EXHAUSTIVE_TIMEOUT_MS = 5000;
 
 // 자동 채움 정책 상수
-// 자동 채움 정책 상수
-const EXCLUDED_FILL_GRADES: RaceGrade[] = ["OP", "Pre-OP"];
+const EXCLUDED_FILL_GRADES: RaceGrade[] = ["OP", "G3", "Pre-OP"];
 const SUMMER_CAMP_MONTHS = [7, 8]; // 여름 캠프 기간 - 자동 채움 스킵
+
+// ─── 성별 선호 (수말/암말 삼관 인자 tie-break) ─────────────────────────
+
+/**
+ * 배치된 인자에 따른 성별 지향.
+ * 주니어 12월 전반 한신/잔디/1600m 자리에 아사히배 퓨처러티 스테이크스(수말)와
+ * 한신 쥬버나일 필리스(암말)가 동시에 열리는데, 승률 계산은 두 레이스가 완전히 같아
+ * 어느 쪽을 선택할지 결정하지 못한다. 유저가 배치한 인자로 성별을 추정해 tie-break.
+ */
+const MALE_FACTOR_IDS = ["triple-crown", "perfect-crown"];
+const FEMALE_FACTOR_IDS = ["triple-tiara", "perfect-tiara"];
+
+const GENDER_PREFERRED_RACE_NAMES: Record<"male" | "female", string> = {
+  male: "아사히배 퓨처러티 스테이크스",
+  female: "한신 쥬버나일 필리스",
+};
+
+function getGenderPreference(
+  state: PlannerState
+): "male" | "female" | null {
+  let hasMale = false;
+  let hasFemale = false;
+  for (const ownership of Object.values(state.ownerships)) {
+    if (ownership?.kind !== "hidden") continue;
+    if (MALE_FACTOR_IDS.includes(ownership.factorId)) hasMale = true;
+    if (FEMALE_FACTOR_IDS.includes(ownership.factorId)) hasFemale = true;
+  }
+  if (hasMale && !hasFemale) return "male";
+  if (hasFemale && !hasMale) return "female";
+  return null;
+}
+
+/**
+ * 성별 선호에 따른 tie-break comparator.
+ * 두 후보 중 선호 레이스가 있으면 우선, 없으면 0 반환.
+ */
+function compareGenderPreference(
+  aRaceName: string,
+  bRaceName: string,
+  genderPref: "male" | "female" | null
+): number {
+  if (!genderPref) return 0;
+  const preferred = GENDER_PREFERRED_RACE_NAMES[genderPref];
+  const aMatch = aRaceName === preferred;
+  const bMatch = bRaceName === preferred;
+  if (aMatch && !bMatch) return -1;
+  if (bMatch && !aMatch) return 1;
+  return 0;
+}
+
 interface Candidate {
   turnIndex: number;
   race: Race;
@@ -641,6 +690,8 @@ function assignAnyRace(
   effective: ReturnType<typeof effectiveAptitudes>,
   options: AutoAssignOptions
 ): AssignResult {
+  const genderPref = getGenderPreference(state);
+
   for (const [, id] of Object.entries(state.selections)) {
     if (!id) continue;
     const race = allRaces.find((r) => r.id === id);
@@ -670,7 +721,9 @@ function assignAnyRace(
       const gradeDiff =
         (GRADE_SCORE_MAP[b.cand.race.grade] ?? 0) - (GRADE_SCORE_MAP[a.cand.race.grade] ?? 0);
       if (gradeDiff !== 0) return gradeDiff;
-      return b.cand.winrate - a.cand.winrate;
+      const winDiff = b.cand.winrate - a.cand.winrate;
+      if (winDiff !== 0) return winDiff;
+      return compareGenderPreference(a.cand.race.name, b.cand.race.name, genderPref);
     });
 
   if (usable.length > 0) {
@@ -1177,6 +1230,7 @@ export function autoAssignG1(
   const effective = effectiveAptitudes(character.aptitudes, state.filter);
   const owner: SlotOwnership = { kind: "g1" };
   const g1Races = allRaces.filter((r) => r.grade === "G1" && !r.isOverseas);
+  const genderPref = getGenderPreference(state);
 
   const initialCandidates: { turnIndex: number; race: Race; initialWinrate: number }[] = [];
   for (const race of g1Races) {
@@ -1198,6 +1252,8 @@ export function autoAssignG1(
 
   initialCandidates.sort((a, b) => {
     if (b.initialWinrate !== a.initialWinrate) return b.initialWinrate - a.initialWinrate;
+    const genderCmp = compareGenderPreference(a.race.name, b.race.name, genderPref);
+    if (genderCmp !== 0) return genderCmp;
     return a.turnIndex - b.turnIndex;
   });
 
@@ -1303,8 +1359,9 @@ function fillEmptySlots(
   let workingState = state;
   let filledCount = 0;
   const owner: SlotOwnership = { kind: "filler" };
+  const genderPref = getGenderPreference(state);
 
-  // 자동 채움 후보 인덱싱 단계에서 이미 OP/G3, 해외 제외.
+  // 자동 채움 후보 인덱싱 단계에서 이미 OP/G3/Pre-OP, 해외 제외.
   const raceByTurn = new Map<number, Race[]>();
   for (const race of allRaces) {
     if (race.isOverseas) continue;
@@ -1349,7 +1406,9 @@ function fillEmptySlots(
       const scoreA = (GRADE_SCORE_MAP[a.race.grade] ?? 0) + dupA;
       const scoreB = (GRADE_SCORE_MAP[b.race.grade] ?? 0) + dupB;
       if (scoreB !== scoreA) return scoreB - scoreA;
-      return b.winrate - a.winrate;
+      const winDiff = b.winrate - a.winrate;
+      if (winDiff !== 0) return winDiff;
+      return compareGenderPreference(a.race.name, b.race.name, genderPref);
     });
 
     for (const cand of candidates) {
@@ -1455,9 +1514,6 @@ export function runOptimization(
   const mandatoryFail: string[] = [];
 
   // ─── G1 우선 모드: 인자 배치 전에 G1 먼저 채움 ─────
-  // pinned/goal 로 이미 확보한 슬롯 뒤에, 승률 높은 G1 을 선점.
-  // 이후 인자 재배치 / 조합 탐색은 canOverwrite 규칙에 따라
-  // G1 슬롯 위에 덮어쓸 수 있음 (hidden > g1 우선순위).
   if (priority === "g1") {
     const { state: afterG1Early } = autoAssignG1(mandatoryState, character, options);
     mandatoryState = afterG1Early;
@@ -1555,7 +1611,6 @@ export function runOptimization(
   }
 
   // ─── 인자 우선 모드: 인자 배치 후 남은 자리에 G1 채움 ─────
-  // G1 우선 모드는 이미 앞에서 실행했으므로 다시 실행하지 않음.
   if (priority === "factor") {
     const { state: afterG1 } = autoAssignG1(workingState, character, options);
     workingState = afterG1;
@@ -1704,17 +1759,12 @@ function findBestFactorCombination(
     }
     if (!allOk) continue;
 
-    // 인자별 점수 (예외 처리 반영)
     let subsetFactorScore = 0;
     for (const f of subset) subsetFactorScore += getFactorScore(f.id);
 
-    // G1 우선 모드: G1 은 이미 앞에서 배치됐음.
-    //   calculateG1AndPenaltyScore 로 실제 남은 G1 점수를 산출.
-    // 인자 우선 모드: G1 은 조합 탐색 후에 배치될 예정.
-    //   빈 슬롯 수에 비례한 기대점수를 추정.
     let estG1Score: number;
     if (priority === "g1") {
-      estG1Score = 0; // 이미 실측 반영됨
+      estG1Score = 0;
     } else {
       const emptySlots = countEmptySlots(trialState);
       estG1Score = Math.min(emptySlots, 24) * G1_SCORE * 0.5;
