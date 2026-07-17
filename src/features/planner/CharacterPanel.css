@@ -380,3 +380,63 @@
     font-size: 11px;
   }
 }
+/* ─── 배치 현황 (G1/G2/G3 카운트) ─── */
+
+.race-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.race-stats__cells {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+}
+
+.race-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 6px 2px;
+  border-radius: 4px;
+  color: white;
+  gap: 2px;
+}
+
+.race-stat__label {
+  font-size: 10px;
+  font-weight: 700;
+  opacity: 0.9;
+  letter-spacing: 0.03em;
+}
+
+.race-stat__count {
+  font-size: 18px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+/* RaceCalendar 의 grade-bg--* 와 동일한 팔레트 재사용 */
+.race-stat--g1 {
+  background: linear-gradient(135deg, #dc2626, #991b1b);
+}
+.race-stat--g2 {
+  background: linear-gradient(135deg, #ea580c, #9a3412);
+}
+.race-stat--g3 {
+  background: linear-gradient(135deg, #ca8a04, #713f12);
+}
+
+@media (max-width: 767px) {
+  .race-stat {
+    padding: 4px 2px;
+  }
+  .race-stat__label {
+    font-size: 9px;
+  }
+  .race-stat__count {
+    font-size: 15px;
+  }
+}

@@ -1,14 +1,23 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import type { Character, AptitudeGrade } from "../../types/character";
-import type { AptitudeFilter, AptitudeFilterGrade } from "../../domain/scheduler";
+import type { Race } from "../../types/race";
+import type {
+  AptitudeFilter,
+  AptitudeFilterGrade,
+  SlotSelections,
+} from "../../domain/scheduler";
 import { availableFilterGrades } from "../../domain/scheduler";
 import { CharacterPickerModal } from "./CharacterPickerModal";
 import { assetPath } from "../../utils/assetPath";
+import racesData from "../../../data/races.json";
 import "./CharacterPanel.css";
+
+const allRaces = racesData as Race[];
 
 interface Props {
   character: Character | null;
   filter: AptitudeFilter;
+  selections: SlotSelections;
   onSelectCharacter: (id: string) => void;
   onSetFilterGrade: (key: keyof AptitudeFilter, grade: AptitudeFilterGrade) => void;
 }
@@ -16,10 +25,24 @@ interface Props {
 export function CharacterPanel({
   character,
   filter,
+  selections,
   onSelectCharacter,
   onSetFilterGrade,
 }: Props) {
   const [modalOpen, setModalOpen] = useState(false);
+
+  const gradeCounts = useMemo(() => {
+    const counts: Record<"G1" | "G2" | "G3", number> = { G1: 0, G2: 0, G3: 0 };
+    for (const raceId of Object.values(selections)) {
+      if (!raceId) continue;
+      const race = allRaces.find((r) => r.id === raceId);
+      if (!race) continue;
+      if (race.grade === "G1") counts.G1++;
+      else if (race.grade === "G2") counts.G2++;
+      else if (race.grade === "G3") counts.G3++;
+    }
+    return counts;
+  }, [selections]);
 
   return (
     <aside className="character-panel">
@@ -113,6 +136,24 @@ export function CharacterPanel({
               />
             </div>
           </div>
+
+          <div className="race-stats">
+            <div className="apt-section__title">배치 현황</div>
+            <div className="race-stats__cells">
+              <div className="race-stat race-stat--g1">
+                <div className="race-stat__label">G1</div>
+                <div className="race-stat__count">{gradeCounts.G1}</div>
+              </div>
+              <div className="race-stat race-stat--g2">
+                <div className="race-stat__label">G2</div>
+                <div className="race-stat__count">{gradeCounts.G2}</div>
+              </div>
+              <div className="race-stat race-stat--g3">
+                <div className="race-stat__label">G3</div>
+                <div className="race-stat__count">{gradeCounts.G3}</div>
+              </div>
+            </div>
+          </div>
         </>
       )}
 
@@ -155,11 +196,6 @@ function AptCell({ label, grade }: { label: string; grade: AptitudeGrade }) {
  * 필터 등급 선택기 (드롭다운).
  * 원본 등급을 기본값으로 표시하고, 원본부터 A까지 선택 가능.
  * 원본이 S/A 면 필터 불필요 → 비활성 표시.
- *
- * 유저 관점:
- *   - 표시된 값 = 실제 사용될 적성 등급
- *   - 원본 그대로 선택 = 필터 OFF (내부적으로 grade=null)
- *   - 상승 등급 선택 = 필터 ON
  */
 function FilterGradeSelector({
   label,
@@ -178,7 +214,6 @@ function FilterGradeSelector({
   const availableGrades = availableFilterGrades(original);
   const canBeFiltered = availableGrades.length > 0;
 
-  // 표시할 등급: 필터 값이 있으면 그것, 없으면 원본
   const displayGrade: AptitudeGrade = grade ?? original;
   const isElevated = grade !== null;
 
@@ -194,8 +229,6 @@ function FilterGradeSelector({
   }, [open]);
 
   const handleSelect = (selected: AptitudeGrade) => {
-    // 원본과 같은 등급 선택 → filter=null (OFF)
-    // 그 외 → filter=selected (내부적으로 A/B/C 만 가능)
     if (selected === original) {
       onChange(null);
     } else {
