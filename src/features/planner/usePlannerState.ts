@@ -25,6 +25,9 @@ import {
   savePlannerState,
   loadMinWinrate,
   saveMinWinrate,
+  loadOptimizePriority,
+  saveOptimizePriority,
+  type OptimizePriority,
 } from "../../domain/persistence";
 
 const characters = charactersData as Character[];
@@ -33,17 +36,13 @@ const allRaces = racesData as Race[];
 /**
  * 캐릭터 목표 레이스를 races.json 의 실제 Race 로 매칭.
  *
- * 인벤 크롤 데이터에는 두 가지 종류의 이상이 존재하여 단순 이름 매칭만으로는 실패한다:
- *   (A) 축약형 이름 저장 (예: "아사히배 FS", "스프린터스 S", "마일 CS")
- *   (B) deadline 의 month/half 가 실제 개최 턴과 어긋남
- *
  * 매칭 순서:
  *   1. 이름 정확 매칭 (턴+학년 완전 일치)
  *   2. 이름 양방향 부분 매칭 ("일본 더비" ↔ "도쿄 우준 (일본 더비)")
  *   3. raceInfo 매칭 (grade+venue+surface+distance)
- *      3a. 유일하면 채택 — (A) 처리
+ *      3a. 유일하면 채택 — 축약형 이름 대응
  *      3b. 여러 개면 goalName 첫 토큰으로 disambiguate
- *   4. 학년 내 이름 정확 매칭 (턴 무시, 유일하면 채택) — (B) 처리
+ *   4. 학년 내 이름 정확 매칭 (턴 무시, 유일하면 채택) — deadline 오류 대응
  */
 function findRaceByGoal(
   goalName: string,
@@ -154,6 +153,8 @@ function buildFactorMap(
 export function usePlannerState() {
   const [state, setState] = useState<PlannerState>(INITIAL_STATE);
   const [minWinrate, setMinWinrateState] = useState<number>(100);
+  const [optimizePriority, setOptimizePriorityState] =
+    useState<OptimizePriority>("factor");
   const [lastAssignResult, setLastAssignResult] = useState<{
     factorId?: string;
     success: boolean;
@@ -163,6 +164,7 @@ export function usePlannerState() {
   useEffect(() => {
     setState(loadPlannerState());
     setMinWinrateState(loadMinWinrate());
+    setOptimizePriorityState(loadOptimizePriority());
   }, []);
 
   useEffect(() => {
@@ -173,6 +175,11 @@ export function usePlannerState() {
   const setMinWinrate = useCallback((value: number) => {
     setMinWinrateState(value);
     saveMinWinrate(value);
+  }, []);
+
+  const setOptimizePriority = useCallback((value: OptimizePriority) => {
+    setOptimizePriorityState(value);
+    saveOptimizePriority(value);
   }, []);
 
   const character: Character | null = state.characterId
@@ -398,7 +405,7 @@ export function usePlannerState() {
       state,
       character,
       factorMap,
-      { minWinrate }
+      { minWinrate, priority: optimizePriority }
     );
 
     setState(newState);
@@ -406,6 +413,7 @@ export function usePlannerState() {
     const parts: string[] = [];
     parts.push(`인자 ${result.chosenFactorCount}개`);
     parts.push(`총점 ${result.totalScore}`);
+    parts.push(`${result.priority === "g1" ? "G1 우선" : "인자 우선"}`);
     if (result.filledEmptyCount > 0) {
       parts.push(`빈 슬롯 ${result.filledEmptyCount} 채움`);
     }
@@ -425,13 +433,15 @@ export function usePlannerState() {
       success: true,
       message: lines.join("\n"),
     });
-  }, [character, state, minWinrate]);
+  }, [character, state, minWinrate, optimizePriority]);
 
   return {
     state,
     character,
     minWinrate,
     setMinWinrate,
+    optimizePriority,
+    setOptimizePriority,
     selectCharacter,
     setAptitudeFilter,
     selectRace,

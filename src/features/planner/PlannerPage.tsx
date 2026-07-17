@@ -11,6 +11,8 @@ export function PlannerPage() {
     character,
     minWinrate,
     setMinWinrate,
+    optimizePriority,
+    setOptimizePriority,
     selectCharacter,
     setAptitudeFilter,
     selectRace,
@@ -96,6 +98,26 @@ export function PlannerPage() {
 
       {character && (
         <>
+          <div className="priority-toggle-group">
+            <label className="priority-toggle-label">최적화 우선순위</label>
+            <div className="priority-toggle">
+              <button
+                className={`priority-toggle__btn ${optimizePriority === "factor" ? "priority-toggle__btn--active" : ""}`}
+                onClick={() => setOptimizePriority("factor")}
+                title="히든 인자를 먼저 배치하고 남은 자리에 G1"
+              >
+                인자 우선
+              </button>
+              <button
+                className={`priority-toggle__btn ${optimizePriority === "g1" ? "priority-toggle__btn--active" : ""}`}
+                onClick={() => setOptimizePriority("g1")}
+                title="승률 높은 G1 을 먼저 채우고 인자는 그 사이에서 배치"
+              >
+                G1 우선
+              </button>
+            </div>
+          </div>
+
           <div className="auto-btn-row">
             <button
               className={`g1-auto-btn ${g1AutoActive ? "g1-auto-btn--active" : ""}`}

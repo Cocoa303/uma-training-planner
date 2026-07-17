@@ -3,6 +3,7 @@ import { INITIAL_STATE, EMPTY_FILTER } from "./scheduler";
 
 const STATE_KEY = "uma-training-planner:v1";
 const MIN_WINRATE_KEY = "uma-training-planner:min-winrate";
+const OPTIMIZE_PRIORITY_KEY = "uma-training-planner:optimize-priority";
 
 /**
  * 필터 값 하나를 마이그레이션.
@@ -96,6 +97,33 @@ export function loadMinWinrate(): number {
 export function saveMinWinrate(value: number): void {
   try {
     localStorage.setItem(MIN_WINRATE_KEY, String(value));
+  } catch {
+    // ignore
+  }
+}
+
+// ─── 최적화 우선순위 설정 ─────────────────────────
+
+/**
+ * 최적화 시 배치 순서.
+ * - "factor": 히든 인자 조합 탐색 후 G1 자동 배치 (기본)
+ * - "g1": G1 자동 배치 후 히든 인자 조합 탐색
+ */
+export type OptimizePriority = "factor" | "g1";
+
+export function loadOptimizePriority(): OptimizePriority {
+  try {
+    const raw = localStorage.getItem(OPTIMIZE_PRIORITY_KEY);
+    if (raw === "factor" || raw === "g1") return raw;
+    return "factor";
+  } catch {
+    return "factor";
+  }
+}
+
+export function saveOptimizePriority(value: OptimizePriority): void {
+  try {
+    localStorage.setItem(OPTIMIZE_PRIORITY_KEY, value);
   } catch {
     // ignore
   }

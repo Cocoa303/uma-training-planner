@@ -19,6 +19,8 @@ const allRaces = racesData as Race[];
 
 // ─── 결과 타입 ─────────────────────────────
 
+export type OptimizePriority = "factor" | "g1";
+
 export interface AssignResult {
   success: boolean;
   assigned: { turnIndex: number; raceId: string }[];
@@ -38,15 +40,18 @@ export interface OptimizeResult {
   totalScore: number;
   method: "exhaustive" | "greedy";
   elapsedMs: number;
+  priority: OptimizePriority;
   reason?: string;
 }
 
 export interface AutoAssignOptions {
   minWinrate: number;
+  priority?: OptimizePriority;
 }
 
 const DEFAULT_OPTIONS: AutoAssignOptions = {
   minWinrate: 100,
+  priority: "factor",
 };
 
 // ─── 점수 상수 ─────────────────────────
@@ -69,7 +74,6 @@ const HIDDEN_FACTOR_SCORE_MAP: Record<string, number> = {
 
 /**
  * 활성화 여부와 무관하게 최적화 시 무조건 우선 배치 시도할 인자 ID들.
- * 이 인자들은 조합 탐색 대상이 아니라 강제 배치 대상이 된다.
  */
 const PRIORITY_FACTOR_IDS = ["perfect-crown", "perfect-tiara"];
 
@@ -86,6 +90,10 @@ const GRADE_SCORE_MAP: Record<RaceGrade, number> = {
 };
 
 const EXHAUSTIVE_TIMEOUT_MS = 5000;
+
+// 자동 채움 정책 상수
+const EXCLUDED_FILL_GRADES: RaceGrade[] = ["OP", "G3"];
+const SUMMER_CAMP_MONTHS = [7, 8]; // 여름 캠프 기간 - 자동 채움 스킵
 
 interface Candidate {
   turnIndex: number;
@@ -1286,10 +1294,6 @@ function calculateHiddenFactorScore(state: PlannerState): number {
 
 const MAX_TURN_INDEX = 72;
 
-// 자동 채움 정책 상수
-const EXCLUDED_FILL_GRADES: RaceGrade[] = ["OP", "G3"];
-const SUMMER_CAMP_MONTHS = [7, 8]; // 여름 캠프 기간 - 자동 채움 스킵
-
 function fillEmptySlots(
   state: PlannerState,
   effective: ReturnType<typeof effectiveAptitudes>,
@@ -1301,7 +1305,6 @@ function fillEmptySlots(
   const owner: SlotOwnership = { kind: "filler" };
 
   // 자동 채움 후보 인덱싱 단계에서 이미 OP/G3, 해외 제외.
-  // (여기서 걸러야 이후 후보 배열이 아예 비어 스킵됨)
   const raceByTurn = new Map<number, Race[]>();
   for (const race of allRaces) {
     if (race.isOverseas) continue;
@@ -1402,6 +1405,7 @@ export function runOptimization(
 ): { state: PlannerState; result: OptimizeResult } {
   const startTime = Date.now();
   const effective = effectiveAptitudes(character.aptitudes, state.filter);
+  const priority: OptimizePriority = options.priority ?? "factor";
 
   const activeFactorIds = new Set<string>();
   const manualBackup: { turnIndex: number; raceId: string }[] = [];
@@ -1450,6 +1454,15 @@ export function runOptimization(
   const mandatorySuccess: string[] = [];
   const mandatoryFail: string[] = [];
 
+  // ─── G1 우선 모드: 인자 배치 전에 G1 먼저 채움 ─────
+  // pinned/goal 로 이미 확보한 슬롯 뒤에, 승률 높은 G1 을 선점.
+  // 이후 인자 재배치 / 조합 탐색은 canOverwrite 규칙에 따라
+  // G1 슬롯 위에 덮어쓸 수 있음 (hidden > g1 우선순위).
+  if (priority === "g1") {
+    const { state: afterG1Early } = autoAssignG1(mandatoryState, character, options);
+    mandatoryState = afterG1Early;
+  }
+
   for (const factorId of activeFactorIds) {
     const factor = factorMap.get(factorId);
     if (!factor) continue;
@@ -1477,8 +1490,6 @@ export function runOptimization(
   // ═══════════════════════════════════════════════════════════════
   // 퍼펙트 크라운/티아라 강제 우선 배치
   // 활성화 안 되어 있어도 최우선 시도. 성공하면 반영, 실패하면 무시.
-  // 활성 상태는 건드리지 않음 (일회성, 다음 최적화 시 다시 시도).
-  // 이 인자들이 조합 탐색 후보에 포함되지 않도록 activeFactorIds 에 임시 추가.
   // ═══════════════════════════════════════════════════════════════
   for (const priorityId of PRIORITY_FACTOR_IDS) {
     if (activeFactorIds.has(priorityId)) continue;
@@ -1522,7 +1533,8 @@ export function runOptimization(
     mandatoryState,
     character,
     options,
-    startTime
+    startTime,
+    priority
   );
 
   let workingState = mandatoryState;
@@ -1542,8 +1554,12 @@ export function runOptimization(
     }
   }
 
-  const { state: afterG1 } = autoAssignG1(workingState, character, options);
-  workingState = afterG1;
+  // ─── 인자 우선 모드: 인자 배치 후 남은 자리에 G1 채움 ─────
+  // G1 우선 모드는 이미 앞에서 실행했으므로 다시 실행하지 않음.
+  if (priority === "factor") {
+    const { state: afterG1 } = autoAssignG1(workingState, character, options);
+    workingState = afterG1;
+  }
 
   let restoredManualCount = 0;
   let droppedManualCount = 0;
@@ -1612,6 +1628,7 @@ export function runOptimization(
       totalScore,
       method,
       elapsedMs,
+      priority,
       reason: reasons.length > 0 ? reasons.join(" / ") : undefined,
     },
   };
@@ -1622,7 +1639,8 @@ function findBestFactorCombination(
   baseState: PlannerState,
   character: Character,
   options: AutoAssignOptions,
-  startTime: number
+  startTime: number,
+  priority: OptimizePriority
 ): { chosenIds: string[]; method: "exhaustive" | "greedy"; timedOut: boolean } {
   const n = candidates.length;
 
@@ -1690,8 +1708,17 @@ function findBestFactorCombination(
     let subsetFactorScore = 0;
     for (const f of subset) subsetFactorScore += getFactorScore(f.id);
 
-    const emptySlots = countEmptySlots(trialState);
-    const estG1Score = Math.min(emptySlots, 24) * G1_SCORE * 0.5;
+    // G1 우선 모드: G1 은 이미 앞에서 배치됐음.
+    //   calculateG1AndPenaltyScore 로 실제 남은 G1 점수를 산출.
+    // 인자 우선 모드: G1 은 조합 탐색 후에 배치될 예정.
+    //   빈 슬롯 수에 비례한 기대점수를 추정.
+    let estG1Score: number;
+    if (priority === "g1") {
+      estG1Score = 0; // 이미 실측 반영됨
+    } else {
+      const emptySlots = countEmptySlots(trialState);
+      estG1Score = Math.min(emptySlots, 24) * G1_SCORE * 0.5;
+    }
     const penalty = calculateG1AndPenaltyScore(trialState);
     const totalScore = subsetFactorScore + estG1Score + penalty;
 
@@ -1725,7 +1752,6 @@ function greedySelect(
   const withEfficiency = factors.map((f) => {
     const { result } = autoAssignFactor(f, baseState, character, options);
     const slotsNeeded = result.success ? result.assigned.length : Infinity;
-    // 효율: 인자별 점수 / 필요 슬롯 수
     const efficiency = slotsNeeded > 0 ? getFactorScore(f.id) / slotsNeeded : 0;
     return { factor: f, efficiency, slotsNeeded };
   });
