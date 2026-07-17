@@ -66,6 +66,7 @@ export function PlannerPage() {
     <CharacterPanel
       character={character}
       filter={state.filter}
+      selections={state.selections}
       onSelectCharacter={selectCharacter}
       onSetFilterGrade={setAptitudeFilter}
     />
