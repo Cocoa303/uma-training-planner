@@ -1469,45 +1469,49 @@ export function runOptimization(
   const activeFactorIds = new Set<string>();
   const manualBackup: { turnIndex: number; raceId: string }[] = [];
 
-  for (const [key, ownership] of Object.entries(state.ownerships)) {
-    if (!ownership) continue;
-    const turnIndex = Number(key);
+for (const [key, ownership] of Object.entries(state.ownerships)) {
+  if (!ownership) continue;
+  const turnIndex = Number(key);
 
-    if (ownership.kind === "hidden") {
-      activeFactorIds.add(ownership.factorId);
-    } else if (ownership.kind === "manual") {
-      const raceId = state.selections[turnIndex];
-      if (raceId) {
-        manualBackup.push({ turnIndex, raceId });
-      }
+  if (ownership.kind === "hidden") {
+    activeFactorIds.add(ownership.factorId);
+  } else if (ownership.kind === "manual" && !ownership.pinned) {
+    // pinned manual 은 이미 baseState 에 포함됐으므로 백업 대상 아님
+    const raceId = state.selections[turnIndex];
+    if (raceId) {
+      manualBackup.push({ turnIndex, raceId });
     }
   }
+}
 
-  // baseState 구성:
-  // - goal 슬롯은 무조건 유지
-  // - pinned hidden 슬롯도 그대로 유지 (재배치 시도 안 함, 승률 재검사 안 함)
-  const baseState: PlannerState = {
-    ...state,
-    selections: {},
-    ownerships: {},
-  };
-  const pinnedFactorIds = new Set<string>();
+// baseState 구성:
+// - goal 슬롯은 무조건 유지
+// - pinned 슬롯도 그대로 유지 (kind 무관)
+//   pinned hidden 은 activeFactorIds 재배치도 스킵.
+const baseState: PlannerState = {
+  ...state,
+  selections: {},
+  ownerships: {},
+};
+const pinnedFactorIds = new Set<string>();
 
-  for (const [key, ownership] of Object.entries(state.ownerships)) {
-    if (!ownership) continue;
-    const turnIndex = Number(key);
-    const raceId = state.selections[turnIndex];
-    if (!raceId) continue;
+for (const [key, ownership] of Object.entries(state.ownerships)) {
+  if (!ownership) continue;
+  const turnIndex = Number(key);
+  const raceId = state.selections[turnIndex];
+  if (!raceId) continue;
 
-    if (ownership.kind === "goal") {
-      baseState.selections[turnIndex] = raceId;
-      baseState.ownerships[turnIndex] = { kind: "goal" };
-    } else if (ownership.kind === "hidden" && ownership.pinned) {
-      baseState.selections[turnIndex] = raceId;
-      baseState.ownerships[turnIndex] = ownership;
+  if (ownership.kind === "goal") {
+    baseState.selections[turnIndex] = raceId;
+    baseState.ownerships[turnIndex] = { kind: "goal" };
+  } else if (ownership.pinned) {
+    baseState.selections[turnIndex] = raceId;
+    baseState.ownerships[turnIndex] = ownership;
+    if (ownership.kind === "hidden") {
       pinnedFactorIds.add(ownership.factorId);
     }
   }
+}
 
   let mandatoryState = baseState;
   const mandatorySuccess: string[] = [];

@@ -30,11 +30,6 @@ interface FactorsFile {
 }
 const factors = factorsData as unknown as FactorsFile;
 
-/**
- * factor id → 표시 이름 매핑.
- * factors.json (nickname + hidden) 과 동적 생성 G1 인자를 한 번에 병합.
- * 모듈 로드 시 한 번만 계산 (races.json / factors.json 모두 정적).
- */
 const FACTOR_NAME_BY_ID: Map<string, string> = (() => {
   const map = new Map<string, string>();
   for (const f of factors.nickname) map.set(f.id, f.name);
@@ -43,14 +38,17 @@ const FACTOR_NAME_BY_ID: Map<string, string> = (() => {
   return map;
 })();
 
+const LONG_PRESS_MS = 1000;
+
 interface Props {
   character: Character | null;
   filter: AptitudeFilter;
   selections: SlotSelections;
   ownerships: SlotOwnerships;
-  onSelectRace: (turnIndex: number, raceId: string) => void;
+  onSelectRace: (turnIndex: number, raceId: string, pinned?: boolean) => void;
   onClearSlot: (turnIndex: number) => void;
-  /** 활성 뷰 (외부 관리) */
+  onToggleSlotPin: (turnIndex: number) => void;
+  isSlotPinnedAt: (turnIndex: number) => boolean;
   activeView: ActiveView;
   onChangeView: (view: ActiveView) => void;
 }
@@ -62,6 +60,8 @@ export function RaceCalendar({
   ownerships,
   onSelectRace,
   onClearSlot,
+  onToggleSlotPin,
+  isSlotPinnedAt,
   activeView,
   onChangeView,
 }: Props) {
@@ -117,8 +117,10 @@ export function RaceCalendar({
               effective={effective}
               selections={selections}
               ownerships={ownerships}
+              isSlotPinnedAt={isSlotPinnedAt}
               onOpenPicker={openPicker}
               onClearSlot={onClearSlot}
+              onToggleSlotPin={onToggleSlotPin}
             />
           ))}
         </div>
@@ -128,29 +130,33 @@ export function RaceCalendar({
           effective={effective}
           selections={selections}
           ownerships={ownerships}
+          isSlotPinnedAt={isSlotPinnedAt}
           onOpenPicker={openPicker}
           onClearSlot={onClearSlot}
+          onToggleSlotPin={onToggleSlotPin}
         />
       )}
 
       {pickerSlot && (
         <RacePickerModal
-        turnIndex={pickerSlot.turnIndex}
-        className={pickerSlot.className}
-        month={pickerSlot.month}
-        half={pickerSlot.half}
-        character={character}
-        filter={filter}
-        selections={selections}
-        ownership={ownerships[pickerSlot.turnIndex]}
-        onSelect={(raceId) => {
-          onSelectRace(pickerSlot.turnIndex, raceId);
-          setPickerSlot(null);
-        }}
-        onClear={() => onClearSlot(pickerSlot.turnIndex)}
-        onClose={() => setPickerSlot(null)}
-      />
-    )}
+          turnIndex={pickerSlot.turnIndex}
+          className={pickerSlot.className}
+          month={pickerSlot.month}
+          half={pickerSlot.half}
+          character={character}
+          filter={filter}
+          selections={selections}
+          ownership={ownerships[pickerSlot.turnIndex]}
+          isSlotPinnedAt={isSlotPinnedAt}
+          onSelect={(raceId, pinned) => {
+            onSelectRace(pickerSlot.turnIndex, raceId, pinned);
+            setPickerSlot(null);
+          }}
+          onClear={() => onClearSlot(pickerSlot.turnIndex)}
+          onTogglePin={() => onToggleSlotPin(pickerSlot.turnIndex)}
+          onClose={() => setPickerSlot(null)}
+        />
+      )}
     </div>
   );
 }
@@ -162,6 +168,7 @@ interface ClassSectionProps {
   effective: ReturnType<typeof effectiveAptitudes> | null;
   selections: SlotSelections;
   ownerships: SlotOwnerships;
+  isSlotPinnedAt: (turnIndex: number) => boolean;
   onOpenPicker: (
     turnIndex: number,
     className: ClassLevel,
@@ -169,6 +176,7 @@ interface ClassSectionProps {
     half: 1 | 2
   ) => void;
   onClearSlot: (turnIndex: number) => void;
+  onToggleSlotPin: (turnIndex: number) => void;
 }
 
 function ClassSection({
@@ -176,8 +184,10 @@ function ClassSection({
   effective,
   selections,
   ownerships,
+  isSlotPinnedAt,
   onOpenPicker,
   onClearSlot,
+  onToggleSlotPin,
 }: ClassSectionProps) {
   return (
     <section className="class-section">
@@ -189,20 +199,23 @@ function ClassSection({
         effective={effective}
         selections={selections}
         ownerships={ownerships}
+        isSlotPinnedAt={isSlotPinnedAt}
         onOpenPicker={onOpenPicker}
         onClearSlot={onClearSlot}
+        onToggleSlotPin={onToggleSlotPin}
       />
     </section>
   );
 }
 
-// ─── 학년 그리드 (공통) ───────────
+// ─── 학년 그리드 ───────────
 
 interface ClassGridProps {
   className: ClassLevel;
   effective: ReturnType<typeof effectiveAptitudes> | null;
   selections: SlotSelections;
   ownerships: SlotOwnerships;
+  isSlotPinnedAt: (turnIndex: number) => boolean;
   onOpenPicker: (
     turnIndex: number,
     className: ClassLevel,
@@ -210,6 +223,7 @@ interface ClassGridProps {
     half: 1 | 2
   ) => void;
   onClearSlot: (turnIndex: number) => void;
+  onToggleSlotPin: (turnIndex: number) => void;
 }
 
 function ClassGrid({
@@ -217,8 +231,10 @@ function ClassGrid({
   effective,
   selections,
   ownerships,
+  isSlotPinnedAt,
   onOpenPicker,
   onClearSlot,
+  onToggleSlotPin,
 }: ClassGridProps) {
   const slots = getSlotsForClass(className);
 
@@ -234,10 +250,12 @@ function ClassGrid({
             selections={selections}
             ownership={ownerships[slot.turnIndex]}
             selectedRaceId={selectedRaceId}
+            isPinned={isSlotPinnedAt(slot.turnIndex)}
             onOpenPicker={() =>
               onOpenPicker(slot.turnIndex, className, slot.month, slot.half)
             }
             onClearSlot={onClearSlot}
+            onTogglePin={() => onToggleSlotPin(slot.turnIndex)}
           />
         );
       })}
@@ -253,8 +271,10 @@ interface SlotCellProps {
   selections: SlotSelections;
   ownership: SlotOwnership | undefined;
   selectedRaceId: string | undefined;
+  isPinned: boolean;
   onOpenPicker: () => void;
   onClearSlot: (turnIndex: number) => void;
+  onTogglePin: () => void;
 }
 
 function SlotCell({
@@ -263,13 +283,15 @@ function SlotCell({
   selections,
   ownership,
   selectedRaceId,
+  isPinned,
   onOpenPicker,
   onClearSlot,
+  onTogglePin,
 }: SlotCellProps) {
   const selectedRace = slot.races.find((r) => r.id === selectedRaceId);
   const isGoal = ownership?.kind === "goal";
-  const badge = getSlotBadge(ownership);
-  const cellClassName = getSlotClassName(ownership, !!selectedRace);
+  const badge = getSlotBadge(ownership, isPinned);
+  const cellClassName = getSlotClassName(ownership, !!selectedRace, isPinned);
 
   const winrate =
     selectedRace && !isGoal && effective
@@ -280,11 +302,17 @@ function SlotCell({
         )
       : null;
 
-  // ─── 툴팁 상태 ─────────────────────
-  const tooltipInfo = selectedRace ? getSlotTooltip(selectedRace, ownership) : null;
-  const [tooltipPos, setTooltipPos] = useState<{ x: number; y: number } | null>(null);
+  const tooltipInfo = selectedRace
+    ? getSlotTooltip(selectedRace, ownership, isPinned)
+    : null;
+  const [tooltipPos, setTooltipPos] = useState<{ x: number; y: number } | null>(
+    null
+  );
   const cellRef = useRef<HTMLDivElement>(null);
   const hoverTimerRef = useRef<number | null>(null);
+
+  const longPressTimerRef = useRef<number | null>(null);
+  const longPressFiredRef = useRef(false);
 
   const showTooltip = () => {
     if (!cellRef.current) return;
@@ -306,9 +334,27 @@ function SlotCell({
     setTooltipPos(null);
   };
 
+  const startLongPress = () => {
+    if (!selectedRace) return;
+    if (isGoal) return;
+    longPressFiredRef.current = false;
+    longPressTimerRef.current = window.setTimeout(() => {
+      longPressFiredRef.current = true;
+      onTogglePin();
+    }, LONG_PRESS_MS);
+  };
+
+  const cancelLongPress = () => {
+    if (longPressTimerRef.current !== null) {
+      window.clearTimeout(longPressTimerRef.current);
+      longPressTimerRef.current = null;
+    }
+  };
+
   useEffect(() => {
     return () => {
       if (hoverTimerRef.current !== null) window.clearTimeout(hoverTimerRef.current);
+      if (longPressTimerRef.current !== null) window.clearTimeout(longPressTimerRef.current);
     };
   }, []);
 
@@ -328,9 +374,20 @@ function SlotCell({
           race={selectedRace}
           badge={badge}
           isGoal={isGoal}
+          isPinned={isPinned}
           winrate={winrate}
-          onClick={onOpenPicker}
+          onClick={() => {
+            if (longPressFiredRef.current) {
+              longPressFiredRef.current = false;
+              return;
+            }
+            onOpenPicker();
+          }}
           onClear={() => onClearSlot(slot.turnIndex)}
+          onPointerDown={startLongPress}
+          onPointerUp={cancelLongPress}
+          onPointerLeave={cancelLongPress}
+          onPointerCancel={cancelLongPress}
         />
       ) : (
         <EmptySlot
@@ -350,16 +407,26 @@ function FilledSlot({
   race,
   badge,
   isGoal,
+  isPinned,
   winrate,
   onClick,
   onClear,
+  onPointerDown,
+  onPointerUp,
+  onPointerLeave,
+  onPointerCancel,
 }: {
   race: Race;
   badge: { label: string; className: string } | null;
   isGoal: boolean;
+  isPinned: boolean;
   winrate: number | null;
   onClick: () => void;
   onClear: () => void;
+  onPointerDown: () => void;
+  onPointerUp: () => void;
+  onPointerLeave: () => void;
+  onPointerCancel: () => void;
 }) {
   const handleClick = (e: React.MouseEvent) => {
     if (isGoal) return;
@@ -371,10 +438,18 @@ function FilledSlot({
     <div
       className={`filled-slot ${isGoal ? "filled-slot--locked" : ""}`}
       onClick={handleClick}
+      onPointerDown={onPointerDown}
+      onPointerUp={onPointerUp}
+      onPointerLeave={onPointerLeave}
+      onPointerCancel={onPointerCancel}
     >
-      {badge && (
-        <div className={`filled-slot__badge ${badge.className}`}>{badge.label}</div>
-      )}
+      {/* 우상단: pin mark → badge 순서로 배치 */}
+      <div className="filled-slot__top-right">
+        {isPinned && <span className="filled-slot__pin-mark">📌</span>}
+        {badge && (
+          <span className={`filled-slot__badge ${badge.className}`}>{badge.label}</span>
+        )}
+      </div>
 
       <div className="filled-slot__image">
         {race.image ? (
@@ -430,15 +505,14 @@ function EmptySlot({
 
 // ─── 슬롯 툴팁 ─────────────────────
 
-/**
- * 배치된 레이스가 어떤 사유로 이 슬롯에 있는지 요약.
- * manual (사용자 직접 선택) 은 툴팁 생략.
- */
 function getSlotTooltip(
   race: Race,
-  ownership: SlotOwnership | undefined
+  ownership: SlotOwnership | undefined,
+  isPinned: boolean
 ): { primary: string; secondary: string } | null {
   if (!ownership) return null;
+
+  const pinSuffix = isPinned ? " · 📌 고정됨" : "";
 
   switch (ownership.kind) {
     case "goal":
@@ -446,14 +520,19 @@ function getSlotTooltip(
     case "hidden": {
       const factorName =
         FACTOR_NAME_BY_ID.get(ownership.factorId) ?? ownership.factorId;
-      return { primary: race.name, secondary: `히든 인자 · ${factorName}` };
+      return {
+        primary: race.name,
+        secondary: `히든 인자 · ${factorName}${pinSuffix}`,
+      };
     }
     case "g1":
-      return { primary: race.name, secondary: "G1 자동 배치" };
+      return { primary: race.name, secondary: `G1 자동 배치${pinSuffix}` };
     case "filler":
-      return { primary: race.name, secondary: "빈 슬롯 자동 채움" };
+      return { primary: race.name, secondary: `빈 슬롯 자동 채움${pinSuffix}` };
     case "manual":
-      return null;
+      return isPinned
+        ? { primary: race.name, secondary: "📌 고정됨" }
+        : { primary: race.name, secondary: "수동 배치" };
   }
 }
 
@@ -488,19 +567,22 @@ function SlotTooltip({
 // ─── 헬퍼 ─────────────────────────
 
 function getSlotBadge(
-  ownership: SlotOwnership | undefined
+  ownership: SlotOwnership | undefined,
+  _isPinned: boolean
 ): { label: string; className: string } | null {
   if (!ownership) return null;
   if (ownership.kind === "goal") return { label: "목표", className: "badge--goal" };
   if (ownership.kind === "hidden") return { label: "인자", className: "badge--hidden" };
   if (ownership.kind === "g1") return { label: "G1", className: "badge--g1auto" };
   if (ownership.kind === "filler") return { label: "채움", className: "badge--filler" };
+  // manual 은 배지 없음. pin mark 로 대체.
   return null;
 }
 
 function getSlotClassName(
   ownership: SlotOwnership | undefined,
-  hasRace: boolean
+  hasRace: boolean,
+  isPinned: boolean
 ): string {
   const classes = ["slot-cell"];
   if (hasRace) classes.push("slot-cell--filled");
@@ -508,6 +590,7 @@ function getSlotClassName(
   else if (ownership?.kind === "hidden") classes.push("slot-cell--hidden-factor");
   else if (ownership?.kind === "g1") classes.push("slot-cell--g1-auto");
   else if (ownership?.kind === "filler") classes.push("slot-cell--filler");
+  if (isPinned) classes.push("slot-cell--pinned");
   return classes.join(" ");
 }
 

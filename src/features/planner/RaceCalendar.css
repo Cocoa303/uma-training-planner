@@ -73,7 +73,7 @@
     overflow: hidden;
   }
 
-.slot-cell--filled { background: #f9fafb; }
+  .slot-cell--filled { background: #f9fafb; }
   .slot-cell--goal { background: #fef2f2; border-color: #fca5a5; }
   .slot-cell--hidden-factor { background: #fef3c7; border-color: #fcd34d; }
   .slot-cell--g1-auto { background: #dbeafe; border-color: #93c5fd; }
@@ -108,6 +108,7 @@
     overflow: hidden;
     transition: transform 0.1s;
     min-height: 0;
+    touch-action: manipulation;
   }
 
   .filled-slot:hover:not(.filled-slot--locked) {
@@ -118,19 +119,33 @@
     cursor: default;
   }
 
-  .filled-slot__badge {
+  /* 우상단 그룹: pin mark + badge */
+  .filled-slot__top-right {
     position: absolute;
     top: 2px;
     right: 2px;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+  }
+
+  .filled-slot__pin-mark {
+    font-size: 11px;
+    line-height: 1;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.4));
+    pointer-events: none;
+  }
+
+  .filled-slot__badge {
     color: white;
     font-size: 9px;
     padding: 1px 5px;
     border-radius: 3px;
     font-weight: 600;
-    z-index: 3;
   }
 
-.badge--goal { background: #ef4444; }
+  .badge--goal { background: #ef4444; }
   .badge--hidden { background: #f59e0b; }
   .badge--g1auto { background: #3b82f6; }
   .badge--filler { background: #6b7280; }
@@ -174,7 +189,7 @@
     background: rgba(0, 0, 0, 0.3);
   }
 
-.grade-bg--g1 { background: linear-gradient(135deg, #3b82f6, #1e40af); }
+  .grade-bg--g1 { background: linear-gradient(135deg, #3b82f6, #1e40af); }
   .grade-bg--g2 { background: linear-gradient(135deg, #ec4899, #be185d); }
   .grade-bg--g3 { background: linear-gradient(135deg, #22c55e, #15803d); }
   .grade-bg--op { background: linear-gradient(135deg, #6b7280, #374151); }
@@ -272,8 +287,6 @@
     display: block;
   }
 
-  /* ─── 전체 뷰: 3학년 좌우 배치 (컴팩트 유지) ─── */
-
   .race-calendar__all-view {
     display: flex;
     flex-direction: row;
@@ -307,9 +320,7 @@
     color: white;
   }
 
-  /* ═══════════════════════════════════════════════════════════ */
-  /* 개별 뷰: aspect-ratio 2.5:1, 폰트 1.5배                        */
-  /* ═══════════════════════════════════════════════════════════ */
+  /* 개별 뷰: aspect-ratio 2.5:1, 폰트 1.5배 */
 
   .race-calendar:not(.race-calendar--all) .slot-cell {
     aspect-ratio: 2.5 / 1;
@@ -334,9 +345,17 @@
   .race-calendar:not(.race-calendar--all) .filled-slot__badge {
     font-size: 13.5px;
     padding: 2px 8px;
+    border-radius: 4px;
+  }
+
+  .race-calendar:not(.race-calendar--all) .filled-slot__pin-mark {
+    font-size: 17px;
+  }
+
+  .race-calendar:not(.race-calendar--all) .filled-slot__top-right {
     top: 3px;
     right: 3px;
-    border-radius: 4px;
+    gap: 4px;
   }
 
   .race-calendar:not(.race-calendar--all) .empty-slot__plus {
@@ -405,6 +424,10 @@
     overflow: hidden;
     transition: transform 0.1s;
     min-height: 0;
+    touch-action: manipulation;
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
   }
 
   .filled-slot:hover:not(.filled-slot--locked) {
@@ -415,19 +438,32 @@
     cursor: default;
   }
 
-  .filled-slot__badge {
+  .filled-slot__top-right {
     position: absolute;
     top: 2px;
     right: 2px;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+  }
+
+  .filled-slot__pin-mark {
+    font-size: 12px;
+    line-height: 1;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.4));
+    pointer-events: none;
+  }
+
+  .filled-slot__badge {
     color: white;
     font-size: 9px;
     padding: 1px 5px;
     border-radius: 3px;
     font-weight: 600;
-    z-index: 2;
   }
 
-.badge--goal { background: #ef4444; }
+  .badge--goal { background: #ef4444; }
   .badge--hidden { background: #f59e0b; }
   .badge--g1auto { background: #3b82f6; }
   .badge--filler { background: #6b7280; }
@@ -469,11 +505,12 @@
     background: rgba(0, 0, 0, 0.3);
   }
 
-.grade-bg--g1 { background: linear-gradient(135deg, #3b82f6, #1e40af); }
+  .grade-bg--g1 { background: linear-gradient(135deg, #3b82f6, #1e40af); }
   .grade-bg--g2 { background: linear-gradient(135deg, #ec4899, #be185d); }
   .grade-bg--g3 { background: linear-gradient(135deg, #22c55e, #15803d); }
   .grade-bg--op { background: linear-gradient(135deg, #6b7280, #374151); }
   .grade-bg--preop { background: linear-gradient(135deg, #9ca3af, #4b5563); }
+
   .filled-slot__info {
     display: flex;
     align-items: center;
@@ -619,6 +656,15 @@
     padding: 6px 4px;
     font-size: 11px;
   }
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* 핀 고정 시각 표시 (공통)                                          */
+/* ═══════════════════════════════════════════════════════════════ */
+
+.slot-cell--pinned {
+  border-color: #f59e0b !important;
+  box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.25);
 }
 
 /* ═══════════════════════════════════════════════════════════════ */

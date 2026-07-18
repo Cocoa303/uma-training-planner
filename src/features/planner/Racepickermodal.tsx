@@ -24,8 +24,10 @@ interface Props {
   filter: AptitudeFilter;
   selections: SlotSelections;
   ownership: SlotOwnership | undefined;
-  onSelect: (raceId: string) => void;
+  isSlotPinnedAt: (turnIndex: number) => boolean;
+  onSelect: (raceId: string, pinned?: boolean) => void;
   onClear: () => void;
+  onTogglePin: () => void;
   onClose: () => void;
 }
 
@@ -46,8 +48,10 @@ export function RacePickerModal({
   filter,
   selections,
   ownership,
+  isSlotPinnedAt,
   onSelect,
   onClear,
+  onTogglePin,
   onClose,
 }: Props) {
   const effective = useMemo(() => {
@@ -72,10 +76,10 @@ export function RacePickerModal({
   const currentRaceId = selections[turnIndex];
   const currentRace = races.find((r) => r.id === currentRaceId);
   const isGoal = ownership?.kind === "goal";
-  const isPinned = ownership?.kind === "hidden" && ownership.pinned === true;
+  const isCurrentPinned = isSlotPinnedAt(turnIndex);
 
-  // 해제 가능 여부: 배치돼 있고 + goal 아님 + pinned 아님
-  const canClear = !!currentRace && !isGoal && !isPinned;
+  const canClear = !!currentRace && !isGoal && !isCurrentPinned;
+  const canTogglePin = !!currentRace && !isGoal;
 
   const sortedEntries = useMemo(() => {
     const withWinrate = races.map((race) => {
@@ -106,6 +110,27 @@ export function RacePickerModal({
     onClose();
   };
 
+  const handleTogglePin = () => {
+    onTogglePin();
+    // 모달은 닫지 않음. 유저가 pin 상태를 확인 가능하도록.
+  };
+
+  const handleSelectRace = (raceId: string) => {
+    // 기본 선택은 pinned=false. pinned 상태는 다른 레이스 선택 시 해제됨.
+    onSelect(raceId, false);
+  };
+
+  const handlePinRace = (raceId: string, e: React.MouseEvent) => {
+  e.stopPropagation();
+  // 이미 이 레이스가 배치돼 있고 pinned 상태면 → 고정 해제 (모달 유지)
+  if (raceId === currentRaceId && isCurrentPinned) {
+    onTogglePin();
+    return;
+  }
+  // 그 외: 이 레이스로 배치하면서 즉시 pinned=true 로 걸기
+  onSelect(raceId, true);
+};
+
   return (
     <div className="race-picker-backdrop" onClick={onClose}>
       <div className="race-picker" onClick={(e) => e.stopPropagation()}>
@@ -116,26 +141,42 @@ export function RacePickerModal({
           <button className="race-picker__close" onClick={onClose}>×</button>
         </div>
 
-        {/* 배치 해제 버튼: 현재 슬롯에 레이스가 있고, goal/pinned 아닐 때만 노출 */}
+        {/* 현재 배치 정보 + 액션 버튼 */}
         {currentRace && (
           <div className="race-picker__current-bar">
             <div className="race-picker__current-info">
               <span className="race-picker__current-label">현재 배치:</span>
-              <span className="race-picker__current-name">{currentRace.name}</span>
-            </div>
-            {canClear ? (
-              <button
-                className="race-picker__clear-btn"
-                onClick={handleClear}
-                title="이 슬롯 비우기"
-              >
-                🗑 배치 해제
-              </button>
-            ) : (
-              <span className="race-picker__lock-info">
-                {isGoal ? "🔒 목표 레이스 (해제 불가)" : "📌 고정됨 (인자 고정 해제 필요)"}
+              <span className="race-picker__current-name">
+                {isCurrentPinned && "📌 "}
+                {currentRace.name}
               </span>
-            )}
+            </div>
+            <div className="race-picker__current-actions">
+              {canTogglePin && (
+                <button
+                  className={`race-picker__pin-btn ${isCurrentPinned ? "race-picker__pin-btn--on" : ""}`}
+                  onClick={handleTogglePin}
+                  title={isCurrentPinned ? "고정 해제" : "고정 (최적화 시 유지)"}
+                >
+                  📌 {isCurrentPinned ? "고정 해제" : "고정"}
+                </button>
+              )}
+              {canClear ? (
+                <button
+                  className="race-picker__clear-btn"
+                  onClick={handleClear}
+                  title="이 슬롯 비우기"
+                >
+                  🗑 배치 해제
+                </button>
+              ) : (
+                !canTogglePin && (
+                  <span className="race-picker__lock-info">
+                    🔒 목표 레이스 (해제 불가)
+                  </span>
+                )
+              )}
+            </div>
           </div>
         )}
 
@@ -146,11 +187,14 @@ export function RacePickerModal({
             <div className="race-picker__list">
               {sortedEntries.map(({ race, winrate }) => {
                 const isCurrent = race.id === currentRaceId;
+                const isCurrentAndPinned = isCurrent && isCurrentPinned;
                 return (
-                  <button
+                  <div
                     key={race.id}
-                    className={`race-option-card ${isCurrent ? "race-option-card--current" : ""}`}
-                    onClick={() => onSelect(race.id)}
+                    className={`race-option-card ${isCurrent ? "race-option-card--current" : ""} ${isCurrentAndPinned ? "race-option-card--pinned" : ""}`}
+                    onClick={() => handleSelectRace(race.id)}
+                    role="button"
+                    tabIndex={0}
                   >
                     <div className="race-option-card__image">
                       {race.image ? (
@@ -181,7 +225,18 @@ export function RacePickerModal({
                         </div>
                       )}
                     </div>
-                  </button>
+
+                    {/* 우측 pin 버튼: 이 레이스로 배치하면서 즉시 고정 */}
+                    {!isGoal && (
+                      <button
+                        className={`race-option-card__pin-btn ${isCurrentAndPinned ? "race-option-card__pin-btn--on" : ""}`}
+                        onClick={(e) => handlePinRace(race.id, e)}
+                        title={isCurrentAndPinned ? "고정됨" : "이 레이스로 고정 배치"}
+                      >
+                        📌
+                      </button>
+                    )}
+                  </div>
                 );
               })}
             </div>

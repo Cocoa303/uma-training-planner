@@ -11,6 +11,8 @@ import {
   selectRaceInSlot,
   clearSlot,
   clearSlotsByOwnership,
+  toggleSlotPin,
+  isSlotPinned,
   type PlannerState,
   type AptitudeFilter,
   type AptitudeFilterGrade,
@@ -118,7 +120,6 @@ function buildInitialGoalSlots(character: Character): {
       continue;
     }
 
-    // 슬롯 인덱스는 goal.deadline 이 아니라 매칭된 race 의 실제 개최 턴 기준.
     const turnIdx = toTurnIndex(
       goal.deadline.class,
       race.turn.month,
@@ -221,12 +222,15 @@ export function usePlannerState() {
     []
   );
 
-  const selectRace = useCallback((turnIndex: number, raceId: string) => {
-    setState((s) => {
-      if (s.ownerships[turnIndex]?.kind === "goal") return s;
-      return selectRaceInSlot(s, turnIndex, raceId);
-    });
-  }, []);
+  const selectRace = useCallback(
+    (turnIndex: number, raceId: string, pinned: boolean = false) => {
+      setState((s) => {
+        if (s.ownerships[turnIndex]?.kind === "goal") return s;
+        return selectRaceInSlot(s, turnIndex, raceId, pinned);
+      });
+    },
+    []
+  );
 
   const clearRaceSlot = useCallback((turnIndex: number) => {
     setState((s) => {
@@ -234,6 +238,37 @@ export function usePlannerState() {
       return clearSlot(s, turnIndex);
     });
   }, []);
+
+  const toggleSlotPinAt = useCallback(
+    (turnIndex: number) => {
+      setState((s) => {
+        const ownership = s.ownerships[turnIndex];
+        if (!ownership) return s;
+        if (ownership.kind === "goal") return s;
+
+        const wasPinned = ownership.pinned === true;
+        const raceId = s.selections[turnIndex];
+        const raceName = raceId
+          ? allRaces.find((r) => r.id === raceId)?.name ?? "레이스"
+          : "레이스";
+
+        setLastAssignResult({
+          success: true,
+          message: wasPinned
+            ? `📌 [${raceName}] 고정 해제됨`
+            : `📌 [${raceName}] 고정됨`,
+        });
+
+        return toggleSlotPin(s, turnIndex);
+      });
+    },
+    []
+  );
+
+  const isSlotPinnedAt = useCallback(
+    (turnIndex: number): boolean => isSlotPinned(state.ownerships[turnIndex]),
+    [state.ownerships]
+  );
 
   const resetAll = useCallback(() => {
     setState((s) => {
@@ -261,7 +296,6 @@ export function usePlannerState() {
       );
 
       if (hasAssigned) {
-        // 고정된 인자는 클릭으로 해제 불가
         const hasPinned = Object.values(state.ownerships).some(
           (o) =>
             o?.kind === "hidden" && o.factorId === factor.id && o.pinned
@@ -392,8 +426,10 @@ export function usePlannerState() {
   }, [character, state, minWinrate]);
 
   const clearG1AutoAssign = useCallback(() => {
-    setState((s) => clearSlotsByOwnership(s, (o) => o.kind === "g1"));
-    setLastAssignResult({ success: true, message: "G1 자동 배치 해제됨" });
+    setState((s) =>
+      clearSlotsByOwnership(s, (o) => o.kind === "g1" && !o.pinned)
+    );
+    setLastAssignResult({ success: true, message: "G1 자동 배치 해제됨 (고정 제외)" });
   }, []);
 
   const runOptimize = useCallback(() => {
@@ -446,6 +482,8 @@ export function usePlannerState() {
     setAptitudeFilter,
     selectRace,
     clearRaceSlot,
+    toggleSlotPinAt,
+    isSlotPinnedAt,
     resetAll,
     toggleFactorAssignment,
     isFactorAssigned,

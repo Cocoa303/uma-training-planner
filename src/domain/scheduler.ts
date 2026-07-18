@@ -37,19 +37,21 @@ export const EMPTY_FILTER: AptitudeFilter = {
 
 /**
  * 슬롯 소유권.
- * - goal: 목표 레이스 (변경 불가)
+ * - goal: 목표 레이스 (변경 불가, 항상 최우선)
  * - hidden: 히든 인자 자동 배치
- *   - pinned=true: 유저가 명시적으로 고정. 최적화가 재배치하지 않음.
  * - g1: G1 자동 배치
  * - manual: 유저가 직접 선택
  * - filler: 최적화의 "빈 슬롯 채우기" 로 자동 배치 (재실행 시 초기화됨)
+ *
+ * pinned: 유저가 명시적으로 고정. 최적화가 재배치하지 않고,
+ *         다른 자동 배치가 덮어쓰지 못한다. goal 제외 모든 kind 에 적용 가능.
  */
 export type SlotOwnership =
   | { kind: "goal" }
   | { kind: "hidden"; factorId: string; pinned?: boolean }
-  | { kind: "g1" }
-  | { kind: "manual" }
-  | { kind: "filler" };
+  | { kind: "g1"; pinned?: boolean }
+  | { kind: "manual"; pinned?: boolean }
+  | { kind: "filler"; pinned?: boolean };
 
 export type SlotSelections = Record<number, string | undefined>;
 export type SlotOwnerships = Record<number, SlotOwnership | undefined>;
@@ -74,15 +76,16 @@ export const INITIAL_STATE: PlannerState = {
  * 우선순위 비교.
  * 높은 우선순위가 낮은 우선순위를 덮어쓸 수 있음.
  *
- * filler(-1) < manual(0) < g1(1) < hidden(2) < hidden-pinned(3) < goal(4)
+ * filler(-1) < manual(0) < g1(1) < hidden(2) < *-pinned(3) < goal(4)
  *
- * hidden-pinned: 유저가 명시적으로 고정한 히든 인자.
- * 최적화가 재배치하지 않고, 다른 자동 배치가 덮어쓰지 못한다.
+ * pinned 슬롯 (kind 무관): 우선순위 3.
+ * 유저가 명시적으로 고정한 것이므로 다른 자동 배치가 덮어쓰지 못함.
  */
 function getOwnershipPriority(o: SlotOwnership): number {
+  if (o.kind === "goal") return 4;
+  if ("pinned" in o && o.pinned) return 3;
   switch (o.kind) {
-    case "goal": return 4;
-    case "hidden": return o.pinned ? 3 : 2;
+    case "hidden": return 2;
     case "g1": return 1;
     case "manual": return 0;
     case "filler": return -1;
@@ -168,7 +171,8 @@ export function toggleFilterKey(
 export function selectRaceInSlot(
   state: PlannerState,
   turnIndex: number,
-  raceId: string
+  raceId: string,
+  pinned: boolean = false
 ): PlannerState {
   return {
     ...state,
@@ -178,7 +182,7 @@ export function selectRaceInSlot(
     },
     ownerships: {
       ...state.ownerships,
-      [turnIndex]: { kind: "manual" },
+      [turnIndex]: { kind: "manual", pinned },
     },
   };
 }
@@ -319,4 +323,40 @@ export function availableFilterGrades(
   }
 
   return options;
+}
+/**
+ * 특정 슬롯의 pinned 플래그를 토글.
+ * goal 슬롯은 무시 (이미 잠금 상태).
+ * 현재 kind 를 유지하면서 pinned 만 변경.
+ */
+export function toggleSlotPin(
+  state: PlannerState,
+  turnIndex: number
+): PlannerState {
+  const existing = state.ownerships[turnIndex];
+  if (!existing) return state;
+  if (existing.kind === "goal") return state;
+
+  const nextOwnership: SlotOwnership = {
+    ...existing,
+    pinned: !existing.pinned,
+  };
+
+  return {
+    ...state,
+    ownerships: {
+      ...state.ownerships,
+      [turnIndex]: nextOwnership,
+    },
+  };
+}
+
+/**
+ * 슬롯이 pinned 상태인지 확인.
+ * goal 은 별개 개념이므로 false 반환.
+ */
+export function isSlotPinned(ownership: SlotOwnership | undefined): boolean {
+  if (!ownership) return false;
+  if (ownership.kind === "goal") return false;
+  return ownership.pinned === true;
 }

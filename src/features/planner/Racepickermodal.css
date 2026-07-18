@@ -75,7 +75,6 @@
   gap: 12px;
 }
 
-/* ═══ 가로 배치 강제 ═══ */
 .race-option-card {
   display: flex !important;
   flex-direction: row !important;
@@ -89,6 +88,7 @@
   transition: all 0.15s;
   width: 100%;
   overflow: hidden;
+  position: relative;
 }
 
 .race-option-card:hover {
@@ -96,7 +96,6 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-/* 왼쪽 이미지 */
 .race-option-card__image {
   width: 240px !important;
   flex-shrink: 0 !important;
@@ -126,7 +125,6 @@
   font-size: 24px;
 }
 
-/* 오른쪽 정보 */
 .race-option-card__info {
   flex: 1 !important;
   min-width: 0;
@@ -145,7 +143,6 @@
   min-width: 0;
 }
 
-/* 이름: 2줄 고정 (넘치면 ...) */
 .race-option-card__name {
   font-size: 15px;
   font-weight: 700;
@@ -153,7 +150,7 @@
   flex: 1;
   min-width: 0;
   line-height: 1.35;
-  min-height: calc(15px * 1.35 * 2); /* 2줄 만큼 예약 */
+  min-height: calc(15px * 1.35 * 2);
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -163,12 +160,11 @@
   word-break: keep-all;
 }
 
-/* 정보 (venue/surface/distance): 2줄 고정 */
 .race-option-card__meta {
   font-size: 12px;
   color: #6b7280;
   line-height: 1.4;
-  min-height: calc(12px * 1.4 * 2); /* 2줄 만큼 예약 */
+  min-height: calc(12px * 1.4 * 2);
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -188,90 +184,63 @@
 .winrate--ok { color: #d97706; }
 .winrate--bad { color: #dc2626; }
 
-/* ─── 모바일 대응 ─── */
-
-@media (max-width: 767px) {
-  .race-picker-backdrop {
-    padding: 8px;
-    align-items: flex-end;
-  }
-
-  .race-picker {
-    max-height: 92vh;
-    border-radius: 12px 12px 8px 8px;
-  }
-
-  .race-picker__header {
-    padding: 12px 16px;
-  }
-
-  .race-picker__title {
-    font-size: 15px;
-  }
-
-  .race-picker__body {
-    padding: 10px;
-  }
-
-  .race-picker__list {
-    gap: 8px;
-  }
-
-  /* 모바일: 이미지 폭 축소 */
-  .race-option-card__image {
-    width: 130px !important;
-  }
-
-  .race-option-card__info {
-    padding: 8px 10px;
-    gap: 4px;
-  }
-
-  .race-option-card__name {
-    font-size: 13px;
-    line-height: 1.3;
-    min-height: calc(13px * 1.3 * 2);
-  }
-
-  .race-option-card__meta {
-    font-size: 10.5px;
-    line-height: 1.35;
-    min-height: calc(10.5px * 1.35 * 2);
-  }
-
-  .race-option-card__winrate {
-    font-size: 18px;
-  }
-
-  .race-option-card__placeholder {
-    font-size: 18px;
-  }
+/* 우측 pin 버튼 */
+.race-option-card__pin-btn {
+  width: 44px;
+  flex-shrink: 0;
+  border: none;
+  border-left: 1px solid #e5e7eb;
+  background: white;
+  cursor: pointer;
+  font-size: 20px;
+  filter: grayscale(1);
+  opacity: 0.4;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-/* ─── 초소형 모바일 ─── */
-
-@media (max-width: 399px) {
-  .race-option-card__image {
-    width: 100px !important;
-  }
-
-  .race-option-card__info {
-    padding: 6px 8px;
-  }
-
-  .race-option-card__name {
-    font-size: 12px;
-  }
-
-  .race-option-card__meta {
-    font-size: 10px;
-  }
-
-  .race-option-card__winrate {
-    font-size: 16px;
-  }
+.race-option-card__pin-btn:hover {
+  filter: none;
+  opacity: 1;
+  background: #fef3c7;
 }
-/* ─── 현재 배치 표시 + 해제 버튼 ─── */
+
+/* pin 버튼: 활성화(고정된) 상태 */
+.race-option-card__pin-btn--on {
+  filter: none !important;
+  opacity: 1 !important;
+  background: #f59e0b !important;
+}
+
+.race-option-card__pin-btn--on:hover {
+  background: #d97706 !important;
+}
+
+/* 현재 배치된 카드 시각적 강조 */
+.race-option-card--current {
+  border-color: #f59e0b;
+  background: #fffbeb;
+  box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.2);
+}
+
+.race-option-card--current:hover {
+  border-color: #d97706;
+}
+
+/* 현재 배치 + pinned 상태 (강조 강화) */
+.race-option-card--pinned {
+  border-color: #f59e0b;
+  background: #fef3c7;
+  box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.35);
+}
+
+.race-option-card--pinned:hover {
+  border-color: #d97706;
+}
+
+/* ─── 현재 배치 표시 + 액션 버튼 ─── */
 
 .race-picker__current-bar {
   display: flex;
@@ -309,6 +278,39 @@
   min-width: 0;
 }
 
+.race-picker__current-actions {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.race-picker__pin-btn {
+  padding: 6px 12px;
+  border: 1px solid #f59e0b;
+  background: white;
+  color: #78350f;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+
+.race-picker__pin-btn:hover {
+  background: #fef3c7;
+}
+
+.race-picker__pin-btn--on {
+  background: #f59e0b;
+  color: white;
+}
+
+.race-picker__pin-btn--on:hover {
+  background: #d97706;
+}
+
 .race-picker__clear-btn {
   padding: 6px 12px;
   border: 1px solid #ef4444;
@@ -338,34 +340,116 @@
   flex-shrink: 0;
 }
 
-/* 현재 배치된 카드 시각적 강조 */
-.race-option-card--current {
-  border-color: #f59e0b;
-  background: #fffbeb;
-  box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.2);
-}
-
-.race-option-card--current:hover {
-  border-color: #d97706;
-}
-
 /* 모바일 대응 */
+
 @media (max-width: 767px) {
+  .race-picker-backdrop {
+    padding: 8px;
+    align-items: flex-end;
+  }
+
+  .race-picker {
+    max-height: 92vh;
+    border-radius: 12px 12px 8px 8px;
+  }
+
+  .race-picker__header {
+    padding: 12px 16px;
+  }
+
+  .race-picker__title {
+    font-size: 15px;
+  }
+
+  .race-picker__body {
+    padding: 10px;
+  }
+
+  .race-picker__list {
+    gap: 8px;
+  }
+
+  .race-option-card__image {
+    width: 130px !important;
+  }
+
+  .race-option-card__info {
+    padding: 8px 10px;
+    gap: 4px;
+  }
+
+  .race-option-card__name {
+    font-size: 13px;
+    line-height: 1.3;
+    min-height: calc(13px * 1.3 * 2);
+  }
+
+  .race-option-card__meta {
+    font-size: 10.5px;
+    line-height: 1.35;
+    min-height: calc(10.5px * 1.35 * 2);
+  }
+
+  .race-option-card__winrate {
+    font-size: 18px;
+  }
+
+  .race-option-card__placeholder {
+    font-size: 18px;
+  }
+
+  .race-option-card__pin-btn {
+    width: 40px;
+    font-size: 18px;
+  }
+
   .race-picker__current-bar {
     padding: 8px 14px;
     gap: 8px;
   }
+
   .race-picker__current-label {
     font-size: 11px;
   }
+
   .race-picker__current-name {
     font-size: 12px;
   }
+
+  .race-picker__pin-btn,
   .race-picker__clear-btn {
     padding: 5px 10px;
     font-size: 11px;
   }
+
   .race-picker__lock-info {
     font-size: 10.5px;
+  }
+}
+
+@media (max-width: 399px) {
+  .race-option-card__image {
+    width: 100px !important;
+  }
+
+  .race-option-card__info {
+    padding: 6px 8px;
+  }
+
+  .race-option-card__name {
+    font-size: 12px;
+  }
+
+  .race-option-card__meta {
+    font-size: 10px;
+  }
+
+  .race-option-card__winrate {
+    font-size: 16px;
+  }
+
+  .race-option-card__pin-btn {
+    width: 36px;
+    font-size: 16px;
   }
 }

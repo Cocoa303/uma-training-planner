@@ -17,6 +17,8 @@ export function PlannerPage() {
     setAptitudeFilter,
     selectRace,
     clearRaceSlot,
+    toggleSlotPinAt,
+    isSlotPinnedAt,
     resetAll,
     toggleFactorAssignment,
     isFactorAssigned,
@@ -165,6 +167,8 @@ export function PlannerPage() {
         ownerships={state.ownerships}
         onSelectRace={selectRace}
         onClearSlot={clearRaceSlot}
+        onToggleSlotPin={toggleSlotPinAt}
+        isSlotPinnedAt={isSlotPinnedAt}
         activeView={activeView}
         onChangeView={setActiveView}
       />
